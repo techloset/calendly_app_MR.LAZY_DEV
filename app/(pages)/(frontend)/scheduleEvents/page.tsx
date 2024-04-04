@@ -1,38 +1,14 @@
+import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
+import Image from "next/image";
 import React from "react";
+import sticker from "../../../../public/vectors/sticker.png";
+import backArrow from "../../../../public/vectors/backArrow.png";
 
 export default function page() {
   return (
     <div>
-      <div className="bg-white shadow-lg h-[60px] flex justify-center">
-        <div className=" w-[60%] flex justify-between items-center">
-          <div></div>
-          <div className="flex gap-4">
-            <div className="flex gap-3 items-center">
-              Menu{" "}
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 10l7 7 7-7"
-                  />
-                </svg>
-              </span>
-            </div>
-            <div>
-              <button className="h-[44px] border-[grey] text-center flex items-center justify-center rounded-[32px] px-6 border-[1px] text-[12px] font-bold ">
-                Copy link
-              </button>
-            </div>
-          </div>
-        </div>
+      <div>
+        <MenuHeader />
       </div>
       <div>
         <div className="flex justify-center items-center mt-14">
@@ -40,7 +16,13 @@ export default function page() {
             <div className="w-[30%] border-[1px] px-7 py-7">
               <div>
                 <div>
-                  <div className="bg-black h-10 w-10 rounded-full"></div>
+                  <div className="h-10 w-10 border-[1px] flex items-center justify-center rounded-full">
+                    <Image
+                      src={backArrow}
+                      className="h-6 w-6"
+                      alt="Back Arrow"
+                    />
+                  </div>
                 </div>
                 <div className="mt-6">
                   <p className="text-[14px] font-medium">Muhammad Talha</p>
@@ -83,6 +65,14 @@ export default function page() {
             </div>
 
             <div className="w-[70%] px-8 py-6 ">
+              <div className="flex justify-end">
+                <Image
+                  src={sticker}
+                  className="h-15 w-15 absolute"
+                  style={{ right: "150px", top: "115px" }}
+                  alt="tick"
+                />
+              </div>
               <div>
                 <div>
                   <p className="font-bold text-[18px]">Enter Details</p>

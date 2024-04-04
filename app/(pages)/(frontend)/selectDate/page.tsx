@@ -2,7 +2,13 @@
 import DatePickerComponent from "@/app/(components)/datePickerComponent/DatePickerComponent";
 import TimeSlot from "@/app/(components)/timeSlot/TimeSlot";
 import TimezoneSelector from "@/app/(components)/timeZone/TimezoneSelector";
+import Image from "next/image";
 import Calendar from "react-calendar";
+import clock from "../../../../public/vectors/clock.png";
+import tool from "../../../../public/vectors/tool.png";
+import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
+import sticker from "../../../../public/vectors/sticker.png";
+import backArrow from "../../../../public/vectors/backArrow.png";
 
 interface TimeZone {
   label: string;
@@ -32,36 +38,8 @@ const timeZones: TimeZone[] = [
 const page: React.FC = () => {
   return (
     <div>
-      <div className="bg-white shadow-lg h-[60px] flex justify-center">
-        <div className=" w-[60%] flex justify-between items-center">
-          <div></div>
-          <div className="flex gap-4">
-            <div className="flex gap-3 items-center">
-              Menu{" "}
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 10l7 7 7-7"
-                  />
-                </svg>
-              </span>
-            </div>
-            <div>
-              <button className="h-[44px] border-[grey] text-center flex items-center justify-center rounded-[32px] px-6 border-[1px] text-[12px] font-bold ">
-                Copy link
-              </button>
-            </div>
-          </div>
-        </div>
+      <div>
+        <MenuHeader />
       </div>
       <div>
         <div className="flex justify-center items-center mt-14">
@@ -74,8 +52,10 @@ const page: React.FC = () => {
                 <div className="">
                   <p className="text-[22px] font-bold">30 Minutes Meeting</p>
                 </div>
-                <div className="mt-4 flex gap-3 items-center">
-                  <div></div>
+                <div className="mt-4 flex gap-2 items-center">
+                  <div>
+                    <Image src={clock} className="h-4 w-4" alt="clock" />
+                  </div>
                   <div>
                     <p className="text-[14px] font-medium">30 Min</p>
                   </div>
@@ -84,6 +64,14 @@ const page: React.FC = () => {
             </div>
 
             <div className="w-[70%] px-8 py-6 ">
+              <div className="flex justify-end">
+                <Image
+                  src={sticker}
+                  className="h-15 w-15 absolute"
+                  style={{ right: "230px", top: "115px" }}
+                  alt="tick"
+                />
+              </div>
               <div>
                 <p className="font-bold text-[18px]">Select a Date & Time</p>
                 <div className="flex">
@@ -106,7 +94,8 @@ const page: React.FC = () => {
                       <TimezoneSelector timeZones={timeZones} />
                     </div>
                     <div className="mt-3">
-                      <button className="h-[44px] border-gray-400 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                      <button className="h-[44px] gap-2 border-gray-400 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                        <Image src={tool} alt="Took" />
                         Troubleshoot
                       </button>
                     </div>

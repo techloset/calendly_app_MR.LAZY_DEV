@@ -130,7 +130,7 @@ const Page: React.FC = () => {
             </div>
             <div className="flex gap-2">
               <div className="flex justify-center">
-                <button className="h-[44px] border-[grey] text-center flex items-center justify-center px-3 text-[13px] font-bold ">
+                <button className="h-[44px] border-[grey] text-center flex items-center justify-center px-3 text-[13px] font-medium ">
                   Set up later
                 </button>
               </div>

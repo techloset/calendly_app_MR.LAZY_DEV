@@ -1,5 +1,6 @@
+import Image from "next/image";
 import React, { useState } from "react";
-
+import world from "../../../public/vectors/globe.png";
 interface TimeZone {
   label: string;
   value: string;
@@ -19,6 +20,7 @@ const TimezoneSelector: React.FC<{ timeZones: TimeZone[] }> = ({
 
   return (
     <div className="flex">
+      <Image src={world} className="h-4 w-4 mt-2" alt="world" />
       <select
         id="timezone-select"
         className="rounded-md p-2 font-normal"
