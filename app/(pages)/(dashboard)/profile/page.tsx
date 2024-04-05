@@ -13,6 +13,7 @@ import downArrow from "../../../../public/profile/down-arrow.png";
 import backArrow from "../../../../public/profile/backArrow.png";
 import i from "../../../../public/profile/i.png";
 import inviteUser from "../../../../public/profile/inviteUser.png";
+import avatar from "../../../../public/profile/avatar.png";
 import Image from "next/image";
 import {
   countriesArray,
@@ -64,7 +65,7 @@ const page: React.FC = () => {
   return (
     <div>
       <div className="flex">
-        <div className="w-[20%] flex flex-col justify-between px-6 py-4 h-[1100px] border-[1px]">
+        <div className="w-[20%] flex flex-col justify-between px-6 py-4 h-[1100px] border-gray-300 border-[1px]">
           <div>
             <div>
               <Image src={logo} className="h-[40px] w-[150px]" alt="" />
@@ -74,7 +75,7 @@ const page: React.FC = () => {
                 <Image src={backArrow} className="w-4 h-4" alt="" />
               </div>
               <div>
-                <p className="text-blue-600 font-medium text-[18px]">
+                <p className="text-[#0069FF] font-medium text-[18px]">
                   Back to home
                 </p>
               </div>
@@ -89,7 +90,9 @@ const page: React.FC = () => {
                 <Image src={person} className="w-6 h-6" alt="" />
               </div>
               <div>
-                <p className="text-blue-600 font-medium text-[18px]">Profile</p>
+                <p className="text-[#0069FF] font-medium text-[18px]">
+                  Profile
+                </p>
               </div>
             </div>
             <div className="flex gap-3 mt-3 py-2">
@@ -188,7 +191,9 @@ const page: React.FC = () => {
                 </div>
 
                 <div className="mt-16 flex gap-7 items-center">
-                  <div className="h-24 w-24 bg-slate-300 rounded-full"></div>
+                  <div className="h-24 w-24 rounded-full">
+                    <Image src={avatar} className="w-full h-full" alt="" />
+                  </div>
                   <div className="">
                     <div>
                       <button className="h-[37px] gap-2 text-center border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold ">
@@ -213,7 +218,7 @@ const page: React.FC = () => {
                   <div className="mt-2">
                     <input
                       type="text"
-                      className="h-[40px] w-[450px] border-[1px] px-3 rounded-md"
+                      className="h-[40px] w-[450px] border-[1px] border-gray-300 px-3 rounded-md"
                       placeholder="Muhammad Talha"
                     />
                   </div>
@@ -227,7 +232,7 @@ const page: React.FC = () => {
                   <div className="mt-2">
                     <textarea
                       rows={10}
-                      className="h-[90px] border-[1px] w-[450px] px-3 rounded-md"
+                      className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
                       placeholder=""
                     />
                   </div>
@@ -259,7 +264,7 @@ const page: React.FC = () => {
                           /> */}
                           <input
                             type="date"
-                            className="h-[40px] w-[215px] px-3 border-[1px] border-gray-400 rounded-md"
+                            className="h-[40px] w-[215px] px-3 border-[1px] border-gray-300 rounded-md"
                             name=""
                             placeholder="DD/MM/YYYY"
                             id=""
@@ -271,7 +276,7 @@ const page: React.FC = () => {
                           <p className="font-bold text-[16px]">Time Format</p>
                           <Image src={i} className="h-3 w-3" alt="i" />
                         </div>
-                        <div className="h-[40px] w-[215px] border-[1px] border-gray-400 rounded-md mt-2">
+                        <div className="h-[40px] w-[215px] border-[1px] border-gray-300 rounded-md mt-2">
                           <Dropdown
                             options={timesArray}
                             onSelect={(option) => setSelectedHour(option)}
@@ -319,7 +324,7 @@ const page: React.FC = () => {
             <div className="mt-7 px-7 w-[66%]">
               <div className="flex justify-between items-center">
                 <div className="flex gap-3">
-                  <button className="h-[44px] bg-blue-600 text-white border-bg-blue-600 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                  <button className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
                     Save changes
                   </button>
                   <button className="h-[44px]  text-center flex items-center border-black justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
@@ -327,7 +332,7 @@ const page: React.FC = () => {
                   </button>
                 </div>
                 <div>
-                  <button className="h-[44px] bg-red-600 text-white border-bg-blue-600 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                  <button className="h-[44px] bg-red-600 text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
                     Delete Account
                   </button>
                 </div>

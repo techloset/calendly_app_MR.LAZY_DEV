@@ -10,8 +10,6 @@ function DatePickerComponent(): JSX.Element {
   const handleDateChange = (newValue: dayjs.Dayjs | null) => {
     if (newValue !== null) {
       const formattedDate = newValue.format("DD/MM/YYYY");
-
-      // Log the formatted date to the console
       console.log("Selected Date:", formattedDate);
     }
     setValue(newValue);
@@ -19,11 +17,12 @@ function DatePickerComponent(): JSX.Element {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar
-        value={value}
-        onChange={handleDateChange}
+      <div
         className="custom-calendar"
-      />
+        style={{ width: "200px", height: "500px" }}
+      >
+        <DateCalendar value={value} onChange={handleDateChange} />
+      </div>
     </LocalizationProvider>
   );
 }

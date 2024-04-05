@@ -56,7 +56,7 @@ export default function page() {
 
               <div className="mt-[380px]">
                 <div className="flex justify-between">
-                  <p className="font-medium text-[15px] text-blue-600">
+                  <p className="font-medium text-[15px] text-[#0069FF]">
                     Cookie settings
                   </p>
                   <p className="font-medium text-[15px] ">Report abuse</p>
@@ -114,17 +114,17 @@ export default function page() {
                 <div className="mt-4 h-[50px] w-[470px]">
                   <p className="font-normal text-[14px]">
                     By proceeding, you comfirm that you have read and agree to{" "}
-                    <span className="font-bold text-blue-600">
+                    <span className="font-bold text-[#0069FF]">
                       Calendly's Term of Use{" "}
                     </span>{" "}
                     and{" "}
-                    <span className="font-bold text-blue-600">
+                    <span className="font-bold text-[#0069FF]">
                       Privacy Notice.
                     </span>
                   </p>
                 </div>
                 <div className="mt-3">
-                  <button className="h-[44px] bg-blue-600 text-white border-bg-blue-600 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                  <button className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
                     Schedule Event
                   </button>
                 </div>

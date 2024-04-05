@@ -7,6 +7,7 @@ import progressBar from "../../../../public/images/progressBar.png";
 import speaker from "../../../../public/vectors/speaker.png";
 import Checkbox from "@/app/(components)/checkBox/CheckBox";
 import Image from "next/image";
+import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 
 interface DropdownProps {
   options: string[];
@@ -25,7 +26,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
       }}
       onChange={(e) => onSelect(e.target.value)}
     >
-      {options.map((option, index) => (
+      {hoursTimes.map((option, index) => (
         <option key={index} value={option}>
           {option}
         </option>
@@ -36,8 +37,6 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 
 const Page: React.FC = () => {
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
-
-  const hoursOptions: string[] = ["8 am", "9 am", "10 am", "11 am", "12 pm"];
 
   return (
     <div>
@@ -70,13 +69,13 @@ const Page: React.FC = () => {
             <div className="mt-2 w-[595px] h-[46px] flex justify-between">
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                 <Dropdown
-                  options={hoursOptions}
+                  options={hoursTimes}
                   onSelect={(option) => setSelectedHour(option)}
                 />
               </div>
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                 <Dropdown
-                  options={hoursOptions}
+                  options={hoursTimes}
                   onSelect={(option) => setSelectedHour(option)}
                 />
               </div>

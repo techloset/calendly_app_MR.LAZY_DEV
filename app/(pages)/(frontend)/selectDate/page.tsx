@@ -8,7 +8,6 @@ import clock from "../../../../public/vectors/clock.png";
 import tool from "../../../../public/vectors/tool.png";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import sticker from "../../../../public/vectors/sticker.png";
-import backArrow from "../../../../public/vectors/backArrow.png";
 
 interface TimeZone {
   label: string;

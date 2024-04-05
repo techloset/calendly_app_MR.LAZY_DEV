@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="flex mt-5 justify-center">
+    <div className="flex mt-28 justify-center">
       <div className="w-[440px] h-[580px] ">
         <div className="flex justify-center">
           <img src={image.src} className="w-[182px] h-[43px]" alt="Logo" />
