@@ -30,6 +30,7 @@ import {
   hoursOptions,
   timesArray,
 } from "@/app/(components)/profileData/ProfileData";
+import Link from "next/link";
 
 interface DropdownProps {
   options: string[];
@@ -91,7 +92,7 @@ const page: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex mt-6 py-2 gap-3 flex-row bg-[#F2F8FF] px-3 w-[243px] h-[44px] items-center">
+            <div className="flex mt-6 py-2 gap-3 flex-row bg-[#F2F8FF] cursor-pointer px-3 w-[243px] h-[44px] items-center">
               <div>
                 <Image src={scheduleHome} className="w-4 h-4" alt="" />
               </div>
@@ -101,7 +102,7 @@ const page: React.FC = () => {
                 </p>
               </div>
             </div>
-            <div className="flex mt-3 py-2 gap-3 flex-row px-3 w-[243px] h-[44px] items-center">
+            <div className="flex mt-3 py-2 gap-3 flex-row px-3  hover:bg-[#F2F8FF] cursor-pointer w-[243px] h-[44px] items-center">
               <div>
                 <Image src={analysis} className="w-4 h-4" alt="" />
               </div>
@@ -111,7 +112,7 @@ const page: React.FC = () => {
             </div>
           </div>
           <div>
-            <div className="flex mt-3 py-2 gap-3 flex-row px-3 w-[243px] h-[44px] items-center">
+            <div className="flex mt-3 py-2 gap-3 flex-row  hover:bg-[#F2F8FF] cursor-pointer px-3 w-[243px] h-[44px] items-center">
               <div>
                 <Image src={avaibility} className="w-4 h-4" alt="" />
               </div>
@@ -119,7 +120,7 @@ const page: React.FC = () => {
                 <p className=" font-bold text-[14px]">Availability</p>
               </div>
             </div>
-            <div className="flex mt-2 py-2 gap-3 flex-row px-3 w-[243px] h-[44px] items-center">
+            <div className="flex mt-2 py-2 gap-3 flex-row  hover:bg-[#F2F8FF] cursor-pointer px-3 w-[243px] h-[44px] items-center">
               <div>
                 <Image src={adminCenter} className="w-4 h-4" alt="" />
               </div>
@@ -135,9 +136,12 @@ const page: React.FC = () => {
             <div></div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold ">
+                <Link
+                  href={"/profile"}
+                  className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
+                >
                   M
-                </div>
+                </Link>
                 <div>
                   <Image src={downArrow} className="h-3 w-3" alt="Tab" />
                 </div>
@@ -176,17 +180,17 @@ const page: React.FC = () => {
                       <div className="h-[48px] w-[89px] border-b-[3px] border-blue-600 items-center flex justify-center">
                         <p className="text-[15px] font-normal">Upcoming</p>
                       </div>
-                      <div className="h-[48px] w-[89px] items-center flex justify-center">
+                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
                         <p className="text-[15px] text-gray-500 font-normal">
                           Pending
                         </p>
                       </div>
-                      <div className="h-[48px] w-[89px] items-center flex justify-center">
+                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
                         <p className="text-[15px] text-gray-500 font-normal">
                           Past
                         </p>
                       </div>
-                      <div className="h-[48px] w-[89px] items-center flex justify-center">
+                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
                         <p className="text-[15px] text-gray-500 font-normal">
                           Data Range
                         </p>
