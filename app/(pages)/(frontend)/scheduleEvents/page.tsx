@@ -2,12 +2,16 @@
 "use client";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import sticker from "../../../../public/vectors/sticker.png";
+import clock from "../../../../public/icons/clock.png";
+import diary from "../../../../public/icons/diary.png";
+import global from "../../../../public/icons/globe.png";
 import backArrow from "../../../../public/vectors/backArrow.png";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import nodemailer from "nodemailer";
+import Params from "@/app/(components)/params/Params";
 
 interface FormData {
   name: string;
@@ -22,9 +26,62 @@ interface EmailMessage {
   text: string;
 }
 
+interface ParamsData {
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
+  dayName: string | null;
+}
+
 export default function Page() {
+  //  const [date, setDate] = useState<string | null>(null);
+  //  const [time, setTime] = useState<string | null>(null);
+  //  const [timeZone, setTimeZone] = useState<string | null>(null);
+  const [dayName, setDayName] = useState<string | null>(null);
+  const [paramsData, setParamsData] = useState<ParamsData>({
+    date: null,
+    time: null,
+    timeZone: null,
+    dayName: null,
+  });
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams) {
+      const date = searchParams.get("date");
+      const time = searchParams.get("time");
+      const timeZone = searchParams.get("timeZone");
+
+      const currentDay = new Date().getDay();
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      const dayName = days[currentDay];
+
+      setParamsData({ date, time, timeZone, dayName });
+
+      setDayName(dayName);
+    }
+  }, [searchParams]);
+
   // Initialize state variables and router
   const router = useRouter();
+
+  if (!searchParams) {
+    return null;
+  }
+
+  console.log("date :", paramsData.date);
+  console.log("time :", paramsData.time);
+  console.log("timeZone :", paramsData.timeZone);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -99,6 +156,7 @@ export default function Page() {
       <div>
         <MenuHeader />
       </div>
+      {/* <Params /> */}
       <div>
         <div className="flex justify-center items-center mt-14">
           <div className="h-[700px] mb-6 shadow-2xl border-[1px] border-grey w-[80%] flex justify-center">
@@ -128,25 +186,36 @@ export default function Page() {
                 <div className="">
                   <p className="text-[22px] font-bold">30 Minutes Meeting</p>
                 </div>
-                <div className="mt-4 flex gap-3 items-center">
-                  <div></div>
+                <div className="mt-4 flex gap-1 items-center">
+                  <div>
+                    <Image src={clock} className="h-4 w-4" alt="" />
+                  </div>
                   <div>
                     <p className="text-[14px] font-medium">30 Min</p>
                   </div>
                 </div>
-                <div className="mt-4 flex gap-3 items-center">
-                  <div></div>
+                <div className="mt-4 flex gap-1 items-center">
+                  <div>
+                    <Image src={diary} className="h-4 w-4" alt="" />
+                  </div>
                   <div>
                     <p className="text-[14px] font-medium">
-                      11:00am - 11:30am, Wednesday, March 27, 2024
+                      {paramsData.time ? paramsData.time : "undefine"},{" "}
+                      {paramsData.dayName ? paramsData.dayName : "undefine"}, ,
+                      {paramsData.date ? paramsData.date : "undefine"},{" "}
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 flex gap-3 items-center">
-                  <div></div>
+                <div className="mt-4 flex gap-1 items-center">
+                  <div>
+                    <Image src={global} className="h-4 w-4" alt="" />
+                  </div>
                   <div>
                     <p className="text-[14px] font-medium">
-                      Pakistan, Maldives Time
+                      {/* Pakistan, Maldives Time */}
+                      {paramsData.timeZone
+                        ? paramsData.timeZone
+                        : "undefine"},{" "}
                     </p>
                   </div>
                 </div>

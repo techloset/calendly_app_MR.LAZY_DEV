@@ -38,7 +38,7 @@ const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
         onChange={handleChange}
       >
         {timeZones.map((timeZone: TimeZone, index: number) => (
-          <option key={index} value={timeZone.value + `(${hours} : ${mints})`}>
+          <option key={index} value={timeZone.value}>
             {timeZone.label}
             {`(${hours} : ${mints})`}
           </option>

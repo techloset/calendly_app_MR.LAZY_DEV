@@ -51,27 +51,6 @@ const page: React.FC = () => {
     timeZone: null,
   });
 
-  // function handleNext() {
-  //   // const { date, time, timeZone } = selectedDateTime;
-  //   // const queryObject = {
-  //   //   date: date || "",
-  //   //   time: time || "",
-  //   //   timeZone: timeZone || "",
-  //   // };
-  //   // const queryString = qs.stringify(queryObject);
-  //   // const url = `/scheduleEvents?${queryString}`;
-  //   // router.push(url);
-
-  //   router.push({
-  //     pathName: "/scheduleEvents",
-  //     query: {
-  //       date: selectedDateTime.date,
-  //       time: selectedDateTime.time,
-  //       timeZones: selectedDateTime.timeZone,
-  //     },
-  //   });
-  // }
-
   const handleDateChange = (date: string) => {
     setSelectedDateTime((prev) => ({ ...prev, date }));
   };
@@ -167,39 +146,39 @@ const page: React.FC = () => {
                       </div> */}
                       <TimeSlot
                         time="9:00am"
-                        onClick={() => handleTimeSlotClick("9:00am")}
+                        onClick={() => handleTimeSlotClick("9:00am - 9:30am")}
                       />{" "}
                       <TimeSlot
                         time="9:30am"
-                        onClick={() => handleTimeSlotClick("9:30am")}
+                        onClick={() => handleTimeSlotClick("9:30am - 10:00am")}
                       />{" "}
                       <TimeSlot
                         time="10:00am"
-                        onClick={() => handleTimeSlotClick("10:00am")}
+                        onClick={() => handleTimeSlotClick("10:00am - 10:30am")}
                       />{" "}
                       <TimeSlot
                         time="10:30am"
-                        onClick={() => handleTimeSlotClick("10:30am")}
+                        onClick={() => handleTimeSlotClick("10:30am - 11:00am")}
                       />{" "}
                       <TimeSlot
                         time="11:00am"
-                        onClick={() => handleTimeSlotClick("11:00am")}
+                        onClick={() => handleTimeSlotClick("11:00am - 11:30am")}
                       />{" "}
                       <TimeSlot
                         time="11:30am"
-                        onClick={() => handleTimeSlotClick("11:30am")}
+                        onClick={() => handleTimeSlotClick("11:30am - 12:00pm")}
                       />{" "}
                       <TimeSlot
                         time="12:00pm"
-                        onClick={() => handleTimeSlotClick("12:00pm")}
+                        onClick={() => handleTimeSlotClick("12:00pm - 12:30pm")}
                       />{" "}
                       <TimeSlot
                         time="12:30pm"
-                        onClick={() => handleTimeSlotClick("12:30pm")}
+                        onClick={() => handleTimeSlotClick("12:30pm - 1:00pm")}
                       />{" "}
                       <TimeSlot
                         time="1:00m"
-                        onClick={() => handleTimeSlotClick("1:00m")}
+                        onClick={() => handleTimeSlotClick("1:00m - 1:30pm")}
                       />{" "}
                       <div className="w-[220px] h-[65px] flex gap-2 mx-3 mt-10">
                         <div className="w-[110px] cursor-pointer h-[65px] bg-gray-600 rounded-[8px] flex justify-center items-center">
@@ -207,21 +186,28 @@ const page: React.FC = () => {
                             11:00am
                           </p>
                         </div>
-                        <Link
-                          href={{
-                            pathname: "/scheduleEvents",
-                            query: {
-                              title: "dfkjdjf",
-                              desc: "dfjdkfjdfjkdjfk",
-                            },
-                          }}
-                          className="w-[110px] cursor-pointer h-[65px] flex
-                          justify-center rounded-[8px] items-center bg-[#0069FF] "
-                        >
-                          <p className="font-semibold text-white text-[17px]">
-                            Next
-                          </p>
-                        </Link>
+                        {selectedDateTime.date &&
+                        selectedDateTime.time &&
+                        selectedDateTime.timeZone ? (
+                          <Link
+                            href={{
+                              pathname: "/scheduleEvents",
+                              query: {
+                                date: selectedDateTime.date,
+                                time: selectedDateTime.time,
+                                timeZone: selectedDateTime.timeZone,
+                              },
+                            }}
+                            className="w-[110px] cursor-pointer h-[65px] flex
+                            justify-center rounded-[8px] items-center bg-[#0069FF] "
+                          >
+                            <p className="font-semibold text-white text-[17px]">
+                              Next
+                            </p>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                       </div>
                       {/* <div className="w-[208px] h-[52px] mt-3 ml-4 flex justify-center border-[1px] py-2 border-[#0069FF] rounded-[4px]">
                         <p className="font-bold text-[14px] text-[#0069FF]">
