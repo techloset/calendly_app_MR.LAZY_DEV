@@ -4,13 +4,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs from "dayjs";
 
-function DatePickerComponent(): JSX.Element {
+interface DatePickerProps {
+  onDateChange: (date: string) => void;
+}
+
+function DatePickerComponent({ onDateChange }: DatePickerProps): JSX.Element {
   const [value, setValue] = React.useState<dayjs.Dayjs | null>(null);
 
   const handleDateChange = (newValue: dayjs.Dayjs | null) => {
     if (newValue !== null) {
       const formattedDate = newValue.format("DD/MM/YYYY");
-      console.log("Selected Date:", formattedDate);
+      onDateChange(formattedDate);
     }
     setValue(newValue);
   };

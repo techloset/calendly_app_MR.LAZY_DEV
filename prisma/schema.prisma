@@ -1,0 +1,83 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URL")
+}
+
+model ScheduleEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  anything  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model User {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   email          String   @unique
+//   hashedPassword String // Rename 'password' to 'hashedPassword' if it's stored as a hashed value
+//   fullName       String
+//   userName       String
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
+// }
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  email          String   @unique
+  hashedPassword String? // Assuming it's optional if you're using it for authentication
+  fullName       String?
+  userName       String?
+  welcomeMessage String? // Add welcomeMessage field
+  language       String?
+  dateFormat     String?
+  timeFormat     String?
+  timeZone       String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// model User {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   email          String
+//   name           String
+//   userName       String
+//   password       String
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
+// }
+
+// model ScheduleEvent {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   name      String
+//   email     String   @unique
+//   anything  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model User {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   email          String   @unique
+//   fullName       String
+//   userName       String
+//   hashedPassword String // Make sure the password field is defined
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
+// }
+
+// model User {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   email          String
+//   name           String
+//   userName       String
+//   password       String
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
+// }

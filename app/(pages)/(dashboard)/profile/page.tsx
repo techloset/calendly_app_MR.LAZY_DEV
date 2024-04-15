@@ -1,5 +1,7 @@
+// components/page.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import logo from "../../../../public/images/logo.svg";
 import person from "../../../../public/vectors/personn.png";
 import brading from "../../../../public/profile/star.png";
@@ -10,11 +12,9 @@ import help from "../../../../public/profile/help.png";
 import setting from "../../../../public/profile/setting.png";
 import logout from "../../../../public/profile/logout.png";
 import downArrow from "../../../../public/profile/down-arrow.png";
-import backArrow from "../../../../public/profile/backArrow.png";
 import i from "../../../../public/profile/i.png";
 import inviteUser from "../../../../public/profile/inviteUser.png";
 import avatar from "../../../../public/profile/avatar.png";
-import Image from "next/image";
 import {
   countriesArray,
   countryCityData,
@@ -22,6 +22,32 @@ import {
   timesArray,
 } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
+import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+
+interface Props {
+  handleFileChange: (files: FileList | null) => void;
+}
+
+interface FormData {
+  userName: string;
+  welcomeMessage: string;
+  language: string;
+  dateFormat: string;
+  timeFormat: string;
+  timeZone: string;
+  profilePicture: string | ArrayBuffer | null;
+}
+
+interface User {
+  id: string;
+  email: string;
+  fullName: string;
+  userName: string;
+  // Add other fields as needed
+}
 
 interface DropdownProps {
   options: string[];
@@ -48,10 +74,52 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
     </select>
   );
 };
-const page: React.FC = () => {
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
 
+const page: React.FC<Props> = ({ handleFileChange }) => {
+  const [formData, setFormData] = useState<FormData>({
+    userName: "",
+    welcomeMessage: "",
+    language: "",
+    dateFormat: "",
+    timeFormat: "",
+    timeZone: "",
+    profilePicture: null,
+  });
+
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const [user, setUser] = useState<User | null>(null);
+  const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axios.get<User>("/api/user");
+  //       setUser(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
+
+  //   if (session) {
+  //     fetchUserData();
+  //   }
+  // }, [session]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -61,139 +129,83 @@ const page: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // const hoursOptions: string[] = ["8 am", "9 am", "10 am", "11 am", "12 pm"];
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // const handleLogout = async () => {
+  //   await signOut({ callbackUrl: "/authLogin" });
+  //   router.push("/authLogin");
+  // };
+
+  const handleFileInputChange = (files: FileList | null) => {
+    if (files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFormData((prev) => ({
+          ...prev,
+          profilePicture: reader.result,
+        }));
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.put("/api/profile", formData);
+      // Optionally, you can redirect the user to another page or show a success message
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      // Handle error, e.g., show an error message to the user
+    }
+  };
 
   return (
     <div>
       <div className="flex">
-        <div className="w-[20%] flex flex-col justify-between px-2 py-4 h-[1100px] border-gray-300 border-[1px]">
-          <div>
-            <div>
-              <Image src={logo} className="h-[40px] w-[150px]" alt="" />
-            </div>
-            <div className="flex items-center gap-2 mt-10">
-              <Link href={"/home"} className="flex items-center gap-2">
-                <div>
-                  <Image
-                    src={backArrow}
-                    className="w-4 cursor-pointer h-4"
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <p className="text-[#0069FF] cursor-pointer font-medium text-[18px]">
-                    Back to home
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-4 ">
-              <p className=" font-bold text-[19px]">Account settings</p>
-            </div>
-
-            <div className="flex flex-row items-center  gap-5 mt-4 py-2 cursor-pointer pl-4 bg-[#F2F8FF] hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={person} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className="text-[#0069FF] font-medium text-[18px]">
-                  Profile
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={brading} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">Branding</p>
-              </div>
-            </div>
-            <div className="flex gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={link} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">My Link</p>
-              </div>
-            </div>
-            <div className="flex gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={preference} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">Login preferences</p>
-              </div>
-            </div>
-            <div className="flex gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={setting} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">Cookie settings</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={sync} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className="font-medium text-xl">Calendar sync</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            {/* <div className="flex items-center gap-3 mt-3 py-2">
-              <div>
-                <Image src={help} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">Help</p>
-              </div>
-              <div>
-                <Image src={downArrow} className="w-3 mt-1 h-3" alt="" />
-              </div>
-            </div> */}
-            <div className="flex items-center gap-5 mt-3 pl-4 py-2 cursor-pointer hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={help} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className="font-medium text-xl">Help</p>
-              </div>
-              <div>
-                <Image src={downArrow} className="w-3 mt-1 h-3" alt="" />
-              </div>
-            </div>
-            <div className="flex items-center gap-5 mt-3 pl-4 py-2 cursor-pointer hover:bg-[#F2F8FF]">
-              <div>
-                <Image src={logout} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className="font-medium text-xl">Logout</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <ProfileSidebar />
         <div className="w-[80%] h-[1000px]">
           <div className="flex h-[60px] px-6 justify-between">
             <div></div>
             <div className="flex items-center gap-3">
               <div className="flex jstify-center gap-2">
-                <button className="h-[37px] gap-2 border-[blue] hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-blue-700 text-[12px] font-bold ">
+                <Link
+                  href={"/selectDate"}
+                  className="h-[37px] gap-2 border-[blue] hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-blue-700 text-[12px] font-bold "
+                >
                   <Image src={inviteUser} className="h-6 w-6" alt="Tab" />
                   Invite user
-                </button>
+                </Link>
               </div>
               <div className="flex items-center gap-2">
-                <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold ">
-                  M
-                </div>
-                <div>
-                  <Image src={downArrow} className="h-3 w-3" alt="Tab" />
-                </div>
+                {session?.user?.image ? (
+                  <Link href={"/profile"} className="flex items-center gap-2">
+                    <Image
+                      src={session?.user?.image}
+                      width={100}
+                      height={100}
+                      className="h-[37px] w-[37px] rounded-full "
+                      alt=""
+                    />
+                    <div>
+                      <Image src={downArrow} className="h-3 w-3" alt="Tab" />
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold ">
+                      M
+                    </div>
+                    <div>
+                      <Image src={downArrow} className="h-3 w-3" alt="Tab" />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -208,15 +220,48 @@ const page: React.FC = () => {
                   <p className="font-semibold text-[22px]">Profile</p>
                 </div>
 
+                <div>
+                  {session && user ? (
+                    <div>
+                      <h1>User Profile</h1>
+                      <p>Email: {user.email}</p>
+                      <p>Full Name: {user.fullName}</p>
+                      <p>Username: {user.userName}</p>
+                      {/* Add other fields as needed */}
+                    </div>
+                  ) : (
+                    <p>You are not logged in</p>
+                  )}
+                </div>
+
                 <div className="mt-16 flex gap-7 items-center">
                   <div className="h-24 w-24 rounded-full">
-                    <Image src={avatar} className="w-full h-full" alt="" />
+                    {formData.profilePicture ? (
+                      <Image
+                        src={formData.profilePicture as string}
+                        width={100}
+                        height={100}
+                        className="h-24 w-24 rounded-full "
+                        alt=""
+                      />
+                    ) : (
+                      <Image src={avatar} className="w-full h-full" alt="" />
+                    )}
                   </div>
                   <div className="">
                     <div>
-                      <button className="h-[37px] gap-2 text-center hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold ">
+                      <button
+                        onClick={handleClick}
+                        className="h-[37px] gap-2 text-center hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold"
+                      >
                         Upload picture
                       </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={(e) => handleFileInputChange(e.target.files)}
+                      />
                     </div>
                     <div className="mt-4">
                       <p className="text-[13px]">
@@ -237,7 +282,10 @@ const page: React.FC = () => {
                     <input
                       type="text"
                       className="h-[40px] w-[450px] border-[1px] border-gray-300 px-3 rounded-md"
-                      placeholder="Muhammad Talha"
+                      value={formData.userName}
+                      onChange={handleChange}
+                      name="userName"
+                      placeholder={session?.user?.email || ""}
                     />
                   </div>
 
@@ -250,7 +298,10 @@ const page: React.FC = () => {
                   <div className="mt-2">
                     <textarea
                       rows={10}
+                      value={formData.welcomeMessage}
+                      onChange={handleChange}
                       className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
+                      name="welcomeMessage"
                       placeholder=""
                     />
                   </div>
@@ -263,7 +314,12 @@ const page: React.FC = () => {
                     <div className="h-[40px] mt-2 w-[450px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                       <Dropdown
                         options={hoursOptions}
-                        onSelect={(option) => setSelectedHour(option)}
+                        onSelect={(option) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            language: option,
+                          }))
+                        }
                       />
                     </div>
                   </div>
@@ -276,16 +332,12 @@ const page: React.FC = () => {
                           <Image src={i} className="h-3 w-3" alt="i" />
                         </div>
                         <div className="h-[40px] mt-2">
-                          {/* <Dropdown
-                            options={hoursOptions}
-                            onSelect={(option) => setSelectedHour(option)}
-                          /> */}
                           <input
                             type="date"
                             className="h-[40px] w-[215px] px-3 border-[1px] border-gray-300 rounded-md"
-                            name=""
+                            name="dateFormat"
                             placeholder="DD/MM/YYYY"
-                            id=""
+                            onChange={handleChange}
                           />
                         </div>
                       </div>
@@ -297,7 +349,12 @@ const page: React.FC = () => {
                         <div className="h-[40px] w-[215px] border-[1px] border-gray-300 rounded-md mt-2">
                           <Dropdown
                             options={timesArray}
-                            onSelect={(option) => setSelectedHour(option)}
+                            onSelect={(option) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                timeFormat: option,
+                              }))
+                            }
                           />
                         </div>
                       </div>
@@ -311,7 +368,12 @@ const page: React.FC = () => {
                       <div className="h-[40px] mt-2 w-[450px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                         <Dropdown
                           options={countriesArray}
-                          onSelect={(option) => setSelectedHour(option)}
+                          onSelect={(option) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              language: option,
+                            }))
+                          }
                         />
                       </div>
                     </div>
@@ -331,7 +393,12 @@ const page: React.FC = () => {
                       <div className="h-[40px] mt-2 w-[450px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                         <Dropdown
                           options={countryCityData}
-                          onSelect={(option) => setSelectedHour(option)}
+                          onSelect={(option) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              timeZone: option,
+                            }))
+                          }
                         />
                       </div>
                     </div>
@@ -342,7 +409,10 @@ const page: React.FC = () => {
             <div className="mt-7 px-7 w-[66%]">
               <div className="flex justify-between items-center">
                 <div className="flex gap-3">
-                  <button className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                  <button
+                    onClick={handleSubmit}
+                    className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                  >
                     Save changes
                   </button>
                   <button className="h-[44px] hover:border-[blue] hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] text-center flex items-center border-black justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">

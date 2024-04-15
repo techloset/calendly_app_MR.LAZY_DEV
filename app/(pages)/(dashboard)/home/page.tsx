@@ -31,6 +31,7 @@ import {
   timesArray,
 } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface DropdownProps {
   options: string[];
@@ -59,6 +60,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 const page: React.FC = () => {
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
+  const { data: session, status } = useSession();
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -136,15 +138,32 @@ const page: React.FC = () => {
             <div></div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <Link
-                  href={"/profile"}
-                  className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
-                >
-                  M
-                </Link>
-                <div>
-                  <Image src={downArrow} className="h-3 w-3" alt="Tab" />
-                </div>
+                {session?.user?.image ? (
+                  <Link href={"/profile"} className="flex items-center gap-2">
+                    <Image
+                      src={session?.user?.image}
+                      width={100}
+                      height={100}
+                      className="h-[37px] w-[37px] rounded-full "
+                      alt=""
+                    />
+                    <div>
+                      <Image src={downArrow} className="h-3 w-3" alt="Tab" />
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href={"/profile"}
+                      className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
+                    >
+                      M
+                    </Link>
+                    <div>
+                      <Image src={downArrow} className="h-3 w-3" alt="Tab" />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

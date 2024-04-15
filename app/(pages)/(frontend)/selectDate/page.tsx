@@ -8,6 +8,9 @@ import clock from "../../../../public/vectors/clock.png";
 import tool from "../../../../public/vectors/tool.png";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import sticker from "../../../../public/vectors/sticker.png";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface TimeZone {
   label: string;
@@ -34,7 +37,57 @@ const timeZones: TimeZone[] = [
   { label: "Eastern Standard Time ", value: "America/Toronto" },
 ];
 
+interface SelectedDateTime {
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
+}
+
 const page: React.FC = () => {
+  const router = useRouter();
+  const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
+    date: null,
+    time: null,
+    timeZone: null,
+  });
+
+  // function handleNext() {
+  //   // const { date, time, timeZone } = selectedDateTime;
+  //   // const queryObject = {
+  //   //   date: date || "",
+  //   //   time: time || "",
+  //   //   timeZone: timeZone || "",
+  //   // };
+  //   // const queryString = qs.stringify(queryObject);
+  //   // const url = `/scheduleEvents?${queryString}`;
+  //   // router.push(url);
+
+  //   router.push({
+  //     pathName: "/scheduleEvents",
+  //     query: {
+  //       date: selectedDateTime.date,
+  //       time: selectedDateTime.time,
+  //       timeZones: selectedDateTime.timeZone,
+  //     },
+  //   });
+  // }
+
+  const handleDateChange = (date: string) => {
+    setSelectedDateTime((prev) => ({ ...prev, date }));
+  };
+
+  const handleTimeSlotClick = (time: string) => {
+    setSelectedDateTime((prev) => ({ ...prev, time }));
+  };
+
+  const handleTimeZoneChange = (value: string | null) => {
+    setSelectedDateTime((prev) => ({ ...prev, timeZone: value }));
+  };
+
+  useEffect(() => {
+    console.log("Selected Date Time:", selectedDateTime);
+  }, [selectedDateTime]);
+
   return (
     <div>
       <div>
@@ -42,7 +95,7 @@ const page: React.FC = () => {
       </div>
       <div>
         <div className="flex justify-center items-center mt-14">
-          <div className="h-[700px] mb-6 shadow-2xl border-[1px] border-grey w-[1060px] flex justify-center">
+          <div className="h-[800px] mb-6 shadow-2xl border-[1px] border-grey w-[1060px] flex justify-center">
             <div className="w-[30%] border-[1px] px-7 py-7">
               <div>
                 <div className="mt-6">
@@ -84,13 +137,16 @@ const page: React.FC = () => {
                             : ""
                         }
                       /> */}
-                      <DatePickerComponent />
+                      <DatePickerComponent onDateChange={handleDateChange} />
                     </div>
                     <div className="py-2 mt-4">
                       <p className="font-bold text-[18px]">Time zone</p>
                     </div>
                     <div>
-                      <TimezoneSelector timeZones={timeZones} />
+                      <TimezoneSelector
+                        timeZones={timeZones}
+                        onChange={handleTimeZoneChange}
+                      />{" "}
                     </div>
                     <div className="mt-3">
                       <button className="h-[44px] gap-2 border-gray-400 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
@@ -109,15 +165,64 @@ const page: React.FC = () => {
                           9:00am
                         </p>
                       </div> */}
-                      <TimeSlot time="9:00am" />
-                      <TimeSlot time="9:30am" />
-                      <TimeSlot time="10:00am" />
-                      <TimeSlot time="10:30am" />
-                      <TimeSlot time="11:00am" />
-                      <TimeSlot time="11:30am" />
-                      <TimeSlot time="12:00pm" />
-                      <TimeSlot time="12:30pm" />
-                      <TimeSlot time="1:00pm" />
+                      <TimeSlot
+                        time="9:00am"
+                        onClick={() => handleTimeSlotClick("9:00am")}
+                      />{" "}
+                      <TimeSlot
+                        time="9:30am"
+                        onClick={() => handleTimeSlotClick("9:30am")}
+                      />{" "}
+                      <TimeSlot
+                        time="10:00am"
+                        onClick={() => handleTimeSlotClick("10:00am")}
+                      />{" "}
+                      <TimeSlot
+                        time="10:30am"
+                        onClick={() => handleTimeSlotClick("10:30am")}
+                      />{" "}
+                      <TimeSlot
+                        time="11:00am"
+                        onClick={() => handleTimeSlotClick("11:00am")}
+                      />{" "}
+                      <TimeSlot
+                        time="11:30am"
+                        onClick={() => handleTimeSlotClick("11:30am")}
+                      />{" "}
+                      <TimeSlot
+                        time="12:00pm"
+                        onClick={() => handleTimeSlotClick("12:00pm")}
+                      />{" "}
+                      <TimeSlot
+                        time="12:30pm"
+                        onClick={() => handleTimeSlotClick("12:30pm")}
+                      />{" "}
+                      <TimeSlot
+                        time="1:00m"
+                        onClick={() => handleTimeSlotClick("1:00m")}
+                      />{" "}
+                      <div className="w-[220px] h-[65px] flex gap-2 mx-3 mt-10">
+                        <div className="w-[110px] cursor-pointer h-[65px] bg-gray-600 rounded-[8px] flex justify-center items-center">
+                          <p className="font-semibold text-[17px] text-white">
+                            11:00am
+                          </p>
+                        </div>
+                        <Link
+                          href={{
+                            pathname: "/scheduleEvents",
+                            query: {
+                              title: "dfkjdjf",
+                              desc: "dfjdkfjdfjkdjfk",
+                            },
+                          }}
+                          className="w-[110px] cursor-pointer h-[65px] flex
+                          justify-center rounded-[8px] items-center bg-[#0069FF] "
+                        >
+                          <p className="font-semibold text-white text-[17px]">
+                            Next
+                          </p>
+                        </Link>
+                      </div>
                       {/* <div className="w-[208px] h-[52px] mt-3 ml-4 flex justify-center border-[1px] py-2 border-[#0069FF] rounded-[4px]">
                         <p className="font-bold text-[14px] text-[#0069FF]">
                           9:30am
@@ -165,6 +270,9 @@ const page: React.FC = () => {
             </div>
           </div>
         </div>
+        {/* <div className="w-[230px] h-[65px] bg-slate-500 mx-3 mt-10">
+          dkfjkdjf
+        </div> */}
       </div>
     </div>
   );

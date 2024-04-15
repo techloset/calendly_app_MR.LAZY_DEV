@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import image from "../../../../public/images/logo1.png";
 import second from "../../../../public/images/second.png";
 import icon from "../../../assets/images/icon.png";
@@ -36,7 +36,47 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 
 const Page: React.FC = () => {
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    selectedDays: [] as string[],
+    selectedHours: { hour1: null, hour2: null } as {
+      hour1: string | null;
+      hour2: string | null;
+    },
+  });
+
+  const handleSelectHour1 = (option: string | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedHours: { ...prev.selectedHours, hour1: option },
+    }));
+  };
+
+  const handleSelectHour2 = (option: string | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedHours: { ...prev.selectedHours, hour2: option },
+    }));
+  };
+
+  const handleCheckboxChange = (label: string, checked: boolean) => {
+    setFormData((prev) => {
+      if (checked) {
+        return {
+          ...prev,
+          selectedDays: [...prev.selectedDays, label],
+        };
+      } else {
+        return {
+          ...prev,
+          selectedDays: prev.selectedDays.filter((day) => day !== label),
+        };
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log("Form Data:", formData);
+  }, [formData]);
 
   return (
     <div>
@@ -68,25 +108,40 @@ const Page: React.FC = () => {
             <p className="text-[14px] font-bold">Available hours</p>
             <div className="mt-2 w-[595px] h-[46px] flex justify-between">
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
-                <Dropdown
-                  options={hoursTimes}
-                  onSelect={(option) => setSelectedHour(option)}
-                />
+                <Dropdown options={hoursTimes} onSelect={handleSelectHour1} />
               </div>
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
-                <Dropdown
-                  options={hoursTimes}
-                  onSelect={(option) => setSelectedHour(option)}
-                />
+                <Dropdown options={hoursTimes} onSelect={handleSelectHour2} />
               </div>
             </div>
 
             <p className="text-[14px] mt-5 font-bold">Available days</p>
             <div className="mt-2 w-[595px] h-[60px] flex border-[1px] border-[#DADADA] rounded-[8px]">
               <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
-                <Checkbox label={"Sundays"} />
+                <Checkbox label={"Sundays"} onChange={handleCheckboxChange} />
               </div>
-              <div className="w-[86px] h-[60px] border-[1px]">
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox label={"Mondays"} onChange={handleCheckboxChange} />
+              </div>
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox label={"Tuesdays"} onChange={handleCheckboxChange} />
+              </div>
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox
+                  label={"Wednesdays"}
+                  onChange={handleCheckboxChange}
+                />
+              </div>
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox label={"Thursdays"} onChange={handleCheckboxChange} />
+              </div>
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox label={"Fridays"} onChange={handleCheckboxChange} />
+              </div>
+              <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
+                <Checkbox label={"Saturdays"} onChange={handleCheckboxChange} />
+              </div>
+              {/* <div className="w-[86px] h-[60px] border-[1px]">
                 <Checkbox label={"Mondays"} />
               </div>
               <div className="w-[86px] h-[60px] border-[1px]">
@@ -103,7 +158,7 @@ const Page: React.FC = () => {
               </div>
               <div className="w-[86px] h-[60px] rounded-r-md border-[1px]">
                 <Checkbox label={"Saturdays"} />
-              </div>
+              </div> */}
             </div>
             <div className="mt-12 w-[595px] h-[24px] gap-2 flex justify-center">
               <div>
@@ -119,7 +174,7 @@ const Page: React.FC = () => {
           </div>
 
           <div className="mt-4 items-center w-[645px] flex justify-between h-[44px]">
-            <div>
+            <div className="h-[10px] w-[100px">
               {" "}
               <Image
                 src={progressBar}

@@ -1,14 +1,18 @@
+// CheckBox.tsx
 import React, { useState } from "react";
 
 interface CheckboxProps {
   label: string;
+  onChange: (label: string, checked: boolean) => void;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
+    const checked = event.target.checked;
+    setIsChecked(checked);
+    onChange(label, checked);
   };
 
   return (
