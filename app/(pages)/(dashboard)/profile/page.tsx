@@ -46,7 +46,6 @@ interface FormData {
 interface User {
   id: string;
   email: string;
-  fullName: string;
   name: string;
   // Add other fields as needed
 }
@@ -78,23 +77,44 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
+  const { data: session, status } = useSession();
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "",
+    email: session?.user?.email || "",
     country: "",
     welcomeMessage: "",
     language: "",
     dateFormat: "",
     timeFormat: "",
     timeZone: "",
-    image: null,
+    image: "",
   });
 
   const router = useRouter();
-  const { data: session, status } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`/api/getProfileData`, {
+          headers: {
+            Authorization: "don@gmail.com",
+          },
+        });
+        console.log("Profile data:", response.data);
+      } catch (error) {
+        console.error(
+          "Error in fetch single profile data fetching profile data:",
+          error
+        );
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -161,11 +181,12 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
   const handleSubmit = async () => {
     try {
-      await axios.put("/api/profile", formData);
-      // Optionally, you can redirect the user to another page or show a success message
+      await axios.post("/api/uploadProfile", formData);
+      console.log("Profile updated successfully!");
+      router.push("/sidebar");
     } catch (error) {
       console.error("Error updating profile:", error);
-      // Handle error, e.g., show an error message to the user
+      console.log("Failed to update profile. Please try again later.");
     }
   };
 
@@ -222,20 +243,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                 </div>
                 <div className="mt-4">
                   <p className="font-semibold text-[22px]">Profile</p>
-                </div>
-
-                <div>
-                  {session && user ? (
-                    <div>
-                      <h1>User Profile</h1>
-                      <p>Email: {user.email}</p>
-                      <p>Full Name: {user.fullName}</p>
-                      <p>name: {user.name}</p>
-                      {/* Add other fields as needed */}
-                    </div>
-                  ) : (
-                    <p>You are not logged in</p>
-                  )}
                 </div>
 
                 <div className="mt-16 flex gap-7 items-center">

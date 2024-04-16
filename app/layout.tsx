@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./libs/AuthOptions";
 import { redirect } from "next/navigation";
 import NextAuthSessionProvider from "./provider/NextAuthSessionProvider";
+import { Provider } from "react-redux";
 
 const inter = Inter({ subsets: ["latin"] });
 
