@@ -8,44 +8,38 @@ import clock from "../../../../public/icons/clock.png";
 import diary from "../../../../public/icons/diary.png";
 import global from "../../../../public/icons/globe.png";
 import backArrow from "../../../../public/vectors/backArrow.png";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
-import nodemailer from "nodemailer";
 import Params from "@/app/(components)/params/Params";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
   email: string;
   additionalInfo: string;
-}
-
-interface EmailMessage {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-}
-
-interface ParamsData {
   date: string | null;
   time: string | null;
   timeZone: string | null;
-  dayName: string | null;
+}
+interface propss {
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
 }
 
 export default function Page() {
-  //  const [date, setDate] = useState<string | null>(null);
-  //  const [time, setTime] = useState<string | null>(null);
-  //  const [timeZone, setTimeZone] = useState<string | null>(null);
-  const [dayName, setDayName] = useState<string | null>(null);
-  const [paramsData, setParamsData] = useState<ParamsData>({
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    additionalInfo: "",
     date: null,
     time: null,
     timeZone: null,
-    dayName: null,
   });
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (searchParams) {
@@ -53,44 +47,15 @@ export default function Page() {
       const time = searchParams.get("time");
       const timeZone = searchParams.get("timeZone");
 
-      const currentDay = new Date().getDay();
-      const days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      const dayName = days[currentDay];
-
-      setParamsData({ date, time, timeZone, dayName });
-
-      setDayName(dayName);
+      setFormData((prev) => ({
+        ...prev,
+        date,
+        time,
+        timeZone,
+      }));
     }
   }, [searchParams]);
 
-  // Initialize state variables and router
-  const router = useRouter();
-
-  if (!searchParams) {
-    return null;
-  }
-
-  console.log("date :", paramsData.date);
-  console.log("time :", paramsData.time);
-  console.log("timeZone :", paramsData.timeZone);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    additionalInfo: "",
-  });
-
-  // const { title, desc } = router.query || {};
-
-  // Function to handle changes in form fields
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -101,52 +66,25 @@ export default function Page() {
     }));
   };
 
-  // Function to handle form submission
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const response = await fetch("/api/sendEmail", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        formData,
-      }),
-    });
-    console.log(await response.json());
+    try {
+      const response = await axios.post("/api/uploadData", formData);
+      console.log("Form data uploaded successfully:", response.data);
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+    } finally {
+      router.push({
+        pathname: "/calendarInvitation",
+        query: {
+          date: formData?.date,
+          time: formData?.time,
+          timeZone: formData?.timeZone,
+        },
+      } as any);
+    }
   };
-  // const handleSubmit = async () => {
-  //   try {
-  //     await axios.post("/api/sendEmail", formData);
-  //     // Handle success, e.g., show a success message or navigate to another page
-  //     console.log("request send correctly");
-  //   } catch (error) {
-  //     console.error("Error handling form submission:", error);
-  //     console.log("request not not send correctly");
-  //     // Handle error, e.g., show an error message to the user
-  //   }
-  // };
 
-  // const handleSubmit = async () => {
-  // try {
-  //   const response = await fetch("/api/uploadData", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(formData),
-  //   });
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! status: ${response.status}`);
-  //   }
-  //   console.log("Data submitted successfully");
-  // } catch (error) {
-  //   console.error("Error submitting data:", error);
-  // }
-  // };
-
-  // Function to handle navigating back
   const handleBack = () => {
     router.back();
   };
@@ -156,7 +94,6 @@ export default function Page() {
       <div>
         <MenuHeader />
       </div>
-      {/* <Params /> */}
       <div>
         <div className="flex justify-center items-center mt-14">
           <div className="h-[700px] mb-6 shadow-2xl border-[1px] border-grey w-[80%] flex justify-center">
@@ -172,12 +109,6 @@ export default function Page() {
                       className="h-6 w-6"
                       alt="Back Arrow"
                     />
-                  </div>
-                  <div>
-                    {/* <h1>Selected Date Time:</h1>
-                    <p>Date: {title}</p> */}
-                    {/* <p>Time: {time}</p>
-                    <p>Time Zone: {timeZone}</p> */}
                   </div>
                 </div>
                 <div className="mt-6">
@@ -200,9 +131,8 @@ export default function Page() {
                   </div>
                   <div>
                     <p className="text-[14px] font-medium">
-                      {paramsData.time ? paramsData.time : "undefine"},{" "}
-                      {paramsData.dayName ? paramsData.dayName : "undefine"}, ,
-                      {paramsData.date ? paramsData.date : "undefine"},{" "}
+                      {formData.time ? formData.time : "undefine"},{" "}
+                      {formData.date ? formData.date : "undefine"},{" "}
                     </p>
                   </div>
                 </div>
@@ -212,10 +142,7 @@ export default function Page() {
                   </div>
                   <div>
                     <p className="text-[14px] font-medium">
-                      {/* Pakistan, Maldives Time */}
-                      {paramsData.timeZone
-                        ? paramsData.timeZone
-                        : "undefine"},{" "}
+                      {formData.timeZone ? formData.timeZone : "undefine"},{" "}
                     </p>
                   </div>
                 </div>
@@ -302,10 +229,24 @@ export default function Page() {
                 <div className="mt-3">
                   <button
                     onClick={handleSubmit}
-                    className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                    className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                   >
                     Schedule Event
                   </button>
+                  {/* <Link
+                    href={{
+                      pathname: "/calendarInvitation",
+                      query: {
+                        date: formData.date,
+                        time: formData.time,
+                        timeZone: formData.timeZone,
+                      },
+                    }}
+                    onClick={handleSubmit}
+                    className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                  >
+                    Schedule Event
+                  </Link> */}
                 </div>
               </div>
             </div>

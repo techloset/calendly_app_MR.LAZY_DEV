@@ -32,20 +32,22 @@ interface Props {
 }
 
 interface FormData {
-  userName: string;
+  email: string;
+  country: string;
+  name: string;
   welcomeMessage: string;
   language: string;
   dateFormat: string;
   timeFormat: string;
   timeZone: string;
-  profilePicture: string | ArrayBuffer | null;
+  image: string | ArrayBuffer | null;
 }
 
 interface User {
   id: string;
   email: string;
   fullName: string;
-  userName: string;
+  name: string;
   // Add other fields as needed
 }
 
@@ -77,13 +79,15 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
   const [formData, setFormData] = useState<FormData>({
-    userName: "",
+    name: "",
+    email: "",
+    country: "",
     welcomeMessage: "",
     language: "",
     dateFormat: "",
     timeFormat: "",
     timeZone: "",
-    profilePicture: null,
+    image: null,
   });
 
   const router = useRouter();
@@ -148,7 +152,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       reader.onload = () => {
         setFormData((prev) => ({
           ...prev,
-          profilePicture: reader.result,
+          image: reader.result,
         }));
       };
       reader.readAsDataURL(files[0]);
@@ -186,7 +190,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                 {session?.user?.image ? (
                   <Link href={"/profile"} className="flex items-center gap-2">
                     <Image
-                      src={session?.user?.image}
+                      src={session?.user.image}
                       width={100}
                       height={100}
                       className="h-[37px] w-[37px] rounded-full "
@@ -226,7 +230,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                       <h1>User Profile</h1>
                       <p>Email: {user.email}</p>
                       <p>Full Name: {user.fullName}</p>
-                      <p>Username: {user.userName}</p>
+                      <p>name: {user.name}</p>
                       {/* Add other fields as needed */}
                     </div>
                   ) : (
@@ -236,9 +240,9 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
                 <div className="mt-16 flex gap-7 items-center">
                   <div className="h-24 w-24 rounded-full">
-                    {formData.profilePicture ? (
+                    {formData.image ? (
                       <Image
-                        src={formData.profilePicture as string}
+                        src={formData.image as string}
                         width={100}
                         height={100}
                         className="h-24 w-24 rounded-full "
@@ -282,9 +286,9 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                     <input
                       type="text"
                       className="h-[40px] w-[450px] border-[1px] border-gray-300 px-3 rounded-md"
-                      value={formData.userName}
+                      value={formData.name}
                       onChange={handleChange}
-                      name="userName"
+                      name="name"
                       placeholder={session?.user?.email || ""}
                     />
                   </div>
@@ -362,7 +366,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
                     <div className="mt-3">
                       <div className="">
-                        <p className="font-bold text-[16px]">Language</p>
+                        <p className="font-bold text-[16px]">Country</p>
                       </div>
 
                       <div className="h-[40px] mt-2 w-[450px] border-[1px] border-[#B2B2B2] rounded-[8px]">
@@ -371,7 +375,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                           onSelect={(option) =>
                             setFormData((prev) => ({
                               ...prev,
-                              language: option,
+                              country: option,
                             }))
                           }
                         />

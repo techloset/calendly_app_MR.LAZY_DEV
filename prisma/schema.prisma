@@ -9,7 +9,7 @@ datasource db {
   url      = env("MONGODB_URL")
 }
 
-model ScheduleEvent {
+model FormData {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String   @unique
@@ -34,13 +34,39 @@ model User {
   hashedPassword String? // Assuming it's optional if you're using it for authentication
   fullName       String?
   userName       String?
-  welcomeMessage String? // Add welcomeMessage field
-  language       String?
-  dateFormat     String?
-  timeFormat     String?
-  timeZone       String?
+  // welcomeMessage String? // Add welcomeMessage field
+  // language       String?
+  // dateFormat     String?
+  // timeFormat     String?
+  // timeZone       String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model ScheduleEvent {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  time           String
+  date           String
+  // dayName        String
+  timeZone       String
+  email          String
+  additionalInfo String
+  createdAt      DateTime @default(now())
+}
+
+model ProfileData {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  image          String
+  name           String
+  email          String
+  welcomeMessage String
+  language       String
+  dateFormat     String
+  timeFormat     String
+  country        String
+  timeZone       String
+  createdAt      DateTime @default(now())
 }
 
 // model User {
