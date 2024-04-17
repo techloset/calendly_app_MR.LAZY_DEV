@@ -42,7 +42,7 @@ interface Event {
   timeZone: string;
   email: string;
   additionalInfo: string;
-  createdAt: string; // Assuming createdAt is a string, update it if it's a Date object
+  createdAt: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
@@ -84,6 +84,12 @@ const page: React.FC = () => {
       }
     }
   }, []);
+
+  const filteredEvents = events.filter(
+    (event) => new Date(event.date) < new Date()
+  );
+
+  // console.log("filtered Events :", filteredEvents);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -211,11 +217,16 @@ const page: React.FC = () => {
                     Wednesday, 27 March 2024
                   </p>
                 </div>
-                {events.map((event, index) => (
+                {filteredEvents.map((event, index) => (
                   <div className="h-[96px] border-[1px] border-gray-300 border-t-0 px-8">
                     <div className="flex items-center justify-between">
                       <div className="h-[48px] flex mt-6 gap-3 w-[310px]">
-                        <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div>
+                        {/* <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div> */}
+                        <>
+                          <div className="h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] bg-gray-400 text-[14px] font-semibold ">
+                            {event.name.charAt(0).toUpperCase()}
+                          </div>
+                        </>
                         <div>
                           <p className="font-normal text-[13px]">
                             {event.time}

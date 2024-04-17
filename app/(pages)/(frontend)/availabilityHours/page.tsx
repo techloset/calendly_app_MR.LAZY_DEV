@@ -8,6 +8,8 @@ import speaker from "../../../../public/vectors/speaker.png";
 import Checkbox from "@/app/(components)/checkBox/CheckBox";
 import Image from "next/image";
 import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
+import Link from "next/link";
+import axios from "axios";
 
 interface DropdownProps {
   options: string[];
@@ -36,47 +38,80 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 
 const Page: React.FC = () => {
-  const [formData, setFormData] = useState({
-    selectedDays: [] as string[],
-    selectedHours: { hour1: null, hour2: null } as {
-      hour1: string | null;
-      hour2: string | null;
-    },
-  });
-
-  const handleSelectHour1 = (option: string | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedHours: { ...prev.selectedHours, hour1: option },
-    }));
-  };
-
-  const handleSelectHour2 = (option: string | null) => {
-    setFormData((prev) => ({
-      ...prev,
-      selectedHours: { ...prev.selectedHours, hour2: option },
-    }));
-  };
+  const [selectedHour1, setSelectedHour1] = useState<string | null>(null); // State for first dropdown
+  const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
+  const [selectedDays, setSelectedDays] = useState<string[]>([]); // State for selected days
 
   const handleCheckboxChange = (label: string, checked: boolean) => {
-    setFormData((prev) => {
+    setSelectedDays((prev) => {
       if (checked) {
-        return {
-          ...prev,
-          selectedDays: [...prev.selectedDays, label],
-        };
+        return [...prev, label];
       } else {
-        return {
-          ...prev,
-          selectedDays: prev.selectedDays.filter((day) => day !== label),
-        };
+        return prev.filter((day) => day !== label);
       }
     });
   };
 
   useEffect(() => {
-    console.log("Form Data:", formData);
-  }, [formData]);
+    console.log("Selected Hour 1:", selectedHour1);
+    console.log("Selected Hour 2:", selectedHour2);
+    console.log("Selected Days:", selectedDays);
+  }, [selectedHour1, selectedHour2, selectedDays]);
+  // const [formData, setFormData] = useState({
+  //   selectedDays: [] as string[],
+  //   // selectedHours: { hour1: null, hour2: null } as {
+  //   //   hour1: string | null;
+  //   //   hour2: string | null;
+  //   // },
+  // });
+
+  // const handleSelectHour1 = (option: string | null) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     selectedHours: { ...prev.selectedHours, hour1: option },
+  //   }));
+  // };
+
+  // const handleSelectHour2 = (option: string | null) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     selectedHours: { ...prev.selectedHours, hour2: option },
+  //   }));
+  // };
+
+  // const handleCheckboxChange = (label: string, checked: boolean) => {
+  //   setFormData((prev) => {
+  //     if (checked) {
+  //       return {
+  //         ...prev,
+  //         selectedDays: [...prev.selectedDays, label],
+  //       };
+  //     } else {
+  //       return {
+  //         ...prev,
+  //         selectedDays: prev.selectedDays.filter((day) => day !== label),
+  //       };
+  //     }
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   console.log("Form Data:", formData);
+  // }, [formData]);
+
+  const handleAvailability = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/uploadAvailability", {
+        selectedDays,
+        selectedHour1,
+        selectedHour2,
+      });
+      console.log("Form data uploaded successfully:", response.data);
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+    }
+  };
 
   return (
     <div>
@@ -108,10 +143,10 @@ const Page: React.FC = () => {
             <p className="text-[14px] font-bold">Available hours</p>
             <div className="mt-2 w-[595px] h-[46px] flex justify-between">
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
-                <Dropdown options={hoursTimes} onSelect={handleSelectHour1} />
+                <Dropdown options={hoursTimes} onSelect={setSelectedHour1} />
               </div>
               <div className="h-[46px] w-[278px] border-[1px] border-[#B2B2B2] rounded-[8px]">
-                <Dropdown options={hoursTimes} onSelect={handleSelectHour2} />
+                <Dropdown options={hoursTimes} onSelect={setSelectedHour2} />
               </div>
             </div>
 
@@ -141,24 +176,6 @@ const Page: React.FC = () => {
               <div className="w-[86px] h-[60px] rounded-s-md border-[1px]">
                 <Checkbox label={"Saturdays"} onChange={handleCheckboxChange} />
               </div>
-              {/* <div className="w-[86px] h-[60px] border-[1px]">
-                <Checkbox label={"Mondays"} />
-              </div>
-              <div className="w-[86px] h-[60px] border-[1px]">
-                <Checkbox label={"Tuesdays"} />
-              </div>
-              <div className="w-[86px] h-[60px] border-[1px]">
-                <Checkbox label={"Wednesdays"} />
-              </div>
-              <div className="w-[86px] h-[60px] border-[1px]">
-                <Checkbox label={"Thursdays"} />
-              </div>
-              <div className="w-[86px] h-[60px] border-[1px]">
-                <Checkbox label={"Fridays"} />
-              </div>
-              <div className="w-[86px] h-[60px] rounded-r-md border-[1px]">
-                <Checkbox label={"Saturdays"} />
-              </div> */}
             </div>
             <div className="mt-12 w-[595px] h-[24px] gap-2 flex justify-center">
               <div>
@@ -184,12 +201,18 @@ const Page: React.FC = () => {
             </div>
             <div className="flex gap-2">
               <div className="flex justify-center">
-                <button className="h-[44px] border-[grey] text-center flex items-center justify-center px-3 text-[13px] font-medium ">
+                <Link
+                  href={"/sidebar"}
+                  className="h-[44px] border-[grey] text-center flex items-center justify-center px-3 text-[13px] font-medium "
+                >
                   Set up later
-                </button>
+                </Link>
               </div>
               <div className="flex justify-center">
-                <button className="h-[44px] border-[#0069FF] bg-[#0069FF] text-center flex items-center text-white justify-center rounded-[32px] px-3 border-[1px] text-[13px] font-bold ">
+                <button
+                  onClick={handleAvailability}
+                  className="h-[44px] border-[#0069FF] bg-[#0069FF] text-center flex items-center text-white justify-center rounded-[32px] px-3 border-[1px] text-[13px] font-bold "
+                >
                   Continue
                 </button>
               </div>

@@ -11,6 +11,7 @@ import sticker from "../../../../public/vectors/sticker.png";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import NewCalendar from "@/app/(components)/newCalendar/NewCalendar";
 
 interface TimeZone {
   label: string;
@@ -52,7 +53,8 @@ const page: React.FC = () => {
   });
 
   const handleDateChange = (date: string) => {
-    setSelectedDateTime((prev) => ({ ...prev, date }));
+    const formattedDate = formatDate(date);
+    setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
   };
 
   const handleTimeSlotClick = (time: string) => {
@@ -66,6 +68,51 @@ const page: React.FC = () => {
   useEffect(() => {
     console.log("Selected Date Time:", selectedDateTime);
   }, [selectedDateTime]);
+
+  const formatDate = (inputDate: any) => {
+    // Split the input date into day, month, and year components
+    const [day, month, year] = inputDate.split("/");
+
+    // Create a new Date object with the provided year, month (zero-based), and day
+    const date = new Date(year, month - 1, day);
+
+    // Define an array of month names
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const dayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    const dayName = dayNames[date.getDay()];
+    const monthName = monthNames[date.getMonth()];
+
+    // Format the date string
+    const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
+
+    return formattedDate;
+  };
+
+  // Example usage:
+  const formattedDate = formatDate("06/04/2024");
 
   return (
     <div>
@@ -117,6 +164,9 @@ const page: React.FC = () => {
                         }
                       /> */}
                       <DatePickerComponent onDateChange={handleDateChange} />
+                      {/* <NewCalendar
+                        onDateChange={(date: any) => handleDateChange(date)}
+                      /> */}
                     </div>
                     <div className="py-2 mt-4">
                       <p className="font-bold text-[18px]">Time zone</p>

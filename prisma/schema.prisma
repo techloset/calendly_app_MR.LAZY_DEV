@@ -18,6 +18,15 @@ model FormData {
   updatedAt DateTime @updatedAt
 }
 
+// schema.prisma
+
+model Availability {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  selectedDays  String[]
+  selectedHour1 String?
+  selectedHour2 String?
+}
+
 // model User {
 //   id             String   @id @default(auto()) @map("_id") @db.ObjectId
 //   email          String   @unique
