@@ -85,9 +85,9 @@ const page: React.FC = () => {
     }
   }, []);
 
-  const filteredEvents = events.filter(
-    (event) => new Date(event.date) < new Date()
-  );
+  // const filteredEvents = events.filter(
+  //   (event) => new Date(event.date) < new Date()
+  // );
 
   // console.log("filtered Events :", filteredEvents);
 
@@ -102,6 +102,64 @@ const page: React.FC = () => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("past");
+
+  useEffect(() => {
+    fetchData();
+
+    async function fetchData() {
+      try {
+        const response = await axios.get("/api/getEventsData");
+        setEvents(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    filterEventsByCategory(selectedCategory);
+  }, [selectedCategory, events]);
+
+  const filterEventsByCategory = (category: string) => {
+    switch (category) {
+      case "upcoming":
+        setFilteredEvents(
+          events.filter((event) => new Date(event.date) > new Date())
+        );
+        break;
+      case "past":
+        setFilteredEvents(
+          events.filter((event) => new Date(event.date) < new Date())
+        );
+        break;
+      case "pending":
+        // Implement logic for pending events
+        setFilteredEvents([]);
+        break;
+      case "dateRange":
+        const sortedEvents = [...events].sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateA - dateB;
+        });
+        setFilteredEvents(sortedEvents);
+        break;
+      default:
+        setFilteredEvents(events);
+        break;
+    }
   };
 
   return (
@@ -158,23 +216,46 @@ const page: React.FC = () => {
                 <div className="h-[64px] rounded-t-[6px] flex justify-between border-[1px] border-gray-300 items-center px-8">
                   <div>
                     <div className="flex gap-3 mt-4">
-                      <div className="h-[48px] w-[89px] border-b-[3px] border-blue-600 items-center flex justify-center">
+                      <div
+                        className={`h-[48px] w-[89px] border-b-[3px] ${
+                          selectedCategory === "upcoming"
+                            ? "border-blue-600"
+                            : "cursor-pointer hover:border-blue-600"
+                        } items-center flex justify-center`}
+                        onClick={() => setSelectedCategory("upcoming")}
+                      >
                         <p className="text-[15px] font-normal">Upcoming</p>
                       </div>
-                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
-                        <p className="text-[15px] text-gray-500 font-normal">
-                          Pending
-                        </p>
+                      <div
+                        className={`h-[48px] w-[89px] border-b-[3px] ${
+                          selectedCategory === "pending"
+                            ? "border-blue-600"
+                            : "cursor-pointer hover:border-blue-600"
+                        } items-center flex justify-center`}
+                        onClick={() => setSelectedCategory("pending")}
+                      >
+                        <p className="text-[15px] font-normal">Pending</p>
                       </div>
-                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
-                        <p className="text-[15px] text-gray-500 font-normal">
-                          Past
-                        </p>
+                      <div
+                        className={`h-[48px] w-[89px] border-b-[3px] ${
+                          selectedCategory === "past"
+                            ? "border-blue-600"
+                            : "cursor-pointer hover:border-blue-600"
+                        } items-center flex justify-center`}
+                        onClick={() => setSelectedCategory("past")}
+                      >
+                        <p className="text-[15px] font-normal">Past</p>
                       </div>
-                      <div className="h-[48px] w-[89px] border-b-[3px] cursor-pointer hover:border-blue-600 items-center flex justify-center">
-                        <p className="text-[15px] text-gray-500 font-normal">
-                          Data Range
-                        </p>
+
+                      <div
+                        className={`h-[48px] w-[89px] border-b-[3px] ${
+                          selectedCategory === "dateRange"
+                            ? "border-blue-600"
+                            : "cursor-pointer hover:border-blue-600"
+                        } items-center flex justify-center`}
+                        onClick={() => setSelectedCategory("dateRange")}
+                      >
+                        <p className="text-[15px] font-normal">Date Range</p>
                       </div>
                     </div>
                   </div>

@@ -101,7 +101,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       try {
         const response = await axios.get(`/api/getProfileData`, {
           headers: {
-            Authorization: "don@gmail.com",
+            Authorization: session?.user?.email,
           },
         });
         console.log("Profile data:", response.data);
