@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import selectedDateTimeSliceReducer from "./slice/selectedDateTimeSlice";
+import fetchScheduleEventsSliceReducer from "./slice/scheduleEventsData";
 import userReducer from "./slice/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,6 +10,7 @@ export const store = configureStore({
   reducer: {
     user: userReducer,
     selectedDateTime: selectedDateTimeSliceReducer,
+    fetchScheduleEvents: fetchScheduleEventsSliceReducer,
   },
 });
 

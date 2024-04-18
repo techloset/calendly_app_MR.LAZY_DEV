@@ -1,5 +1,3 @@
-"use client";
-// NewCalendar.tsx
 import React, { useState, useEffect } from "react";
 import {
   format,
@@ -9,6 +7,7 @@ import {
   addMonths,
   subMonths,
   startOfMonth,
+  isToday, // Import isToday function
 } from "date-fns";
 
 import rightt from "../../../public/vectors/rightt.png";
@@ -40,7 +39,6 @@ const NewCalendar: React.FC<CalendarProps> = ({
       setCurrentDate(date);
       setSelected(date);
       onDateChange?.(date);
-      // console.log(date);
     }
   };
 
@@ -83,15 +81,23 @@ const NewCalendar: React.FC<CalendarProps> = ({
           <div
             key={day.toString()}
             className={`calendar-day flex cursor-pointer justify-center items-center p-3 rounded-full hover:bg-[#c5d7f0] ${
-              getDay(day) === 0 || getDay(day) === 6 ? "text-[#0069FF]" : ""
+              getDay(day) === 0 || getDay(day) === 6
+                ? "text-[#a9b2be] hover:bg-[#c7cbd2]"
+                : ""
             } ${
               day.toDateString() === selected?.toDateString()
                 ? "bg-[#0069FF] text-white font-bold"
                 : ""
+            } ${
+              isToday(day) ? "items-center justify-center flex flex-col" : "" // Add background color or marker for today's date
             }`}
             onClick={() => selectDate(day)}
           >
             {format(day, "d")}
+            {isToday(day) && (
+              <div className="dot bg-black w-1 rounded-full h-1" />
+            )}{" "}
+            {/* Render a dot for today's date */}
           </div>
         ))}
       </div>

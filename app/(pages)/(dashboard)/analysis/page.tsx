@@ -28,14 +28,7 @@ import filterNew from "../../../../public/icons/filterNew.png";
 import rightSmall from "../../../../public/icons/rightSmall.png";
 import { DropdownData } from "@/app/(components)/profileData/ProfileData";
 import { PieChart, Pie, Sector } from "recharts";
-import { ReferenceLine } from "recharts";
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-} from "recharts";
+import { BarChart, Bar, Cell, ResponsiveContainer } from "recharts";
 
 import {
   LineChart,
@@ -45,12 +38,35 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 
 interface DropdownProps {
   options: string[];
   onSelect: (option: string) => void;
+}
+
+interface Event {
+  id: string;
+  name: string;
+  time: string;
+  date: string;
+  timeZone: string;
+  email: string;
+  additionalInfo: string;
+  createdAt: string;
+}
+
+interface SelectedDateTime {
+  id: string | null;
+  name: string | null;
+  email: string | null;
+  additionInfo: string | null;
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
+  createdAt: string | null;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
@@ -75,16 +91,55 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 const page: React.FC = () => {
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
+  const [total, setTotal] = useState<Event[]>([]); // Change the type to Event[]
+  const [totall, setTotall] = useState<number>(0);
+  const [upcoming, setUpcoming] = useState<number>(0);
+  const [past, setPast] = useState<number>(0);
 
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const dispatch = useAppDispatch();
+
+  const [events, setEvents] = useState<Event[]>([]);
+  const scheduleEvents = useAppSelector(
+    (state) => state.fetchScheduleEvents.data
+  );
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    dispatch(fetchScheduleEvents());
+  }, [dispatch]);
 
-    return () => clearInterval(intervalId);
-  }, []);
+  useEffect(() => {
+    // Convert SelectedDateTime to Event if necessary
+    if (scheduleEvents) {
+      if (Array.isArray(scheduleEvents)) {
+        const convertedEvents: Event[] = scheduleEvents.map(
+          (event: SelectedDateTime) => {
+            return {
+              id: event.id || "",
+              name: event.name || "",
+              email: event.email || "",
+              additionInfo: event.additionInfo || "",
+              date: event.date || "",
+              time: event.time || "",
+              timeZone: event.timeZone || "",
+              createdAt: event.createdAt || "",
+            };
+          }
+        );
+        setEvents(convertedEvents);
+      } else {
+        console.error("scheduleEvents is not an array:", scheduleEvents);
+      }
+    }
+  }, [scheduleEvents]);
+
+  useEffect(() => {
+    setTotall(events.length);
+    setUpcoming(
+      events.filter((event) => new Date(event.date) > new Date()).length
+    );
+    setPast(events.filter((event) => new Date(event.date) < new Date()).length);
+  }, [events]);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -92,114 +147,13 @@ const page: React.FC = () => {
   };
 
   const data = [
-    { name: "G1", value: 200 },
-    { name: "G2", value: 400 },
-    { name: "G3", value: 100 },
-    { name: "G4", value: 700 },
-    { name: "G5", value: 400 },
-    { name: "G6", value: 500 },
-    { name: "G7", value: 300 },
-    { name: "G8", value: 100 },
-    // { name: , value: 200 },
-  ];
-
-  const data01 = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-  const data02 = [
-    { name: "A1", value: 100 },
-    { name: "A2", value: 300 },
-    { name: "B1", value: 100 },
-    { name: "B2", value: 80 },
-    { name: "B3", value: 40 },
-    { name: "B4", value: 30 },
-    { name: "B5", value: 50 },
-    { name: "C1", value: 100 },
-    { name: "C2", value: 200 },
-    { name: "D1", value: 150 },
-    { name: "D2", value: 50 },
-  ];
-
-  const dataSecond = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-
-  const series = [
-    {
-      name: "Series 1",
-      data: [
-        { category: "A", value: Math.random() },
-        { category: "B", value: Math.random() },
-        { category: "C", value: Math.random() },
-      ],
-    },
-    {
-      name: "Series 2",
-      data: [
-        { category: "B", value: Math.random() },
-        { category: "C", value: Math.random() },
-        { category: "D", value: Math.random() },
-      ],
-    },
-    {
-      name: "Series 3",
-      data: [
-        { category: "C", value: Math.random() },
-        { category: "D", value: Math.random() },
-        { category: "E", value: Math.random() },
-      ],
-    },
-  ];
-
-  const dataThird = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
+    { name: "Monday", value: 200 },
+    { name: "Tuesday", value: 400 },
+    { name: "Wednesday", value: 100 },
+    { name: "Thursday", value: 700 },
+    { name: "Friday", value: 400 },
+    { name: "Saturday", value: 500 },
+    { name: "Sunday", value: 300 },
   ];
 
   return (
@@ -207,93 +161,75 @@ const page: React.FC = () => {
       <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
       <div
         className={`flex flex-col flex-1 px-5 ${
-          isSidebarOpen ? "lg:ml-[17%] md:ml-[25%] ml:[35%]" : "ml-[13%]"
+          isSidebarOpen ? "lg:ml-[17%] md:ml-[25%] ml:[35%]" : "ml-[7%]"
         }`}
       >
         <div>
           <div className="my-8">
-            <p className="font-bold text-[25px] ml-7 leading-7">Analysis</p>
+            <p className="font-bold text-[25px] ml-28 leading-7">Analysis</p>
           </div>
-          <div className={`flex gap-3 mt-3`}>
-            <div>
-              <LineChart
-                width={400}
-                height={250}
-                data={dataThird}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="pv"
-                  stroke="#8884d8"
-                  strokeDasharray="5 5"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="uv"
-                  stroke="#82ca9d"
-                  strokeDasharray="3 4 5 2"
-                />
-              </LineChart>
+          <div className="flex gap-4 justify-center">
+            <div className="h-[200px] py-3 px-3 pt-4 w-[20%] shadow-2xl">
+              <div>
+                <p className="text-[20px] font-bold">Total</p>
+              </div>
+              <div className="my-3 mx-3">
+                <p className="text-[34px] font-extrabold">{totall}</p>
+              </div>
+              <div className="text-gray-400">
+                <p>+0 (no change)</p>
+              </div>
+              <div className="my-2">
+                <p className="text-gray-400">VS prior 30 days</p>
+              </div>
             </div>
-            <div>
-              <LineChart width={400} height={250}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="category"
-                  type="category"
-                  allowDuplicatedCategory={false}
-                />
-                <YAxis dataKey="value" />
-                <Tooltip />
-                <Legend />
-                {series.map((s) => (
-                  <Line
-                    dataKey="value"
-                    data={s.data}
-                    name={s.name}
-                    key={s.name}
-                  />
-                ))}
-              </LineChart>
+            <div className="h-[200px] py-3 px-3 pt-4 w-[20%] shadow-2xl">
+              <div>
+                <p className="text-[20px] font-bold">Upcoming</p>
+              </div>
+              <div className="my-3 mx-3">
+                <p className="text-[34px] font-extrabold">{upcoming}</p>
+              </div>
+              <div className="text-gray-400">
+                <p>+0 (no change)</p>
+              </div>
+              <div className="my-2">
+                <p className="text-gray-400">VS prior 30 days</p>
+              </div>
             </div>
-            <div>
-              <LineChart
-                width={400}
-                height={250}
-                data={dataThird}
-                margin={{
-                  top: 20,
-                  right: 50,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <ReferenceLine x="Page C" stroke="red" label="Max PV PAGE" />
-                <ReferenceLine y={9800} label="Max" stroke="red" />
-                <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-              </LineChart>
+            <div className="h-[200px] py-3 px-3 pt-4 w-[20%] shadow-2xl">
+              <div>
+                <p className="text-[20px] font-bold">Pending</p>
+              </div>
+              <div className="my-3 mx-3">
+                <p className="text-[34px] font-extrabold">0</p>
+              </div>
+              <div className="text-gray-400">
+                <p>+0 (no change)</p>
+              </div>
+              <div className="my-2">
+                <p className="text-gray-400">VS prior 30 days</p>
+              </div>
+            </div>
+            <div className="h-[200px] py-3 px-3 pt-4 w-[20%] shadow-2xl">
+              <div>
+                <p className="text-[20px] font-bold">Past</p>
+              </div>
+              <div className="my-3 mx-3">
+                <p className="text-[34px] font-extrabold">{past}</p>
+              </div>
+              <div className="text-gray-400">
+                <p>+0 (no change)</p>
+              </div>
+              <div className="my-2">
+                <p className="text-gray-400">VS prior 30 days</p>
+              </div>
             </div>
           </div>
-          <div className="mt-3">
+
+          <div className="mt-16 ml-10">
             <LineChart
-              width={1200}
+              width={1130}
               height={310}
               data={data}
               margin={{

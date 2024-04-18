@@ -29,6 +29,8 @@ import rightSmall from "../../../../public/icons/rightSmall.png";
 import { DropdownData } from "@/app/(components)/profileData/ProfileData";
 import axios from "axios";
 import Calendar from "react-calendar";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 
 interface DropdownProps {
   options: string[];
@@ -44,6 +46,17 @@ interface Event {
   email: string;
   additionalInfo: string;
   createdAt: string;
+}
+
+interface SelectedDateTime {
+  id: string | null;
+  name: string | null;
+  email: string | null;
+  additionInfo: string | null;
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
+  createdAt: string | null;
 }
 
 const colors = [
@@ -80,24 +93,81 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   );
 };
 const page: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
 
   const [currentTime, setCurrentTime] = useState(new Date());
-
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([]); // Change the type to Event[]
+  const scheduleEvents = useAppSelector(
+    (state) => state.fetchScheduleEvents.data
+  );
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchScheduleEvents());
+  }, [dispatch]);
 
-    async function fetchData() {
-      try {
-        const response = await axios.get("/api/getEventsData");
-        setEvents(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  useEffect(() => {
+    // Convert SelectedDateTime to Event if necessary
+    if (scheduleEvents) {
+      if (Array.isArray(scheduleEvents)) {
+        const convertedEvents: Event[] = scheduleEvents.map(
+          (event: SelectedDateTime) => {
+            return {
+              id: event.id || "",
+              name: event.name || "",
+              email: event.email || "",
+              additionInfo: event.additionInfo || "",
+              date: event.date || "",
+              time: event.time || "",
+              timeZone: event.timeZone || "",
+              createdAt: event.createdAt || "",
+            };
+          }
+        );
+        setEvents(convertedEvents);
+      } else {
+        console.error("scheduleEvents is not an array:", scheduleEvents);
       }
     }
-  }, []);
+  }, [scheduleEvents]);
+
+  // useEffect(() => {
+  //   setEvents(scheduleEvents);
+  // }, [scheduleEvents]);
+
+  // useEffect(() => {
+  //   if (scheduleEvents) {
+  //     // Transform SelectedDateTime to Event
+  //     const transformedEvents: Event[] = [
+  //       {
+  //         id: scheduleEvents.id || "",
+  //         name: scheduleEvents.name || "",
+  //         time: scheduleEvents.time || "",
+  //         date: scheduleEvents.date || "",
+  //         timeZone: scheduleEvents.timeZone || "",
+  //         email: scheduleEvents.email || "",
+  //         additionalInfo: scheduleEvents.additionInfo || "",
+  //         createdAt: scheduleEvents.createdAt || "",
+  //       },
+  //     ];
+
+  //     // Set the transformed events to the local state
+  //     setEvents(transformedEvents);
+  //   }
+  // }, [scheduleEvents]);
+
+  // useEffect(() => {
+  //   fetchData();
+
+  //   async function fetchData() {
+  //     try {
+  //       const response = await axios.get("/api/getEventsData");
+  //       setEvents(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+  // }, []);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
@@ -140,18 +210,17 @@ const page: React.FC = () => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("past");
 
-  useEffect(() => {
-    fetchData();
-
-    async function fetchData() {
-      try {
-        const response = await axios.get("/api/getEventsData");
-        setEvents(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  //   async function fetchData() {
+  //     try {
+  //       const response = await axios.get("/api/getEventsData");
+  //       setEvents(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -194,6 +263,10 @@ const page: React.FC = () => {
         break;
     }
   };
+
+  const uniqueDates = Array.from(
+    new Set(filteredEvents.map((event) => event.date))
+  );
 
   return (
     <div className="flex">
@@ -346,75 +419,79 @@ const page: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="h-[58px] px-8 border-[1px] border-t-0 border-gray-300 flex items-center">
-                  <p className="font-bold text-[15px]">
-                    Wednesday, 27 March 2024
-                  </p>
-                </div>
-                {filteredEvents.map((event, index) => (
-                  <div className="h-[96px] border-[1px] border-gray-300 border-t-0 px-8">
-                    <div className="flex items-center justify-between">
-                      <div className="h-[48px] flex mt-6 gap-3 w-[310px]">
-                        {/* <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div> */}
-                        <>
-                          <div
-                            className={`h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] ${
-                              colors[index % colors.length]
-                            } text-[14px] font-semibold`}
-                          >
-                            {event.name.charAt(0).toUpperCase()}
-                          </div>
-                        </>
-                        <div>
-                          <p className="font-normal text-[13px]">
-                            {event.time}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="h-[48px] mt-6 w-[310px]">
-                        <div className="h-[48px] gap-3 w-[310px]">
-                          <div className="">
-                            <p className="font-bold text-[14px]">test</p>
-                          </div>
-                          <div>
-                            <p className="font-normal text-[14px]">
-                              Event type{" "}
-                              <span className="font-bold">
-                                30 Minute Meeting
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className=" h-[48px] mt-6 w-[310px]">
-                        <div className="h-[48px] gap-3 w-[310px]">
-                          <div className="">
-                            <p className="font-normal flex gap-2 text-[14px]">
-                              <span className="px-2 border-r-2  border-black">
-                                1 host
-                              </span>
-                              <span>non-hosts</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className=" h-[48px] flex items-center mt-6 w-[68px]">
-                        <div className="flex gap-2">
-                          <div>
-                            <Image
-                              src={rightSmall}
-                              className="h-[16px] w-[16px]"
-                              alt=""
-                            />
-                          </div>
-                          <div>
-                            <p className="font-normal text-[14px] text-gray-500">
-                              Details
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                {uniqueDates.map((date, index) => (
+                  <div key={index}>
+                    <div className="h-[58px] px-8 border-[1px] border-t-0 border-gray-300 flex items-center">
+                      <p className="font-bold text-[15px]">{date}</p>
                     </div>
+                    {filteredEvents
+                      .filter((event) => event.date === date)
+                      .map((event, index) => (
+                        <div className="h-[96px] border-[1px] border-gray-300 border-t-0 px-8">
+                          <div className="flex items-center justify-between">
+                            <div className="h-[48px] flex mt-6 gap-3 w-[310px]">
+                              {/* <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div> */}
+                              <>
+                                <div
+                                  className={`h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] ${
+                                    colors[index % colors.length]
+                                  } text-[14px] font-semibold`}
+                                >
+                                  {event.name.charAt(0).toUpperCase()}
+                                </div>
+                              </>
+                              <div>
+                                <p className="font-normal text-[13px]">
+                                  {event.time}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="h-[48px] mt-6 w-[310px]">
+                              <div className="h-[48px] gap-3 w-[310px]">
+                                <div className="">
+                                  <p className="font-bold text-[14px]">test</p>
+                                </div>
+                                <div>
+                                  <p className="font-normal text-[14px]">
+                                    Event type{" "}
+                                    <span className="font-bold">
+                                      30 Minute Meeting
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className=" h-[48px] mt-6 w-[310px]">
+                              <div className="h-[48px] gap-3 w-[310px]">
+                                <div className="">
+                                  <p className="font-normal flex gap-2 text-[14px]">
+                                    <span className="px-2 border-r-2  border-black">
+                                      1 host
+                                    </span>
+                                    <span>non-hosts</span>
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className=" h-[48px] flex items-center mt-6 w-[68px]">
+                              <div className="flex gap-2">
+                                <div>
+                                  <Image
+                                    src={rightSmall}
+                                    className="h-[16px] w-[16px]"
+                                    alt=""
+                                  />
+                                </div>
+                                <div>
+                                  <p className="font-normal text-[14px] text-gray-500">
+                                    Details
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 ))}
 

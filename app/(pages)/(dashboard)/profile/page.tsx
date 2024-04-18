@@ -94,7 +94,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   });
 
   const router = useRouter();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -108,7 +108,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
           },
         });
         console.log("Profile data:", response.data);
-        // dispatch(fetchUserDataSuccess(response.data));
+        dispatch(fetchUserDataSuccess(response.data));
         // console.log(session?.user?.email);
       } catch (error) {
         console.error(
