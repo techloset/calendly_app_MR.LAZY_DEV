@@ -28,6 +28,7 @@ import filterNew from "../../../../public/icons/filterNew.png";
 import rightSmall from "../../../../public/icons/rightSmall.png";
 import { DropdownData } from "@/app/(components)/profileData/ProfileData";
 import axios from "axios";
+import Calendar from "react-calendar";
 
 interface DropdownProps {
   options: string[];
@@ -44,6 +45,19 @@ interface Event {
   additionalInfo: string;
   createdAt: string;
 }
+
+const colors = [
+  "bg-blue-600",
+  "bg-pink-600",
+  "bg-green-600",
+  "bg-gray-600",
+  "bg-yellow-600",
+  "bg-orange-600",
+  "bg-red-600",
+  "bg-amber-600",
+  "bg-black",
+  "bg-purple-600",
+];
 
 const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   return (
@@ -84,6 +98,25 @@ const page: React.FC = () => {
       }
     }
   }, []);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const handleImageClick = () => {
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleDateChange = (date: any) => {
+    setSelectedDate(date);
+    setShowCalendar(false); // Close the calendar after selecting a date
+    const formattedDate = date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    });
+    console.log("Selected Date:", formattedDate); // Log the formatted date to the console
+  };
 
   // const filteredEvents = events.filter(
   //   (event) => new Date(event.date) < new Date()
@@ -248,19 +281,39 @@ const page: React.FC = () => {
                       </div>
 
                       <div
-                        className={`h-[48px] w-[89px] border-b-[3px] ${
+                        className={`h-[48px] w-[149px] flex border-b-[3px] ${
                           selectedCategory === "dateRange"
                             ? "border-blue-600"
                             : "cursor-pointer hover:border-blue-600"
                         } items-center flex justify-center`}
                         onClick={() => setSelectedCategory("dateRange")}
                       >
-                        <p className="text-[15px] font-normal">Date Range</p>
+                        <p className="text-[15px] w-[120px] items-center gap-3 flex font-normal">
+                          Date Range{" "}
+                          <span
+                            onClick={handleImageClick}
+                            className="cursor-pointer bg-gra"
+                          >
+                            <Image
+                              src={down}
+                              className="h-[12px] w-[12px]"
+                              alt=""
+                            />
+                          </span>
+                        </p>
+                      </div>
+                      <div className="w-[300px] absolute left-[47%] top-[11%] bg-white shadow-2xl p-3">
+                        {showCalendar && (
+                          <Calendar
+                            onChange={handleDateChange}
+                            value={selectedDate}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <div className="flex gap-2 border-[1px] border-black px-3 py-2 rounded-full ">
+                    <div className="flex gap-2 bg- border-[1px] border-black px-3 py-2 rounded-full ">
                       <div>
                         <Image
                           src={exportt}
@@ -304,7 +357,11 @@ const page: React.FC = () => {
                       <div className="h-[48px] flex mt-6 gap-3 w-[310px]">
                         {/* <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div> */}
                         <>
-                          <div className="h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] bg-gray-400 text-[14px] font-semibold ">
+                          <div
+                            className={`h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] ${
+                              colors[index % colors.length]
+                            } text-[14px] font-semibold`}
+                          >
                             {event.name.charAt(0).toUpperCase()}
                           </div>
                         </>

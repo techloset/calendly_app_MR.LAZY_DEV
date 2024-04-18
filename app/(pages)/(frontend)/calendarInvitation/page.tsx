@@ -1,14 +1,48 @@
+"use client";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import tick from "../../../../public/vectors/check.png";
 import tab from "../../../../public/vectors/newTab.png";
 import person from "../../../../public/vectors/person.png";
 import calendar from "../../../../public/vectors/diary.png";
 import world from "../../../../public/vectors/globe.png";
 import sticker from "../../../../public/vectors/sticker.png";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+interface FormData {
+  date: string | null;
+  time: string | null;
+  timeZone: string | null;
+}
 
 export default function page() {
+  const searchParams = useSearchParams();
+
+  const session = useSession();
+
+  const [formData, setFormData] = useState<FormData>({
+    date: null,
+    time: null,
+    timeZone: null,
+  });
+
+  useEffect(() => {
+    if (searchParams) {
+      const date = searchParams.get("date");
+      const time = searchParams.get("time");
+      const timeZone = searchParams.get("timeZone");
+
+      setFormData((prev) => ({
+        ...prev,
+        date,
+        time,
+        timeZone,
+      }));
+    }
+  }, [searchParams]);
+
   return (
     <div>
       <div>
@@ -64,7 +98,8 @@ export default function page() {
                       </div>
                       <div>
                         <p className="text-[17px] font-semibold text-gray-500">
-                          Muhammad Talha
+                          {/* Muhammad Talha */}
+                          {session.data?.user?.email}
                         </p>
                       </div>
                     </div>
@@ -78,7 +113,9 @@ export default function page() {
                       </div>
                       <div>
                         <p className="text-[17px] font-semibold text-gray-500">
-                          11:00am - 11:30am, Wednesday, March 27, 2024
+                          {formData.time ? formData.time : "undefine"},{" "}
+                          {formData.date ? formData.date : "undefine"},
+                          {/* 11:00am - 11:30am, Wednesday, March 27, 2024 */}
                         </p>
                       </div>
                     </div>
@@ -88,7 +125,8 @@ export default function page() {
                       </div>
                       <div>
                         <p className="text-[17px] font-semibold text-gray-500">
-                          Pakistan, Maldives Time
+                          {/* Pakistan, Maldives Time */}
+                          {formData.timeZone ? formData.timeZone : "undefine"},
                         </p>
                       </div>
                     </div>

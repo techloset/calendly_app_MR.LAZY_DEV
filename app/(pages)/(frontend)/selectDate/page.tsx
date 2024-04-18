@@ -37,6 +37,7 @@ const timeZones: TimeZone[] = [
   { label: "Newfoundland Standard Time ", value: "America/St_Johns" },
   { label: "Eastern Standard Time ", value: "America/Toronto" },
 ];
+import { format } from "date-fns";
 
 interface SelectedDateTime {
   date: string | null;
@@ -45,6 +46,8 @@ interface SelectedDateTime {
 }
 
 const page: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
   const router = useRouter();
   const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
     date: null,
@@ -52,9 +55,15 @@ const page: React.FC = () => {
     timeZone: null,
   });
 
-  const handleDateChange = (date: string) => {
-    const formattedDate = formatDate(date);
-    setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
+  // const handleDateChange = (date: string) => {
+  //   const formattedDate = formatDate(date);
+  //   setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
+  // };
+
+  const handleDateChange = (date: Date) => {
+    const formattedDate = format(date, "EEEE, d MMMM yyyy"); // Format the date
+    setSelectedDate(date); // Set the selected date
+    setSelectedDateTime((prev) => ({ ...prev, date: formattedDate })); // Update the selectedDateTime state
   };
 
   const handleTimeSlotClick = (time: string) => {
@@ -68,6 +77,8 @@ const page: React.FC = () => {
   useEffect(() => {
     console.log("Selected Date Time:", selectedDateTime);
   }, [selectedDateTime]);
+
+  console.log("select", selectedDate);
 
   const formatDate = (inputDate: any) => {
     // Split the input date into day, month, and year components
@@ -163,10 +174,19 @@ const page: React.FC = () => {
                             : ""
                         }
                       /> */}
-                      <DatePickerComponent onDateChange={handleDateChange} />
+                      {/* <DatePickerComponent onDateChange={handleDateChange} /> */}
                       {/* <NewCalendar
-                        onDateChange={(date: any) => handleDateChange(date)}
+                        selectedDate={selectedDate}
+                        onDateChange={handleDateChange}
                       /> */}
+                      <NewCalendar
+                        selectedDate={
+                          selectedDateTime.date
+                            ? new Date(selectedDateTime.date)
+                            : undefined
+                        }
+                        onDateChange={handleDateChange}
+                      />
                     </div>
                     <div className="py-2 mt-4">
                       <p className="font-bold text-[18px]">Time zone</p>

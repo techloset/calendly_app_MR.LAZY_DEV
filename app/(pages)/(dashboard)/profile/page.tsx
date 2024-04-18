@@ -26,6 +26,8 @@ import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useAppDispatch } from "@/app/store/store";
+import { fetchUserDataSuccess } from "@/app/store/slice/userSlice";
 
 interface Props {
   handleFileChange: (files: FileList | null) => void;
@@ -92,6 +94,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   });
 
   const router = useRouter();
+  // const dispatch = useAppDispatch();
   const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -101,10 +104,12 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       try {
         const response = await axios.get(`/api/getProfileData`, {
           headers: {
-            Authorization: session?.user?.email,
+            Authorization: "four@gmail.com",
           },
         });
         console.log("Profile data:", response.data);
+        // dispatch(fetchUserDataSuccess(response.data));
+        // console.log(session?.user?.email);
       } catch (error) {
         console.error(
           "Error in fetch single profile data fetching profile data:",

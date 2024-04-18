@@ -73,15 +73,15 @@ export default function Page() {
       console.log("Form data uploaded successfully:", response.data);
     } catch (error) {
       console.error("Error handling form submission:", error);
-    } finally {
-      router.push({
-        pathname: "/calendarInvitation",
-        query: {
-          date: formData?.date,
-          time: formData?.time,
-          timeZone: formData?.timeZone,
-        },
-      } as any);
+      // } finally {
+      //   router.push({
+      //     pathname: "/calendarInvitation",
+      //     query: {
+      //       date: formData?.date,
+      //       time: formData?.time,
+      //       timeZone: formData?.timeZone,
+      //     },
+      //   } as any);
     }
   };
 
@@ -226,14 +226,14 @@ export default function Page() {
                     </span>
                   </p>
                 </div>
-                <div className="mt-3">
-                  <button
+                <div className="mt-3" onClick={handleSubmit}>
+                  {/* <button
                     onClick={handleSubmit}
                     className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                   >
                     Schedule Event
-                  </button>
-                  {/* <Link
+                  </button> */}
+                  <Link
                     href={{
                       pathname: "/calendarInvitation",
                       query: {
@@ -242,11 +242,10 @@ export default function Page() {
                         timeZone: formData.timeZone,
                       },
                     }}
-                    onClick={handleSubmit}
                     className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                   >
                     Schedule Event
-                  </Link> */}
+                  </Link>
                 </div>
               </div>
             </div>

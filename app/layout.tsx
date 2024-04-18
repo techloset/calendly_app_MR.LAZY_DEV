@@ -8,6 +8,7 @@ import { authOptions } from "./libs/AuthOptions";
 import { redirect } from "next/navigation";
 import NextAuthSessionProvider from "./provider/NextAuthSessionProvider";
 import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        {/* <Provider store={store}> */}
         <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+        {/* </Provider> */}
       </body>
     </html>
   );

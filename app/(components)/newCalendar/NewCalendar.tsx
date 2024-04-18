@@ -17,7 +17,7 @@ import Image from "next/image";
 
 interface CalendarProps {
   selectedDate?: Date; // Optional prop to highlight a specific date
-  onDateChange?: (date: Date) => void; // Optional callback for date selection
+  onDateChange?: (date: Date) => void;
 }
 
 const NewCalendar: React.FC<CalendarProps> = ({
@@ -38,9 +38,9 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const selectDate = (date: Date) => {
     if (getDay(date) !== 0 && getDay(date) !== 6) {
       setCurrentDate(date);
-      setSelected(date); // Update the selected date in state
-      onDateChange?.(date); // Call the callback if provided
-      console.log(date); // Log the selected date
+      setSelected(date);
+      onDateChange?.(date);
+      // console.log(date);
     }
   };
 

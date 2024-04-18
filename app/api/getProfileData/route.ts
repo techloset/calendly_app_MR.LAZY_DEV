@@ -1,5 +1,3 @@
-// pages/api/getProfileData.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 
