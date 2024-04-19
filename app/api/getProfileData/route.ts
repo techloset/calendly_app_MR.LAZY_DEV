@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
+import { getSession } from "next-auth/react";
 
 interface ProfileData {
   id: string;
@@ -14,32 +15,37 @@ interface ProfileData {
   timeZone: string;
 }
 
+// Define the where clause type
+interface ProfileDataWhereUniqueInput {
+  id: string; // Mark id as required
+  email?: string;
+}
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
-    // Retrieve all profile data
-    const profileData = await prismadb.profileData.findMany();
+    // Get the current user's session
+    const session = await getSession({ req: req as any });
+    console.log("firdffst", session?.user?.email);
 
-    if (!profileData || profileData.length === 0) {
-      return new NextResponse("Profile data not found", { status: 404 });
-    }
-
-    // Get the current user's email from the request headers
-    const currentUserEmail = req.headers.get("Authorization");
-
-    if (!currentUserEmail) {
+    // Check if session exists and contains user information
+    if (!session?.user?.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Filter profile data based on the current user's email
-    const userData = profileData.find(
-      (data: ProfileData) => data.email === currentUserEmail
-    );
+    console.log("first", session.user.email);
+
+    // Retrieve user data from the database based on the current user's email
+    const userData = await prismadb.profileData.findUnique({
+      where: { email: session.user.email } as ProfileDataWhereUniqueInput,
+    });
+    console.log("second", session.user.email);
 
     if (!userData) {
       return new NextResponse("User data not found", { status: 404 });
     }
 
-    // Return the filtered user data
+    console.log("third", session.user.email);
+    // Return the user data
     return new NextResponse(JSON.stringify(userData), {
       status: 200,
       headers: { "Content-Type": "application/json" },

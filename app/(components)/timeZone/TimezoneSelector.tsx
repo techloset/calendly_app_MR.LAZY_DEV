@@ -1,4 +1,3 @@
-// TimezoneSelector.tsx
 import Image from "next/image";
 import React, { useState } from "react";
 import world from "../../../public/vectors/globe.png";
@@ -22,7 +21,7 @@ const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setSelectedTimeZone(value);
-    onChange(value); // Call the onChange callback with the selected value
+    onChange(value);
   };
 
   const hours: string = String(new Date().getHours()).padStart(2, "0");

@@ -4,9 +4,8 @@ import "./globals.css";
 
 import AuthProvider from "./providers/SessionProvider";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./libs/AuthOptions";
 import { redirect } from "next/navigation";
-import NextAuthSessionProvider from "./provider/NextAuthSessionProvider";
+import NextAuthSessionProvider from "./providers/NextAuthSessionProvider";
 import ReduxProvider from "./providers/ReduxProvider";
 
 const inter = Inter({ subsets: ["latin"] });

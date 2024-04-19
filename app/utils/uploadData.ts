@@ -1,5 +1,3 @@
-// utils/uploadData.ts
-
 import { PrismaClient } from "@prisma/client";
 import InputData from "./inputData";
 

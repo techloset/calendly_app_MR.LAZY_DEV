@@ -92,17 +92,6 @@ const ProfileSidebar = () => {
         </div>
       </div>
       <div>
-        {/* <div className="flex items-center gap-3 mt-3 py-2">
-              <div>
-                <Image src={help} className="w-6 h-6" alt="" />
-              </div>
-              <div>
-                <p className=" font-medium text-[18px]">Help</p>
-              </div>
-              <div>
-                <Image src={downArrow} className="w-3 mt-1 h-3" alt="" />
-              </div>
-            </div> */}
         <div className="flex items-center gap-5 mt-3 pl-4 py-2 cursor-pointer hover:bg-[#F2F8FF]">
           <div>
             <Image src={help} className="w-6 h-6" alt="" />

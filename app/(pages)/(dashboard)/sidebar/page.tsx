@@ -95,9 +95,11 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 const page: React.FC = () => {
   const dispatch = useAppDispatch();
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
-
+  const [newDate, setNewDate] = useState<string | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [events, setEvents] = useState<Event[]>([]); // Change the type to Event[]
+  const [events, setEvents] = useState<Event[]>([]);
   const scheduleEvents = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
@@ -107,7 +109,6 @@ const page: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Convert SelectedDateTime to Event if necessary
     if (scheduleEvents) {
       if (Array.isArray(scheduleEvents)) {
         const convertedEvents: Event[] = scheduleEvents.map(
@@ -131,44 +132,6 @@ const page: React.FC = () => {
     }
   }, [scheduleEvents]);
 
-  // useEffect(() => {
-  //   setEvents(scheduleEvents);
-  // }, [scheduleEvents]);
-
-  // useEffect(() => {
-  //   if (scheduleEvents) {
-  //     // Transform SelectedDateTime to Event
-  //     const transformedEvents: Event[] = [
-  //       {
-  //         id: scheduleEvents.id || "",
-  //         name: scheduleEvents.name || "",
-  //         time: scheduleEvents.time || "",
-  //         date: scheduleEvents.date || "",
-  //         timeZone: scheduleEvents.timeZone || "",
-  //         email: scheduleEvents.email || "",
-  //         additionalInfo: scheduleEvents.additionInfo || "",
-  //         createdAt: scheduleEvents.createdAt || "",
-  //       },
-  //     ];
-
-  //     // Set the transformed events to the local state
-  //     setEvents(transformedEvents);
-  //   }
-  // }, [scheduleEvents]);
-
-  // useEffect(() => {
-  //   fetchData();
-
-  //   async function fetchData() {
-  //     try {
-  //       const response = await axios.get("/api/getEventsData");
-  //       setEvents(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   }
-  // }, []);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -178,21 +141,15 @@ const page: React.FC = () => {
 
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
-    setShowCalendar(false); // Close the calendar after selecting a date
+    setShowCalendar(false);
     const formattedDate = date.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
+      weekday: "long",
+      month: "long",
       day: "2-digit",
       year: "numeric",
     });
-    console.log("Selected Date:", formattedDate); // Log the formatted date to the console
+    setNewDate(formattedDate);
   };
-
-  // const filteredEvents = events.filter(
-  //   (event) => new Date(event.date) < new Date()
-  // );
-
-  // console.log("filtered Events :", filteredEvents);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -210,17 +167,9 @@ const page: React.FC = () => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("past");
 
-  // useEffect(() => {
-  //   fetchData();
-  //   async function fetchData() {
-  //     try {
-  //       const response = await axios.get("/api/getEventsData");
-  //       setEvents(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    filterEventsByCategory(selectedCategory);
+  }, [selectedCategory, events, startDate, endDate]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -247,16 +196,20 @@ const page: React.FC = () => {
         );
         break;
       case "pending":
-        // Implement logic for pending events
         setFilteredEvents([]);
         break;
       case "dateRange":
-        const sortedEvents = [...events].sort((a, b) => {
-          const dateA = new Date(a.date).getTime();
-          const dateB = new Date(b.date).getTime();
-          return dateA - dateB;
-        });
-        setFilteredEvents(sortedEvents);
+        if (startDate && endDate) {
+          setFilteredEvents(
+            events.filter(
+              (event) =>
+                new Date(event.date) >= startDate &&
+                new Date(event.date) <= endDate
+            )
+          );
+        } else {
+          setFilteredEvents(events);
+        }
         break;
       default:
         setFilteredEvents(events);
@@ -430,7 +383,6 @@ const page: React.FC = () => {
                         <div className="h-[96px] border-[1px] border-gray-300 border-t-0 px-8">
                           <div className="flex items-center justify-between">
                             <div className="h-[48px] flex mt-6 gap-3 w-[310px]">
-                              {/* <div className="h-[30px] w-[30px] bg-slate-600 rounded-full"></div> */}
                               <>
                                 <div
                                   className={`h-[30px] text-white w-[30px] text-center flex items-center justify-center rounded-full border-[1px] ${

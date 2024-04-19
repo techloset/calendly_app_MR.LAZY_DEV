@@ -42,11 +42,6 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 
-interface DropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
-}
-
 interface Event {
   id: string;
   name: string;
@@ -69,29 +64,9 @@ interface SelectedDateTime {
   createdAt: string | null;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
-  return (
-    <select
-      style={{
-        width: "100%",
-        height: "100%",
-        borderRadius: "8px",
-        border: "1px ",
-        paddingLeft: "10px",
-      }}
-      onChange={(e) => onSelect(e.target.value)}
-    >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-};
 const page: React.FC = () => {
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
-  const [total, setTotal] = useState<Event[]>([]); // Change the type to Event[]
+  const [total, setTotal] = useState<Event[]>([]);
   const [totall, setTotall] = useState<number>(0);
   const [upcoming, setUpcoming] = useState<number>(0);
   const [past, setPast] = useState<number>(0);
@@ -108,7 +83,6 @@ const page: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // Convert SelectedDateTime to Event if necessary
     if (scheduleEvents) {
       if (Array.isArray(scheduleEvents)) {
         const convertedEvents: Event[] = scheduleEvents.map(

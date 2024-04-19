@@ -7,7 +7,7 @@ import {
   addMonths,
   subMonths,
   startOfMonth,
-  isToday, // Import isToday function
+  isToday,
 } from "date-fns";
 
 import rightt from "../../../public/vectors/rightt.png";
@@ -15,7 +15,7 @@ import leftt from "../../../public/vectors/leftt.png";
 import Image from "next/image";
 
 interface CalendarProps {
-  selectedDate?: Date; // Optional prop to highlight a specific date
+  selectedDate?: Date;
   onDateChange?: (date: Date) => void;
 }
 
@@ -24,10 +24,9 @@ const NewCalendar: React.FC<CalendarProps> = ({
   onDateChange,
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [selected, setSelected] = useState<Date | null>(null); // State to store the selected date
+  const [selected, setSelected] = useState<Date | null>(null);
 
   useEffect(() => {
-    // Handle initial rendering and state updates for selected date
     setCurrentDate(selectedDate || new Date());
   }, [selectedDate]);
 
@@ -43,7 +42,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
   };
 
   const firstDayOfMonth = startOfWeek(startOfMonth(currentDate), {
-    weekStartsOn: 1, // Start the week on Monday (index 1)
+    weekStartsOn: 1,
   });
 
   const days: Date[] = [];
@@ -53,7 +52,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
   }
 
   return (
-    <div className="calendar w-[410px] h-96">
+    <div className="calendar w-[380px] h-96">
       <div className="calendar-header flex justify-evenly items-center py-2 px-4">
         <button
           onClick={prevMonth}
@@ -89,7 +88,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
                 ? "bg-[#0069FF] text-white font-bold"
                 : ""
             } ${
-              isToday(day) ? "items-center justify-center flex flex-col" : "" // Add background color or marker for today's date
+              isToday(day) ? "items-center justify-center flex flex-col" : ""
             }`}
             onClick={() => selectDate(day)}
           >
@@ -97,7 +96,6 @@ const NewCalendar: React.FC<CalendarProps> = ({
             {isToday(day) && (
               <div className="dot bg-black w-1 rounded-full h-1" />
             )}{" "}
-            {/* Render a dot for today's date */}
           </div>
         ))}
       </div>

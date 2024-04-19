@@ -26,7 +26,7 @@ import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useAppDispatch } from "@/app/store/store";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchUserDataSuccess } from "@/app/store/slice/userSlice";
 
 interface Props {
@@ -49,12 +49,12 @@ interface User {
   id: string;
   email: string;
   name: string;
-  // Add other fields as needed
 }
 
 interface DropdownProps {
   options: string[];
   onSelect: (option: string) => void;
+  defaultValue?: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
@@ -95,9 +95,17 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const userDate = useAppSelector((state) => state.user.userData);
+
   const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    if (session && session.user) {
+      setSelectedHour(session.user.email ?? null);
+    }
+  }, [session]);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -108,6 +116,8 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
           },
         });
         console.log("Profile data:", response.data);
+        console.log("session.user.email:", session?.user?.email);
+
         dispatch(fetchUserDataSuccess(response.data));
         // console.log(session?.user?.email);
       } catch (error) {
@@ -121,21 +131,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
     fetchProfileData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await axios.get<User>("/api/user");
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   if (session) {
-  //     fetchUserData();
-  //   }
-  // }, [session]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -145,10 +140,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       [name]: value,
     }));
   };
-
-  // useEffect(() => {
-  //   console.log(formData);
-  // }, [formData]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -165,11 +156,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       fileInputRef.current.click();
     }
   };
-
-  // const handleLogout = async () => {
-  //   await signOut({ callbackUrl: "/authLogin" });
-  //   router.push("/authLogin");
-  // };
 
   const handleFileInputChange = (files: FileList | null) => {
     if (files) {
@@ -254,7 +240,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   <div className="h-24 w-24 rounded-full">
                     {formData.image ? (
                       <Image
-                        src={formData.image as string}
+                        src={userDate?.image as string}
                         width={100}
                         height={100}
                         className="h-24 w-24 rounded-full "
@@ -301,7 +287,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                       value={formData.name}
                       onChange={handleChange}
                       name="name"
-                      placeholder={session?.user?.email || ""}
+                      placeholder={userDate?.name || ""}
                     />
                   </div>
 
@@ -318,7 +304,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                       onChange={handleChange}
                       className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
                       name="welcomeMessage"
-                      placeholder=""
+                      placeholder={userDate?.welcomeMessage || ""}
                     />
                   </div>
 
@@ -336,6 +322,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                             language: option,
                           }))
                         }
+                        defaultValue={userDate?.language || "Select Language"}
                       />
                     </div>
                   </div>
@@ -352,7 +339,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                             type="date"
                             className="h-[40px] w-[215px] px-3 border-[1px] border-gray-300 rounded-md"
                             name="dateFormat"
-                            placeholder="DD/MM/YYYY"
+                            placeholder={userDate?.dateFormat}
                             onChange={handleChange}
                           />
                         </div>
@@ -371,6 +358,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                                 timeFormat: option,
                               }))
                             }
+                            defaultValue={userDate?.timeFormat}
                           />
                         </div>
                       </div>
