@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
 interface CheckboxProps {
@@ -6,6 +8,9 @@ interface CheckboxProps {
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
+  const { data: sessions } = useSession();
+
+  console.log("djkdf", sessions?.user?.email);
   const [isChecked, setIsChecked] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

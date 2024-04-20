@@ -62,17 +62,64 @@
 //   }
 // }
 
+// import { NextResponse } from "next/server";
+// import nodemailer from "nodemailer";
+
+// export async function POST(request: any) {
+//   try {
+//     const { userName, email, anything } = await request.json();
+
+//     const transporter = nodemailer.createTransport({
+//       host: "smtp.ethereal.email",
+//       port: 587,
+//       secure: true,
+//       auth: {
+//         user: "maddison53@ethereal.email",
+//         pass: "jn7jnAPss4f63QBp6D",
+//       },
+//     });
+
+//     const mailOption = {
+//       from: "ranaasadaly@gmail.com",
+//       to: "mrlazy28112004@gmail.com",
+//       cc: "ranaasadaly@gmail.com",
+//       subject: "Send Email Tutorial",
+//       html: `
+//     <h3>Hello Augustine</h3>
+//     <li> title: ${userName}</li>
+//     <li> title: ${email}</li>
+//     <li> message: ${anything}</li>
+//     `,
+//     };
+
+//     await transporter.sendMail(mailOption);
+
+//     // console.log("Message sent: %s", mailOption.messageId);
+
+//     return NextResponse.json(
+//       { message: "Email Sent Successfully" },
+//       { status: 200 }
+//     );
+//   } catch (error) {
+//     return NextResponse.json(
+//       { message: "Failed to Send Email" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(request: any) {
   try {
-    const { userName, email, anything } = await request.json();
+    const { userName, email, anything, date, time, timeZone } =
+      await request.json();
 
     const transporter = nodemailer.createTransport({
       host: "smtp.ethereal.email",
       port: 587,
-      secure: true,
+      secure: false,
       auth: {
         user: "maddison53@ethereal.email",
         pass: "jn7jnAPss4f63QBp6D",
@@ -89,20 +136,25 @@ export async function POST(request: any) {
     <li> title: ${userName}</li>
     <li> title: ${email}</li>
     <li> message: ${anything}</li> 
+    <li> message: ${date}</li> 
+    <li> message: ${time}</li> 
+    <li> message: ${timeZone}</li> 
     `,
     };
 
     await transporter.sendMail(mailOption);
 
-    // console.log("Message sent: %s", mailOption.messageId);
+    console.log("Email sent successfully");
 
     return NextResponse.json(
       { message: "Email Sent Successfully" },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error sending email:", error);
+
     return NextResponse.json(
-      { message: "Failed to Send Email" },
+      { message: "Failed to Send Email", error: error.message },
       { status: 500 }
     );
   }

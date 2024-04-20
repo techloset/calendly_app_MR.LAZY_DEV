@@ -10,6 +10,12 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import emailjs from "emailjs-com";
+
+interface EmailData {
+  userEmail: string;
+  otherData: any;
+}
 
 interface FormData {
   name: string;
@@ -23,6 +29,13 @@ interface propss {
   date: string | null;
   time: string | null;
   timeZone: string | null;
+}
+
+interface EmailMessage {
+  from: string;
+  to: string;
+  subject: string;
+  text: string;
 }
 
 export default function ScheduleEvent() {
@@ -63,15 +76,60 @@ export default function ScheduleEvent() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post("/api/uploadData", formData);
+  //     console.log("Form data uploaded successfully:", response.data);
+  //   } catch (error) {
+  //     console.error("Error handling form submission:", error);
+  //   }
+  // };
+
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post("/api/uploadData", formData);
-      console.log("Form data uploaded successfully:", response.data);
+      const serviceId = "service_20ro8tt";
+      const templateId = "template_szfvbdm";
+      const userId = "G7wOKA2XXop3K0YlX";
+
+      const templateParams = {
+        from_name: formData.email,
+        to_name: "Rana Saab The Great",
+        message: formData.additionalInfo,
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, userId);
+
+      console.log("Email sent successfully!");
+
+      // Redirect or perform any action after successful email submission
+      // router.push("/success");
     } catch (error) {
-      console.error("Error handling form submission:", error);
+      console.error("Error sending email:", error);
+      // Handle error gracefully
+      // Optionally display error message to the user
     }
   };
+
+  // const handleSendEmail = async (e: any) => {
+  //   e.preventDefault();
+
+  //   const response = await fetch("/api/sendEmail", {
+  //     method: "POST",
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       userName: formData.name,
+  //       email: formData.email,
+  //       anything: formData.additionalInfo,
+  //       date: formData.date,
+  //       time: formData.time,
+  //       timeZone: formData.timeZone,
+  //     }),
+  //   });
+  //   console.log(await response.json());
+  // };
 
   const handleBack = () => {
     router.back();
@@ -138,88 +196,102 @@ export default function ScheduleEvent() {
             </div>
           </div>
 
-          <div className="w-[70%] px-8 py-6 ">
-            <div className="flex justify-end">
-              <Image
-                src={sticker}
-                className="h-15 w-15 absolute"
-                style={{ right: "150px", top: "115px" }}
-                alt="tick"
-              />
+          <div className="w-[70%] flex justify-between">
+            <div>
+              {/* <div className="flex justify-end">
+                <Image
+                  src={sticker}
+                  className="h-15 w-15 absolute"
+                  style={{ right: "150px", top: "115px" }}
+                  alt="tick"
+                />
+              </div> */}
+              <div className=" px-8 py-6 ">
+                <div>
+                  <p className="font-bold text-[18px]">Enter Details</p>
+                </div>
+                <div className="mt-3">
+                  <p className="font-semibold text-[15px]">Name *</p>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
+                    placeholder="Enter your name"
+                  />
+                </div>
+                <div className="mt-2">
+                  <p className="font-semibold text-[15px]">Email *</p>
+                </div>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div className="mt-4 h-[50px] w-[420px]">
+                  <p className="font-semibold text-[15px]">
+                    Please share anything that will help prepare for our
+                    meeting.
+                  </p>
+                </div>
+                <div className="mt-3">
+                  <textarea
+                    rows={3}
+                    cols={6}
+                    name="additionalInfo"
+                    value={formData.additionalInfo}
+                    onChange={handleChange}
+                    className="w-[470px] border-[1px] rounded-[8px] py-2 px-3"
+                    placeholder=""
+                  />
+                </div>
+                <div className="mt-4 h-[50px] w-[430px]">
+                  <p className="font-normal text-[14px]">
+                    By proceeding, you confirm that you have read and agree to{" "}
+                    <span className="font-bold text-[#0069FF]">
+                      Calendly's Term of Use{" "}
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-bold text-[#0069FF]">
+                      Privacy Notice.
+                    </span>
+                  </p>
+                </div>
+                <div
+                  // className="mt-3 w-[150px]"
+                  className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                  onClick={handleSubmit}
+                >
+                  {/* <Link
+                    href={{
+                      pathname: "/calendarInvitation",
+                      query: {
+                        date: formData.date,
+                        time: formData.time,
+                        timeZone: formData.timeZone,
+                      },
+                    }}
+                  > */}
+                  Schedule Event
+                  {/* </Link> */}
+                </div>
+              </div>
             </div>
             <div>
-              <div>
-                <p className="font-bold text-[18px]">Enter Details</p>
-              </div>
-              <div className="mt-3">
-                <p className="font-semibold text-[15px]">Name *</p>
-              </div>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
-                  placeholder="Enter your name"
-                />
-              </div>
-              <div className="mt-2">
-                <p className="font-semibold text-[15px]">Email *</p>
-              </div>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="mt-4 h-[50px] w-[420px]">
-                <p className="font-semibold text-[15px]">
-                  Please share anything that will help prepare for our meeting.
-                </p>
-              </div>
-              <div className="mt-3">
-                <textarea
-                  rows={3}
-                  cols={6}
-                  name="additionalInfo"
-                  value={formData.additionalInfo}
-                  onChange={handleChange}
-                  className="w-[470px] border-[1px] rounded-[8px] py-2 px-3"
-                  placeholder=""
-                />
-              </div>
-              <div className="mt-4 h-[50px] w-[470px]">
-                <p className="font-normal text-[14px]">
-                  By proceeding, you confirm that you have read and agree to{" "}
-                  <span className="font-bold text-[#0069FF]">
-                    Calendly's Term of Use{" "}
-                  </span>{" "}
-                  and{" "}
-                  <span className="font-bold text-[#0069FF]">
-                    Privacy Notice.
-                  </span>
-                </p>
-              </div>
-              <div className="mt-3" onClick={handleSubmit}>
-                <Link
-                  href={{
-                    pathname: "/calendarInvitation",
-                    query: {
-                      date: formData.date,
-                      time: formData.time,
-                      timeZone: formData.timeZone,
-                    },
-                  }}
-                  className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
-                >
-                  Schedule Event
-                </Link>
-              </div>
+              <Image
+                src={sticker}
+                className="h-15 w-15"
+                style={{}}
+                alt="tick"
+              />
             </div>
           </div>
         </div>

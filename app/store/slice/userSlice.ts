@@ -2,16 +2,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
 
 export interface UserData {
-  id: string;
-  image: string;
-  name: string;
+  // id: string;
+  // image: string;
+  // name: string;
   email: string;
-  welcomeMessage: string;
-  language: string;
-  dateFormat: string;
-  country: string;
-  timeFormat: string;
-  timeZone: string;
+  // welcomeMessage: string;
+  // language: string;
+  // dateFormat: string;
+  // country: string;
+  // timeFormat: string;
+  // timeZone: string;
 }
 
 export interface UserState {

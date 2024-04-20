@@ -34,7 +34,8 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   const selectDate = (date: Date) => {
-    if (getDay(date) !== 0 && getDay(date) !== 6) {
+    const today = new Date();
+    if (date.getTime() >= today.getTime()) {
       setCurrentDate(date);
       setSelected(date);
       onDateChange?.(date);

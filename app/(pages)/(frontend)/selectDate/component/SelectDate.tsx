@@ -35,6 +35,9 @@ const timeZones: TimeZone[] = [
   { label: "Eastern Standard Time ", value: "America/Toronto" },
 ];
 import { format } from "date-fns";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
+import { useSession } from "next-auth/react";
 
 interface ProfileData {
   id: string;
@@ -47,6 +50,20 @@ interface ProfileData {
   country: string;
   timeFormat: string;
   timeZone: string;
+}
+
+type SelectedDays = string[][];
+
+interface AvailabilityData {
+  selectedDays: SelectedDays;
+}
+
+// Assuming SelectedDays is a nested array
+
+interface AvailabilityState {
+  selectedDays: SelectedDays;
+  selectedHour1?: string;
+  selectedHour2?: string;
 }
 
 interface Error {
@@ -64,13 +81,41 @@ export default function SelectDate() {
   const initialError: Error | null = null;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const router = useRouter();
+  // const [availability, setAvailability] = useState<AvailabilityState>({
+  //   selectedDays: [],
+  //   selectedHour1: "",
+  //   selectedHour2: "",
+  // });
   const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
     date: null,
     time: null,
     timeZone: null,
   });
+  const dispatch = useAppDispatch();
+  const availabilityData = useAppSelector(
+    (state) => state.fetchAvailabilityData.data
+  );
+
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (availabilityData) {
+  //     setAvailability({
+  //       selectedDays: availabilityData.selectedDays,
+  //       selectedHour1: availabilityData.selectedHour1,
+  //       selectedHour2: availabilityData.selectedHour2,
+  //     });
+  //   }
+  // }, [availabilityData]);
+
+  // console.log("Availability State:", availability);
 
   const handleDateChange = (date: Date) => {
+    const { data: sessions } = useSession();
+
+    console.log("djkdf", sessions?.user?.email);
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
     setSelectedDate(date);
     setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));

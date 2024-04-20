@@ -8,6 +8,8 @@ import Image from "next/image";
 import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 
 interface DropdownProps {
   options: string[];

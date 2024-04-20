@@ -40,14 +40,16 @@ model Availability {
 model User {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   email          String   @unique
-  hashedPassword String? // Assuming it's optional if you're using it for authentication
-  fullName       String?
-  userName       String?
-  // welcomeMessage String? // Add welcomeMessage field
-  // language       String?
-  // dateFormat     String?
-  // timeFormat     String?
-  // timeZone       String?
+  hashedPassword String
+  fullName       String
+  userName       String
+  image          String
+  welcomeMessage String
+  language       String
+  dateFormat     String
+  timeFormat     String
+  timeZone       String
+  country        String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

@@ -14,6 +14,13 @@ export default function SignUp() {
     fullName: "",
     userName: "",
     password: "",
+    image: "Empty",
+    welcomeMessage: "Empty",
+    language: "Empty",
+    timeFormat: "Empty",
+    dateFormat: "Empty",
+    country: "Empty",
+    timeZone: "Empty",
   });
 
   const handleChange = (e: any) => {

@@ -100,15 +100,46 @@ interface UserData {
   hashedPassword: string;
   fullName: string;
   userName: string;
+  image: string;
+  welcomeMessage: string;
+  language: string;
+  dateFormat: string;
+  timeFormat: string;
+  country: string;
+  timeZone: string;
 }
 
 export async function POST(req: Request): Promise<Response> {
   try {
     const body = await req.json();
 
-    const { email, password, fullName, userName } = body;
+    const {
+      email,
+      password,
+      fullName,
+      userName,
+      image,
+      welcomeMessage,
+      language,
+      dateFormat,
+      timeFormat,
+      country,
+      timeZone,
+    } = body;
 
-    if (!email || !password || !fullName || !userName) {
+    if (
+      !email ||
+      !password ||
+      !fullName ||
+      !userName ||
+      !image ||
+      !welcomeMessage ||
+      !language ||
+      !dateFormat ||
+      !timeFormat ||
+      !country ||
+      !timeZone
+    ) {
       return new Response("Missing data", { status: 400 });
     }
 
@@ -130,6 +161,13 @@ export async function POST(req: Request): Promise<Response> {
         hashedPassword: hashedPassword,
         fullName: fullName,
         userName: userName,
+        image: image,
+        welcomeMessage: welcomeMessage,
+        language: language,
+        timeFormat: timeFormat,
+        dateFormat: dateFormat,
+        country: country,
+        timeZone: timeZone,
       },
     } as { data: UserData });
 
