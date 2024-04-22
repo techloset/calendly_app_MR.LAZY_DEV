@@ -80,8 +80,44 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
   const [neww, setNeww] = useState<string | null>(null);
-  const { data: sessions } = useSession();
+  // const { data: sessions } = useSession();
+  const { data: session, status } = useSession();
+
+  const user = session?.user; // Perform null check here
+
   const scheduleEvents = useAppSelector((state) => state.user.userData);
+
+  // useEffect(() => {
+  //   console.log("Session:", session);
+
+  //   const fetchUserData = async () => {
+  //     try {
+  //       if (!session?.token) {
+  //         console.error("Session token is missing.");
+  //         return;
+  //       }
+
+  //       const response = await fetch("/api/profile", {
+  //         headers: {
+  //           Authorization: `Bearer ${session.token}`,
+  //         },
+  //       });
+
+  //       if (response.ok) {
+  //         const userData = await response.json();
+  //         console.log("User data:", userData);
+  //       } else {
+  //         console.error("Failed to fetch user data:", response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
+
+  //   if (session) {
+  //     fetchUserData();
+  //   }
+  // }, [session]);
 
   // useEffect(() => {
   //   setNeww(sessions?.user?.email || "");
@@ -90,7 +126,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   // console.log("djfdjfk", neww);
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: sessions?.user?.email || "",
+    email: session?.user?.email || "",
     country: "",
     welcomeMessage: "",
     language: "",
@@ -104,15 +140,15 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   const dispatch = useAppDispatch();
   const userDate = useAppSelector((state) => state.user.userData);
 
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  useEffect(() => {
-    if (sessions && sessions.user) {
-      setSelectedHour(sessions.user.email ?? null);
-    }
-  }, [sessions]);
+  // useEffect(() => {
+  //   if (sessions && sessions.user) {
+  //     setSelectedHour(sessions.user.email ?? null);
+  //   }
+  // }, [sessions]);
 
   // console.log("schedulell", scheduleEvents?.email);
 
@@ -242,10 +278,8 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   <p className="font-medium text-[16px]">Account details</p>
                 </div>
                 <div className="mt-4">
-                  {/* <p className="font-semibold text-[22px]">Profile</p> */}
-                  <p className="font-semibold text-[22px]">
-                    {sessions?.user?.email}
-                  </p>
+                  <p className="font-semibold text-[22px]">Profile</p>
+                  {/* <p className="font-semibold text-[22px]">{user?.email}</p> */}
                 </div>
 
                 <div className="mt-16 flex gap-7 items-center">

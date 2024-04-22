@@ -2,9 +2,7 @@ import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prismadb from "./prismadb";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-// Define the User interface to represent your user data
 interface User {
   id: string;
   email: string;
@@ -19,7 +17,6 @@ interface User {
   timeZone: string;
 }
 
-// Define the JWT token type
 interface JWT {
   name: string;
   id: string;
@@ -37,8 +34,7 @@ const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(
-        credentials: Record<"email" | "password", string> | undefined,
-        req: any // Adjust the type of req as per your application's requirements
+        credentials: Record<"email" | "password", string> | undefined
       ) {
         try {
           if (!credentials?.email || !credentials?.password) {
@@ -69,19 +65,9 @@ const authOptions: AuthOptions = {
             timeZone: user.timeZone || "Empty",
           };
 
-          // Generate JWT token with user data
-          const token: User = {
-            fullName: userData.fullName,
-            email: userData.email,
+          const token: JWT = {
+            name: userData.fullName,
             id: userData.id,
-            country: userData.country,
-            dateFormat: userData.dateFormat,
-            image: userData.image,
-            language: userData.language,
-            timeFormat: userData.timeFormat,
-            timeZone: userData.timeZone,
-            userName: userData.userName,
-            welcomeMessage: userData.welcomeMessage,
           };
 
           return token;
@@ -100,7 +86,6 @@ const authOptions: AuthOptions = {
       }
       return token;
     },
-
     async session({ session, token }) {
       if (token && token.fullName && token.email) {
         session.user = {

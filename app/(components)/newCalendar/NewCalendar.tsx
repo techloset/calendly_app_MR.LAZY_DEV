@@ -58,42 +58,42 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   const selectDate = (date: Date) => {
-    if (availabilityData instanceof Array && availabilityData.length > 0) {
-      const reversedData = [...availabilityData].reverse();
-      const firstObject = reversedData[0]; // Assuming the data is structured properly
+    // Checking if availabilityData is an array and not empty
+    if (Array.isArray(availabilityData) && availabilityData.length > 0) {
+      // Assuming the data is structured properly, taking the last element
+      const lastAvailableData = availabilityData[availabilityData.length - 1];
 
       const today = new Date();
-      const selectedDayIndex = getDay(date);
+      const selectedDayIndex = date.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, ...)
 
       // Ensure selectedDayIndex is within bounds
       if (selectedDayIndex >= 0 && selectedDayIndex <= 6) {
+        // Getting the name of the selected day
         const selectedDay = [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
+          "Sundays",
+          "Mondays",
+          "Tuesdays",
+          "Wednesdays",
+          "Thursdays",
+          "Fridays",
+          "Saturdays",
         ][selectedDayIndex];
-        const allowedDays = firstObject.selectedDays || [];
+        // Getting the list of allowed days from the lastAvailableData or an empty array if not provided
+        const allowedDays = lastAvailableData.selectedDays || [];
 
         console.log("Selected day:", selectedDay);
         console.log("Allowed days:", allowedDays);
 
-        if (
-          date.getTime() >= today.getTime() &&
-          allowedDays.includes(selectedDay)
-        ) {
+        // Checking if the selected day is allowed
+        if (allowedDays.includes(selectedDay)) {
+          // Update the state only if the selected day is allowed
           setCurrentDate(date);
           setSelected(date);
           onDateChange?.(date);
+          console.log("Date selected successfully:", date);
           return;
         } else {
-          console.error(
-            "Selected day is not allowed or is in the past. Date:",
-            date
-          );
+          console.error("Selected day is not allowed. Date:", date);
         }
       } else {
         console.error("Invalid selected day index:", selectedDayIndex);
