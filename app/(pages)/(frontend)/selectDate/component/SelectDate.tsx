@@ -80,7 +80,29 @@ export default function SelectDate() {
   const initialProfileData: ProfileData | null = null;
   const initialError: Error | null = null;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [availabilityDataa, setAvailabilityDataa] = useState<
+    AvailabilityData[]
+  >([]);
+
+  const dispatch = useAppDispatch();
+  const availabilityData = useAppSelector(
+    (state) => state.fetchAvailabilityData.data
+  );
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
+  // console.log("jldjkfkd", availabilityData);
+  // useEffect(() => {
+  //   if (availabilityData instanceof Array && availabilityData.length > 0) {
+  //     const firstObject = availabilityData[0];
+  //     console.log("Selected Days:", firstObject.selectedDays);
+  //     console.log("Selected Hour 1:", firstObject.selectedHour1);
+  //     console.log("Selected Hour 2:", firstObject.selectedHour2);
+  //   }
+  // }, [availabilityData]);
   // const [availability, setAvailability] = useState<AvailabilityState>({
   //   selectedDays: [],
   //   selectedHour1: "",
@@ -91,10 +113,6 @@ export default function SelectDate() {
     time: null,
     timeZone: null,
   });
-  const dispatch = useAppDispatch();
-  const availabilityData = useAppSelector(
-    (state) => state.fetchAvailabilityData.data
-  );
 
   useEffect(() => {
     dispatch(fetchAvailabilityData());
@@ -113,9 +131,6 @@ export default function SelectDate() {
   // console.log("Availability State:", availability);
 
   const handleDateChange = (date: Date) => {
-    const { data: sessions } = useSession();
-
-    console.log("djkdf", sessions?.user?.email);
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
     setSelectedDate(date);
     setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));

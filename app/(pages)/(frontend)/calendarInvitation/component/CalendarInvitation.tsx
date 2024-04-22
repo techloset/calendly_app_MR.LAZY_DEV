@@ -14,6 +14,9 @@ interface FormData {
   date: string | null;
   time: string | null;
   timeZone: string | null;
+  // const serviceId = "service_20ro8tt";
+  //   const templateId = "template_szfvbdm";
+  //   const userId = "G7wOKA2XXop3K0YlX";
 }
 
 export default function CalendarInvitation() {

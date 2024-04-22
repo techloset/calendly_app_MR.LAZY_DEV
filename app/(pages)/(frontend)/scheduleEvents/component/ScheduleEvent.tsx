@@ -76,38 +76,40 @@ export default function ScheduleEvent() {
     }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("/api/uploadData", formData);
-  //     console.log("Form data uploaded successfully:", response.data);
-  //   } catch (error) {
-  //     console.error("Error handling form submission:", error);
-  //   }
-  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/uploadData", formData);
+      console.log("Form data uploaded successfully:", response.data);
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+    }
+  };
 
-  const handleSubmit = async () => {
+  const handleSendEmail = async () => {
     try {
       const serviceId = "service_20ro8tt";
       const templateId = "template_szfvbdm";
       const userId = "G7wOKA2XXop3K0YlX";
 
       const templateParams = {
-        from_name: formData.email,
-        to_name: "Rana Saab The Great",
+        from_name: "Rana Asad Ali",
+        to_name: formData.name,
         message: formData.additionalInfo,
+        user_email: formData.email,
+        admin_name: "Rana Asad Ali",
+        reply_to: "ranaasadaly@gmail.com",
       };
 
-      await emailjs.send(serviceId, templateId, templateParams, userId);
+      // Initialize EmailJS
+      emailjs.init(userId);
+
+      // Send the email
+      await emailjs.send(serviceId, templateId, templateParams);
 
       console.log("Email sent successfully!");
-
-      // Redirect or perform any action after successful email submission
-      // router.push("/success");
     } catch (error) {
       console.error("Error sending email:", error);
-      // Handle error gracefully
-      // Optionally display error message to the user
     }
   };
 
@@ -265,23 +267,24 @@ export default function ScheduleEvent() {
                     </span>
                   </p>
                 </div>
-                <div
-                  // className="mt-3 w-[150px]"
-                  className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
-                  onClick={handleSubmit}
-                >
-                  {/* <Link
-                    href={{
-                      pathname: "/calendarInvitation",
-                      query: {
-                        date: formData.date,
-                        time: formData.time,
-                        timeZone: formData.timeZone,
-                      },
-                    }}
-                  > */}
-                  Schedule Event
-                  {/* </Link> */}
+                <div onClick={handleSendEmail}>
+                  <div
+                    className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                    onClick={handleSubmit}
+                  >
+                    <Link
+                      href={{
+                        pathname: "/calendarInvitation",
+                        query: {
+                          date: formData.date,
+                          time: formData.time,
+                          timeZone: formData.timeZone,
+                        },
+                      }}
+                    >
+                      Schedule Event
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

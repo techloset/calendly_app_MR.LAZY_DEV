@@ -242,7 +242,10 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   <p className="font-medium text-[16px]">Account details</p>
                 </div>
                 <div className="mt-4">
-                  <p className="font-semibold text-[22px]">Profile</p>
+                  {/* <p className="font-semibold text-[22px]">Profile</p> */}
+                  <p className="font-semibold text-[22px]">
+                    {sessions?.user?.email}
+                  </p>
                 </div>
 
                 <div className="mt-16 flex gap-7 items-center">

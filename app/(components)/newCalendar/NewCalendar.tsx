@@ -13,10 +13,17 @@ import {
 import rightt from "../../../public/vectors/rightt.png";
 import leftt from "../../../public/vectors/leftt.png";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 
 interface CalendarProps {
   selectedDate?: Date;
   onDateChange?: (date: Date) => void;
+}
+
+interface AvailabilityData {
+  selectedDays: string[];
+  // Define other properties if needed
 }
 
 const NewCalendar: React.FC<CalendarProps> = ({
@@ -25,6 +32,23 @@ const NewCalendar: React.FC<CalendarProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selected, setSelected] = useState<Date | null>(null);
+  const dispatch = useAppDispatch();
+  const availabilityData: AvailabilityData | null = useAppSelector(
+    (state) => state.fetchAvailabilityData.data
+  );
+
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (availabilityData instanceof Array && availabilityData.length > 0) {
+  //     const reversedData = [...availabilityData].reverse();
+
+  //     const firstObject = reversedData[0];
+  //     console.log("Selected Days:", firstObject.selectedDays);
+  //   }
+  // }, [availabilityData]);
 
   useEffect(() => {
     setCurrentDate(selectedDate || new Date());
@@ -34,11 +58,48 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   const selectDate = (date: Date) => {
-    const today = new Date();
-    if (date.getTime() >= today.getTime()) {
-      setCurrentDate(date);
-      setSelected(date);
-      onDateChange?.(date);
+    if (availabilityData instanceof Array && availabilityData.length > 0) {
+      const reversedData = [...availabilityData].reverse();
+      const firstObject = reversedData[0]; // Assuming the data is structured properly
+
+      const today = new Date();
+      const selectedDayIndex = getDay(date);
+
+      // Ensure selectedDayIndex is within bounds
+      if (selectedDayIndex >= 0 && selectedDayIndex <= 6) {
+        const selectedDay = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ][selectedDayIndex];
+        const allowedDays = firstObject.selectedDays || [];
+
+        console.log("Selected day:", selectedDay);
+        console.log("Allowed days:", allowedDays);
+
+        if (
+          date.getTime() >= today.getTime() &&
+          allowedDays.includes(selectedDay)
+        ) {
+          setCurrentDate(date);
+          setSelected(date);
+          onDateChange?.(date);
+          return;
+        } else {
+          console.error(
+            "Selected day is not allowed or is in the past. Date:",
+            date
+          );
+        }
+      } else {
+        console.error("Invalid selected day index:", selectedDayIndex);
+      }
+    } else {
+      console.error("Availability data is empty or not an array.");
     }
   };
 
@@ -96,7 +157,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
             {format(day, "d")}
             {isToday(day) && (
               <div className="dot bg-black w-1 rounded-full h-1" />
-            )}{" "}
+            )}
           </div>
         ))}
       </div>
