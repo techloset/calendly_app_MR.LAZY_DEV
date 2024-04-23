@@ -1,5 +1,3 @@
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,24 +16,13 @@ model FormData {
   updatedAt DateTime @updatedAt
 }
 
-// schema.prisma
-
 model Availability {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   selectedDays  String[]
   selectedHour1 String?
   selectedHour2 String?
+  email         String
 }
-
-// model User {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   email          String   @unique
-//   hashedPassword String // Rename 'password' to 'hashedPassword' if it's stored as a hashed value
-//   fullName       String
-//   userName       String
-//   createdAt      DateTime @default(now())
-//   updatedAt      DateTime @updatedAt
-// }
 
 model User {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -59,26 +46,12 @@ model ScheduleEvent {
   name           String
   time           String
   date           String
-  // dayName        String
   timeZone       String
   ownerEmail     String
   email          String
   additionalInfo String
   createdAt      DateTime @default(now())
 }
-
-// model ScheduleEventGet {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   name           String
-//   time           String
-//   date           String
-//   // dayName        String
-//   timeZone       String
-//   ownerEmail     String?
-//   email          String
-//   additionalInfo String
-//   createdAt      DateTime @default(now())
-// }
 
 model ProfileData {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -93,42 +66,3 @@ model ProfileData {
   timeZone       String
   createdAt      DateTime @default(now())
 }
-
-// model User {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   email          String
-//   name           String
-//   userName       String
-//   password       String
-//   createdAt      DateTime @default(now())
-//   updatedAt      DateTime @updatedAt
-// }
-
-// model ScheduleEvent {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   name      String
-//   email     String   @unique
-//   anything  String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
-
-// model User {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   email          String   @unique
-//   fullName       String
-//   userName       String
-//   hashedPassword String // Make sure the password field is defined
-//   createdAt      DateTime @default(now())
-//   updatedAt      DateTime @updatedAt
-// }
-
-// model User {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   email          String
-//   name           String
-//   userName       String
-//   password       String
-//   createdAt      DateTime @default(now())
-//   updatedAt      DateTime @updatedAt
-// }

@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
+import { data } from "@/app/(components)/profileData/ProfileData";
 
 interface Event {
   id: string;
@@ -37,8 +38,6 @@ interface SelectedDateTime {
 }
 
 export default function Analysis() {
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
-  const [total, setTotal] = useState<Event[]>([]);
   const [totall, setTotall] = useState<number>(0);
   const [upcoming, setUpcoming] = useState<number>(0);
   const [past, setPast] = useState<number>(0);
@@ -91,16 +90,6 @@ export default function Analysis() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const data = [
-    { name: "Monday", value: 200 },
-    { name: "Tuesday", value: 400 },
-    { name: "Wednesday", value: 100 },
-    { name: "Thursday", value: 700 },
-    { name: "Friday", value: 400 },
-    { name: "Saturday", value: 500 },
-    { name: "Sunday", value: 300 },
-  ];
 
   return (
     <div className="flex">

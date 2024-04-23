@@ -1,15 +1,6 @@
 // components/page.tsx
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import logo from "../../../../public/images/logo.svg";
-import person from "../../../../public/vectors/personn.png";
-import brading from "../../../../public/profile/star.png";
-import link from "../../../../public/profile/link.png";
-import preference from "../../../../public/profile/list.png";
-import sync from "../../../../public/profile/calendar.png";
-import help from "../../../../public/profile/help.png";
-import setting from "../../../../public/profile/setting.png";
-import logout from "../../../../public/profile/logout.png";
 import downArrow from "../../../../public/profile/down-arrow.png";
 import i from "../../../../public/profile/i.png";
 import inviteUser from "../../../../public/profile/inviteUser.png";
@@ -80,73 +71,15 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 };
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
-  const [neww, setNeww] = useState<string | null>(null);
   const { data: sessions } = useSession();
-  // const { data: session, status } = useSession();
-
-  // const user = sessions?.user; // Perform null check here
-
-  // console.log("kkkkkkkkk", sessions?.user.email);
-
-  // const scheduleEvents = useAppSelector((state) => state.user.userData);
-
-  // useEffect(() => {
-  //   console.log("Session:", session);
-
-  //   const fetchUserData = async () => {
-  //     try {
-  //       if (!session?.token) {
-  //         console.error("Session token is missing.");
-  //         return;
-  //       }
-
-  //       const response = await fetch("/api/profile", {
-  //         headers: {
-  //           Authorization: `Bearer ${session.token}`,
-  //         },
-  //       });
-
-  //       if (response.ok) {
-  //         const userData = await response.json();
-  //         console.log("User data:", userData);
-  //       } else {
-  //         console.error("Failed to fetch user data:", response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   if (session) {
-  //     fetchUserData();
-  //   }
-  // }, [session]);
-
-  // useEffect(() => {
-  //   setNeww(sessions?.user?.email || "");
-  // }, [sessions?.user?.email]);
-
-  // console.log("djfdjfk", neww);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch("/api/getData");
-
-  //       // Check for error response
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch user data");
-  //       }
-
-  //       const responseData = await response.json();
-  //       console.log("User data:", responseData);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector((state) => state.user.userData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const scheduleEventss = useAppSelector(
+    (state) => state.fetchScheduleEvents.data
+  );
 
   const handleDeleteAccount = async () => {
     try {
@@ -159,14 +92,11 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       if (response.status === 200) {
         console.log("User account deleted successfully");
         signOut();
-        // router.push("/login"); // Redirect to login page
       } else {
         console.error("Error:", response.data);
-        // Display an error message to the user
       }
     } catch (error: any) {
       console.error("Error:", error.message);
-      // Display an error message to the user
     }
   };
 
@@ -181,16 +111,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
     timeZone: "",
     image: "",
   });
-
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const userData = useAppSelector((state) => state.user.userData);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const scheduleEventss = useAppSelector(
-    (state) => state.fetchScheduleEvents.data
-  );
 
   useEffect(() => {
     dispatch(fetchUserData());
@@ -211,22 +131,22 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
     }));
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/getProfileCollection");
-        console.log(response.data);
-      } catch (error: any) {
-        console.log("error in get profile data api", error.message);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("/api/getProfileCollection");
+  //       console.log(response.data);
+  //     } catch (error: any) {
+  //       console.log("error in get profile data api", error.message);
+  //     }
+  //   };
 
-    fetchData();
+  //   fetchData();
 
-    return () => {
-      // Cleanup function if needed
-    };
-  }, []);
+  //   return () => {
+  //     // Cleanup function if needed
+  //   };
+  // }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -297,20 +217,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* {userData?.image ? (
-                    <Link href={"/profile"} className="flex items-center gap-2">
-                      <Image
-                        src={userData?.image || ""}
-                        width={100}
-                        height={100}
-                        className="h-[37px] w-[37px] rounded-full "
-                        alt=""
-                      />
-                      <div>
-                        <Image src={downArrow} className="h-3 w-3" alt="Tab" />
-                      </div>
-                    </Link>
-                  ) : ( */}
                   <>
                     <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold ">
                       M
@@ -319,7 +225,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                       <Image src={downArrow} className="h-3 w-3" alt="Tab" />
                     </div>
                   </>
-                  {/* )} */}
                 </div>
               </div>
             </div>
@@ -332,28 +237,15 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   </div>
                   <div className="mt-4">
                     <p className="font-semibold text-[22px]">Profile</p>
-                    {/* <p className="font-semibold text-[22px]">
-                      {sessions?.user.email}
-                    </p> */}
                   </div>
 
                   <div className="mt-16 flex gap-7 items-center">
                     <div className="h-24 w-24 rounded-full">
-                      {/* {userData?.image ? (
-                        <image
-                          src={userData?.image || ""}
-                          height={100}
-                          width={100}
-                          className="w-full h-full rounded-full"
-                          alt=""
-                        />
-                      ) : ( */}
                       <Image
                         src={avatar}
                         className="w-full h-full rounded-full"
                         alt=""
                       />
-                      {/* )} */}
                     </div>
                     <div className="">
                       <div>
@@ -412,7 +304,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                         className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
                         name="welcomeMessage"
                         placeholder={userData?.welcomeMessage || ""}
-                        // placeholder={userDate?.welcomeMessage || ""}
                       />
                     </div>
 
@@ -430,7 +321,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                               language: option,
                             }))
                           }
-                          // defaultValue={userDate?.language || "Select Language"}
                         />
                       </div>
                     </div>
@@ -447,7 +337,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                               type="date"
                               className="h-[40px] w-[215px] px-3 border-[1px] border-gray-300 rounded-md"
                               name="dateFormat"
-                              // placeholder={userDate?.dateFormat}
                               onChange={handleChange}
                             />
                           </div>
@@ -466,7 +355,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                                   timeFormat: option,
                                 }))
                               }
-                              // defaultValue={userDate?.timeFormat}
                             />
                           </div>
                         </div>

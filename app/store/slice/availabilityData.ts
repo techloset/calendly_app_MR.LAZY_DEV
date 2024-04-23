@@ -5,6 +5,7 @@ interface AvailabilityData {
   selectedDays: string[];
   selectedHour1: string;
   selectedHour2: string;
+  email: string;
 }
 
 interface SliceState {

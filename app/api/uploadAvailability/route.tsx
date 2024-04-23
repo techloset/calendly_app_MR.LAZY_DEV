@@ -6,15 +6,16 @@ interface AvailabilityData {
   selectedDays: string[];
   selectedHour1: string;
   selectedHour2: string;
+  email: string;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = await req.json();
 
-    const { selectedDays, selectedHour1, selectedHour2 } = body;
+    const { selectedDays, selectedHour1, selectedHour2, email } = body;
 
-    if (!selectedDays || !selectedHour1 || !selectedHour2) {
+    if (!selectedDays || !selectedHour1 || !selectedHour2 || !email) {
       return new NextResponse("Missing data", { status: 400 });
     }
 
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       selectedDays,
       selectedHour1,
       selectedHour2,
+      email,
     };
 
     const createdData = await prismadb.availability.create({

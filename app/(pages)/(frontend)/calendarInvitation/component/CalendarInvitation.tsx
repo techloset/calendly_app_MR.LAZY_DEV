@@ -15,9 +15,6 @@ interface FormData {
   time: string | null;
   timeZone: string | null;
   ownerEmail: string | null;
-  // const serviceId = "service_20ro8tt";
-  //   const templateId = "template_szfvbdm";
-  //   const userId = "G7wOKA2XXop3K0YlX";
 }
 
 export default function CalendarInvitation() {
@@ -55,14 +52,6 @@ export default function CalendarInvitation() {
           <div className="flex flex-col">
             <div className="flex justify-between">
               <div className=" h-[100%] w-[100%] pl-36 mt-10">
-                {/* <div className="flex justify-end">
-              <Image
-                src={sticker}
-                className="h-15 w-15 absolute"
-                style={{ right: "230px", top: "115px" }}
-                alt="tick"
-              />
-            </div> */}
                 <div>
                   <div className="text-center flex items-center justify-center gap-2">
                     <div className="">
@@ -137,9 +126,6 @@ export default function CalendarInvitation() {
                     </div>
                   </div>
                 </div>
-                {/* <div className="flex mt-44 -ml-60 items-end">
-                  <p className="text-cyan-600">Cooking settings</p>
-                </div> */}
               </div>
               <div>
                 {" "}

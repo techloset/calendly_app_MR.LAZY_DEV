@@ -501,3 +501,58 @@ export let hoursTimes = [
   "4:00 pm",
   "5:00 pm",
 ];
+
+export let timeSlots = [
+  { time: "9:00am", label: "9:00am - 9:30am" },
+  { time: "9:30am", label: "9:30am - 10:00am" },
+  { time: "10:00am", label: "10:00am - 10:30am" },
+  { time: "10:30am", label: "10:30am - 11:00am" },
+  { time: "11:00am", label: "11:00am - 11:30am" },
+  { time: "11:30am", label: "11:30am - 12:00pm" },
+  { time: "12:00pm", label: "12:00pm - 12:30pm" },
+  { time: "12:30pm", label: "12:30pm - 1:00pm" },
+  { time: "1:00pm", label: "1:00pm - 1:30pm" },
+];
+
+export let timeZones = [
+  { label: "Pakistan Standard Time ", value: "Asia/Karachi" },
+  { label: "India Standard Time ", value: "Asia/Kolkata" },
+  { label: "Bangladesh Standard Time ", value: "Asia/Dhaka" },
+  { label: "Nepal Time ", value: "Asia/Kathmandu" },
+  { label: "Uzbekistan Time ", value: "Asia/Tashkent" },
+  { label: "Turkmenistan Standard Time ", value: "Asia/Ashgabat" },
+  { label: "Afghanistan Time ", value: "Asia/Kabul" },
+  { label: "British Summer Time ", value: "Europe/London" },
+  { label: "Eastern Standard Time ", value: "America/New_York" },
+  { label: "Central Standard Time ", value: "America/Chicago" },
+  { label: "Mountain Standard Time ", value: "America/Denver" },
+  { label: "Pacific Standard Time ", value: "America/Los_Angeles" },
+  { label: "Atlantic Standard Time ", value: "America/Halifax" },
+  { label: "Alaska Standard Time ", value: "America/Anchorage" },
+  { label: "Hawaii-Aleutian Standard Time ", value: "Pacific/Honolulu" },
+  { label: "Newfoundland Standard Time ", value: "America/St_Johns" },
+  { label: "Eastern Standard Time ", value: "America/Toronto" },
+];
+
+export let data = [
+  { name: "Monday", value: 200 },
+  { name: "Tuesday", value: 400 },
+  { name: "Wednesday", value: 100 },
+  { name: "Thursday", value: 700 },
+  { name: "Friday", value: 400 },
+  { name: "Saturday", value: 500 },
+  { name: "Sunday", value: 300 },
+];
+
+export let colors = [
+  "bg-blue-600",
+  "bg-pink-600",
+  "bg-green-600",
+  "bg-gray-600",
+  "bg-yellow-600",
+  "bg-orange-600",
+  "bg-red-600",
+  "bg-amber-600",
+  "bg-black",
+  "bg-purple-600",
+];

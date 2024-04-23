@@ -8,7 +8,10 @@ import down from "../../../../../public/icons/down.png";
 import exportt from "../../../../../public/icons/export.png";
 import filterNew from "../../../../../public/icons/filterNew.png";
 import rightSmall from "../../../../../public/icons/rightSmall.png";
-import { DropdownData } from "@/app/(components)/profileData/ProfileData";
+import {
+  DropdownData,
+  colors,
+} from "@/app/(components)/profileData/ProfileData";
 import Calendar from "react-calendar";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 
@@ -57,19 +60,6 @@ interface SelectedDateTime {
   createdAt: string | null;
 }
 
-const colors = [
-  "bg-blue-600",
-  "bg-pink-600",
-  "bg-green-600",
-  "bg-gray-600",
-  "bg-yellow-600",
-  "bg-orange-600",
-  "bg-red-600",
-  "bg-amber-600",
-  "bg-black",
-  "bg-purple-600",
-];
-
 const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   return (
     <select
@@ -101,11 +91,15 @@ export default function SidebarPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("past");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const scheduleEvents = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
-
   const userData = useAppSelector((state) => state.user.userData);
 
   useEffect(() => {
@@ -119,22 +113,6 @@ export default function SidebarPage() {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("/api/getProfileCollection"); // Adjust the API route if necessary
-  //       console.log(response.data);
-  //     } catch (error: any) {
-  //       console.log("djflkdjfdkf", error.message);
-  //     }
-  //   };
-
-  //   fetchData();
-
-  //   return () => {
-  //   };
-  // }, []);
 
   useEffect(() => {
     dispatch(fetchScheduleEvents());
@@ -165,9 +143,6 @@ export default function SidebarPage() {
     }
   }, [scheduleEvents]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
-
   const handleImageClick = () => {
     setShowCalendar(!showCalendar);
   };
@@ -191,14 +166,9 @@ export default function SidebarPage() {
 
     return () => clearInterval(intervalId);
   }, []);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("past");
 
   useEffect(() => {
     filterEventsByCategory(selectedCategory);
@@ -276,17 +246,6 @@ export default function SidebarPage() {
               <div></div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  {/* {userData ? (
-                    <Link href={"/profile"}>
-                      <Image
-                        src={userData?.image || ""}
-                        width={100}
-                        height={100}
-                        className="h-[37px] w-[37px] rounded-full "
-                        alt=""
-                      />
-                    </Link>
-                  ) : ( */}
                   <Link
                     href={"/profile"}
                     className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "

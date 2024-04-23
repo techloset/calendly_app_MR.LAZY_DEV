@@ -15,29 +15,14 @@ interface TimeZone {
   value: string;
 }
 
-const timeZones: TimeZone[] = [
-  { label: "Pakistan Standard Time ", value: "Asia/Karachi" },
-  { label: "India Standard Time ", value: "Asia/Kolkata" },
-  { label: "Bangladesh Standard Time ", value: "Asia/Dhaka" },
-  { label: "Nepal Time ", value: "Asia/Kathmandu" },
-  { label: "Uzbekistan Time ", value: "Asia/Tashkent" },
-  { label: "Turkmenistan Standard Time ", value: "Asia/Ashgabat" },
-  { label: "Afghanistan Time ", value: "Asia/Kabul" },
-  { label: "British Summer Time ", value: "Europe/London" },
-  { label: "Eastern Standard Time ", value: "America/New_York" },
-  { label: "Central Standard Time ", value: "America/Chicago" },
-  { label: "Mountain Standard Time ", value: "America/Denver" },
-  { label: "Pacific Standard Time ", value: "America/Los_Angeles" },
-  { label: "Atlantic Standard Time ", value: "America/Halifax" },
-  { label: "Alaska Standard Time ", value: "America/Anchorage" },
-  { label: "Hawaii-Aleutian Standard Time ", value: "Pacific/Honolulu" },
-  { label: "Newfoundland Standard Time ", value: "America/St_Johns" },
-  { label: "Eastern Standard Time ", value: "America/Toronto" },
-];
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 import { useSession } from "next-auth/react";
+import {
+  timeSlots,
+  timeZones,
+} from "@/app/(components)/profileData/ProfileData";
 
 interface ProfileData {
   id: string;
@@ -52,25 +37,11 @@ interface ProfileData {
   timeZone: string;
 }
 
-const timeSlots = [
-  { time: "9:00am", label: "9:00am - 9:30am" },
-  { time: "9:30am", label: "9:30am - 10:00am" },
-  { time: "10:00am", label: "10:00am - 10:30am" },
-  { time: "10:30am", label: "10:30am - 11:00am" },
-  { time: "11:00am", label: "11:00am - 11:30am" },
-  { time: "11:30am", label: "11:30am - 12:00pm" },
-  { time: "12:00pm", label: "12:00pm - 12:30pm" },
-  { time: "12:30pm", label: "12:30pm - 1:00pm" },
-  { time: "1:00pm", label: "1:00pm - 1:30pm" },
-];
-
 type SelectedDays = string[][];
 
 interface AvailabilityData {
   selectedDays: SelectedDays;
 }
-
-// Assuming SelectedDays is a nested array
 
 interface AvailabilityState {
   selectedDays: SelectedDays;
@@ -92,29 +63,20 @@ export default function SelectDate() {
   const initialProfileData: ProfileData | null = null;
   const initialError: Error | null = null;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  // const [availabilityDataaa, setAvailabilityDataa] = useState<
-  //   AvailabilityData[]
-  // >([]);
 
   const dispatch = useAppDispatch();
   const availabilityData = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
 
-  // const availabilityData: AvailabilityData[] | null = availabilityDataa
-
-  // Ensure availabilityData is not null before accessing its elements
   if (availabilityData !== null) {
     const reversedAvailabilityData = [...availabilityData].reverse();
     const availabilityObject = reversedAvailabilityData[0];
 
-    // Check if availabilityObject is not undefined before accessing its properties
     if (availabilityObject !== undefined) {
       const { selectedHour1, selectedHour2 } = availabilityObject;
       console.log("selectedHour1:", selectedHour1);
       console.log("selectedHour2:", selectedHour2);
-
-      // Now you can use selectedHour1 and selectedHour2 as needed
     } else {
       console.error("availabilityData array is empty.");
     }
@@ -131,20 +93,6 @@ export default function SelectDate() {
     dispatch(fetchAvailabilityData());
   }, [dispatch]);
 
-  // console.log("jldjkfkd", availabilityData);
-  // useEffect(() => {
-  //   if (availabilityData instanceof Array && availabilityData.length > 0) {
-  //     const firstObject = availabilityData[0];
-  //     console.log("Selected Days:", firstObject.selectedDays);
-  //     console.log("Selected Hour 1:", firstObject.selectedHour1);
-  //     console.log("Selected Hour 2:", firstObject.selectedHour2);
-  //   }
-  // }, [availabilityData]);
-  // const [availability, setAvailability] = useState<AvailabilityState>({
-  //   selectedDays: [],
-  //   selectedHour1: "",
-  //   selectedHour2: "",
-  // });
   const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
     date: null,
     time: null,
@@ -154,18 +102,6 @@ export default function SelectDate() {
   useEffect(() => {
     dispatch(fetchAvailabilityData());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (availabilityData) {
-  //     setAvailability({
-  //       selectedDays: availabilityData.selectedDays,
-  //       selectedHour1: availabilityData.selectedHour1,
-  //       selectedHour2: availabilityData.selectedHour2,
-  //     });
-  //   }
-  // }, [availabilityData]);
-
-  // console.log("Availability State:", availability);
 
   const handleDateChange = (date: Date) => {
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
@@ -220,7 +156,6 @@ export default function SelectDate() {
     const dayName = dayNames[date.getDay()];
     const monthName = monthNames[date.getMonth()];
 
-    // Format the date string
     const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
 
     return formattedDate;
@@ -295,45 +230,9 @@ export default function SelectDate() {
                     <p>Wednesday, March 27</p>
                   </div>
                   <div className="mt-8">
-                    {/* <TimeSlot
-                      time="9:00am"
-                      onClick={() => handleTimeSlotClick("9:00am - 9:30am")}
-                    />{" "}
-                    <TimeSlot
-                      time="9:30am"
-                      onClick={() => handleTimeSlotClick("9:30am - 10:00am")}
-                    />{" "}
-                    <TimeSlot
-                      time="10:00am"
-                      onClick={() => handleTimeSlotClick("10:00am - 10:30am")}
-                    />{" "}
-                    <TimeSlot
-                      time="10:30am"
-                      onClick={() => handleTimeSlotClick("10:30am - 11:00am")}
-                    />{" "}
-                    <TimeSlot
-                      time="11:00am"
-                      onClick={() => handleTimeSlotClick("11:00am - 11:30am")}
-                    />{" "}
-                    <TimeSlot
-                      time="11:30am"
-                      onClick={() => handleTimeSlotClick("11:30am - 12:00pm")}
-                    />{" "}
-                    <TimeSlot
-                      time="12:00pm"
-                      onClick={() => handleTimeSlotClick("12:00pm - 12:30pm")}
-                    />{" "}
-                    <TimeSlot
-                      time="12:30pm"
-                      onClick={() => handleTimeSlotClick("12:30pm - 1:00pm")}
-                    />{" "}
-                    <TimeSlot
-                      time="1:00m"
-                      onClick={() => handleTimeSlotClick("1:00m - 1:30pm")}
-                    />{" "} */}
                     {timeSlots.map(({ time, label }) => (
                       <TimeSlot
-                        key={label} // Use a unique key
+                        key={label}
                         time={time}
                         onClick={() => handleTimeSlotClick(label)}
                       />

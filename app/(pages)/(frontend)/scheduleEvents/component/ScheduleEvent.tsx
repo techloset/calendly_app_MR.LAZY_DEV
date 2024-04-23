@@ -50,10 +50,6 @@ export default function ScheduleEvent() {
     ownerEmail: null,
   });
 
-  // const [ownerEmail, setOwnerEmail] = useState<any>();
-
-  // console.log("hhhhhhhhhhhhhhhhhhhhhrst", ownerEmail);
-
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -165,26 +161,6 @@ export default function ScheduleEvent() {
     }
   };
 
-  // const handleSendEmail = async (e: any) => {
-  //   e.preventDefault();
-
-  //   const response = await fetch("/api/sendEmail", {
-  //     method: "POST",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       userName: formData.name,
-  //       email: formData.email,
-  //       anything: formData.additionalInfo,
-  //       date: formData.date,
-  //       time: formData.time,
-  //       timeZone: formData.timeZone,
-  //     }),
-  //   });
-  //   console.log(await response.json());
-  // };
-
   const handleBack = () => {
     router.back();
   };
@@ -255,14 +231,6 @@ export default function ScheduleEvent() {
 
           <div className="w-[70%] flex justify-between">
             <div>
-              {/* <div className="flex justify-end">
-                <Image
-                  src={sticker}
-                  className="h-15 w-15 absolute"
-                  style={{ right: "150px", top: "115px" }}
-                  alt="tick"
-                />
-              </div> */}
               <div className=" px-8 py-6 ">
                 <div>
                   <p className="font-bold text-[18px]">Enter Details</p>

@@ -37,28 +37,6 @@ export default function Login() {
     setLoading(false);
   };
 
-  // const login = async (e: any) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await axios.post("/api/loginnew", {
-  //       email,
-  //       password,
-  //     });
-
-  //     const token = response.data.token;
-
-  //     // Save the token to local storage or session storage for future use
-  //     localStorage.setItem("token", token);
-
-  //     // Redirect the user to the dashboard or another authenticated page
-  //     window.location.href = "/dashboard";
-  //   } catch (error: any) {
-  //     console.error("Login failed:", error.message);
-  //     console.log("Login failed. Please check your credentials.");
-  //   }
-  // };
-
   const handleSignIn = async () => {
     await signIn("google");
   };

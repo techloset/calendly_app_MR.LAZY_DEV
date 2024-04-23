@@ -8,8 +8,9 @@ import Image from "next/image";
 import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { useSession } from "next-auth/react";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
+import { useAppDispatch } from "@/app/store/store";
 
 interface DropdownProps {
   options: string[];
@@ -37,10 +38,16 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   );
 };
 export default function AvailabilityHours() {
+  const { data: sessions } = useSession();
+  const dispatch = useAppDispatch();
   const [selectedHour1, setSelectedHour1] = useState<string | null>(null);
   const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  // const [checkEmail, setCheckEmail] = useState<string>();
 
+  // if (sessions && sessions.user && sessions.user.email) {
+  //   setCheckEmail(sessions.user.email);
+  // }
   const handleCheckboxChange = (label: string, checked: boolean) => {
     setSelectedDays((prev) => {
       if (checked) {
@@ -51,6 +58,10 @@ export default function AvailabilityHours() {
     });
   };
 
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
   const handleAvailability = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -58,6 +69,7 @@ export default function AvailabilityHours() {
         selectedDays,
         selectedHour1,
         selectedHour2,
+        email: sessions?.user.email,
       });
       console.log("Form data uploaded successfully:", response.data);
     } catch (error) {
