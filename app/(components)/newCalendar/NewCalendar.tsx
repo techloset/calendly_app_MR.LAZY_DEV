@@ -41,15 +41,6 @@ const NewCalendar: React.FC<CalendarProps> = ({
     dispatch(fetchAvailabilityData());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (availabilityData instanceof Array && availabilityData.length > 0) {
-  //     const reversedData = [...availabilityData].reverse();
-
-  //     const firstObject = reversedData[0];
-  //     console.log("Selected Days:", firstObject.selectedDays);
-  //   }
-  // }, [availabilityData]);
-
   useEffect(() => {
     setCurrentDate(selectedDate || new Date());
   }, [selectedDate]);
@@ -58,49 +49,51 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   const selectDate = (date: Date) => {
-    // Checking if availabilityData is an array and not empty
     if (Array.isArray(availabilityData) && availabilityData.length > 0) {
-      // Assuming the data is structured properly, taking the last element
       const lastAvailableData = availabilityData[availabilityData.length - 1];
-
       const today = new Date();
-      const selectedDayIndex = date.getDay(); // Get the day of the week (0 for Sunday, 1 for Monday, ...)
+      const selectedDayIndex = date.getDay();
+      const selectedDay = [
+        "Sundays",
+        "Mondays",
+        "Tuesdays",
+        "Wednesdays",
+        "Thursdays",
+        "Fridays",
+        "Saturdays",
+      ][selectedDayIndex];
+      const allowedDays = lastAvailableData.selectedDays || [];
 
-      // Ensure selectedDayIndex is within bounds
-      if (selectedDayIndex >= 0 && selectedDayIndex <= 6) {
-        // Getting the name of the selected day
-        const selectedDay = [
-          "Sundays",
-          "Mondays",
-          "Tuesdays",
-          "Wednesdays",
-          "Thursdays",
-          "Fridays",
-          "Saturdays",
-        ][selectedDayIndex];
-        // Getting the list of allowed days from the lastAvailableData or an empty array if not provided
-        const allowedDays = lastAvailableData.selectedDays || [];
-
-        console.log("Selected day:", selectedDay);
-        console.log("Allowed days:", allowedDays);
-
-        // Checking if the selected day is allowed
-        if (allowedDays.includes(selectedDay)) {
-          // Update the state only if the selected day is allowed
-          setCurrentDate(date);
-          setSelected(date);
-          onDateChange?.(date);
-          console.log("Date selected successfully:", date);
-          return;
-        } else {
-          console.error("Selected day is not allowed. Date:", date);
-        }
+      if (allowedDays.includes(selectedDay)) {
+        setCurrentDate(date);
+        setSelected(date);
+        onDateChange?.(date);
+        return;
       } else {
-        console.error("Invalid selected day index:", selectedDayIndex);
+        console.error("Selected day is not allowed. Date:", date);
       }
     } else {
       console.error("Availability data is empty or not an array.");
     }
+  };
+
+  const isDateAllowed = (date: Date): boolean => {
+    if (Array.isArray(availabilityData) && availabilityData.length > 0) {
+      const lastAvailableData = availabilityData[availabilityData.length - 1];
+      const allowedDays = lastAvailableData.selectedDays || [];
+      const selectedDayIndex = date.getDay();
+      const selectedDay = [
+        "Sundays",
+        "Mondays",
+        "Tuesdays",
+        "Wednesdays",
+        "Thursdays",
+        "Fridays",
+        "Saturdays",
+      ][selectedDayIndex];
+      return allowedDays.includes(selectedDay);
+    }
+    return false;
   };
 
   const firstDayOfMonth = startOfWeek(startOfMonth(currentDate), {
@@ -143,13 +136,11 @@ const NewCalendar: React.FC<CalendarProps> = ({
             key={day.toString()}
             className={`calendar-day flex cursor-pointer justify-center items-center p-3 rounded-full hover:bg-[#c5d7f0] ${
               getDay(day) === 0 || getDay(day) === 6
-                ? "text-[#a9b2be] hover:bg-[#c7cbd2]"
-                : ""
             } ${
               day.toDateString() === selected?.toDateString()
                 ? "bg-[#0069FF] text-white font-bold"
                 : ""
-            } ${
+            } ${!isDateAllowed(day) ? "text-[#c7cbd2]" : ""} ${
               isToday(day) ? "items-center justify-center flex flex-col" : ""
             }`}
             onClick={() => selectDate(day)}

@@ -52,6 +52,18 @@ interface ProfileData {
   timeZone: string;
 }
 
+const timeSlots = [
+  { time: "9:00am", label: "9:00am - 9:30am" },
+  { time: "9:30am", label: "9:30am - 10:00am" },
+  { time: "10:00am", label: "10:00am - 10:30am" },
+  { time: "10:30am", label: "10:30am - 11:00am" },
+  { time: "11:00am", label: "11:00am - 11:30am" },
+  { time: "11:30am", label: "11:30am - 12:00pm" },
+  { time: "12:00pm", label: "12:00pm - 12:30pm" },
+  { time: "12:30pm", label: "12:30pm - 1:00pm" },
+  { time: "1:00pm", label: "1:00pm - 1:30pm" },
+];
+
 type SelectedDays = string[][];
 
 interface AvailabilityData {
@@ -80,14 +92,39 @@ export default function SelectDate() {
   const initialProfileData: ProfileData | null = null;
   const initialError: Error | null = null;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [availabilityDataa, setAvailabilityDataa] = useState<
-    AvailabilityData[]
-  >([]);
+  // const [availabilityDataaa, setAvailabilityDataa] = useState<
+  //   AvailabilityData[]
+  // >([]);
 
   const dispatch = useAppDispatch();
   const availabilityData = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
+
+  // const availabilityData: AvailabilityData[] | null = availabilityDataa
+
+  // Ensure availabilityData is not null before accessing its elements
+  if (availabilityData !== null) {
+    const reversedAvailabilityData = [...availabilityData].reverse();
+    const availabilityObject = reversedAvailabilityData[0];
+
+    // Check if availabilityObject is not undefined before accessing its properties
+    if (availabilityObject !== undefined) {
+      const { selectedHour1, selectedHour2 } = availabilityObject;
+      console.log("selectedHour1:", selectedHour1);
+      console.log("selectedHour2:", selectedHour2);
+
+      // Now you can use selectedHour1 and selectedHour2 as needed
+    } else {
+      console.error("availabilityData array is empty.");
+    }
+  } else {
+    console.error("availabilityData is null.");
+  }
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -258,7 +295,7 @@ export default function SelectDate() {
                     <p>Wednesday, March 27</p>
                   </div>
                   <div className="mt-8">
-                    <TimeSlot
+                    {/* <TimeSlot
                       time="9:00am"
                       onClick={() => handleTimeSlotClick("9:00am - 9:30am")}
                     />{" "}
@@ -293,7 +330,14 @@ export default function SelectDate() {
                     <TimeSlot
                       time="1:00m"
                       onClick={() => handleTimeSlotClick("1:00m - 1:30pm")}
-                    />{" "}
+                    />{" "} */}
+                    {timeSlots.map(({ time, label }) => (
+                      <TimeSlot
+                        key={label} // Use a unique key
+                        time={time}
+                        onClick={() => handleTimeSlotClick(label)}
+                      />
+                    ))}
                     <div className="w-[220px] h-[65px] flex gap-2 mx-3 mt-10">
                       <div className="w-[110px] cursor-pointer h-[65px] bg-gray-600 rounded-[8px] flex justify-center items-center">
                         <p className="font-semibold text-[17px] text-white">

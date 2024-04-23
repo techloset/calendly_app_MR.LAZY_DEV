@@ -80,10 +80,12 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
   const [neww, setNeww] = useState<string | null>(null);
-  // const { data: sessions } = useSession();
-  const { data: session, status } = useSession();
+  const { data: sessions } = useSession();
+  // const { data: session, status } = useSession();
 
-  const user = session?.user; // Perform null check here
+  // const user = sessions?.user; // Perform null check here
+
+  // console.log("kkkkkkkkk", sessions?.user.email);
 
   const scheduleEvents = useAppSelector((state) => state.user.userData);
 
@@ -124,9 +126,30 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   // }, [sessions?.user?.email]);
 
   // console.log("djfdjfk", neww);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("/api/getData");
+
+  //       // Check for error response
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch user data");
+  //       }
+
+  //       const responseData = await response.json();
+  //       console.log("User data:", responseData);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: session?.user?.email || "",
+    email: sessions?.user?.email || "",
     country: "",
     welcomeMessage: "",
     language: "",
@@ -143,6 +166,16 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   // const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  // const handleDynamicRoute = () => {
+  //   const email = "again@gmail.com"; // Get the email from wherever it's stored
+  //   router.push(`/dynamicRoute/${email}`);
+  // };
+
+  const handleDynamicRoute = () => {
+    const email = "again@gmail.com"; // Replace with actual email
+    window.location.href = `/hello/${email}`;
+  };
 
   // useEffect(() => {
   //   if (sessions && sessions.user) {
@@ -278,8 +311,10 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   <p className="font-medium text-[16px]">Account details</p>
                 </div>
                 <div className="mt-4">
-                  <p className="font-semibold text-[22px]">Profile</p>
-                  {/* <p className="font-semibold text-[22px]">{user?.email}</p> */}
+                  {/* <p className="font-semibold text-[22px]">Profile</p> */}
+                  <p className="font-semibold text-[22px]">
+                    {sessions?.user.email}
+                  </p>
                 </div>
 
                 <div className="mt-16 flex gap-7 items-center">
@@ -460,7 +495,8 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
               <div className="flex justify-between items-center">
                 <div className="flex gap-3">
                   <button
-                    onClick={handleSubmit}
+                    // onClick={handleSubmit}
+                    onClick={handleDynamicRoute}
                     className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                   >
                     Save changes
