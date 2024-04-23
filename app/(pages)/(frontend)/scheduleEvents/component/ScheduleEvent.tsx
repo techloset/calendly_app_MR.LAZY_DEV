@@ -24,6 +24,7 @@ interface FormData {
   date: string | null;
   time: string | null;
   timeZone: string | null;
+  ownerEmail: string | null;
 }
 interface propss {
   date: string | null;
@@ -46,7 +47,12 @@ export default function ScheduleEvent() {
     date: null,
     time: null,
     timeZone: null,
+    ownerEmail: null,
   });
+
+  // const [ownerEmail, setOwnerEmail] = useState<any>();
+
+  // console.log("hhhhhhhhhhhhhhhhhhhhhrst", ownerEmail);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -56,12 +62,14 @@ export default function ScheduleEvent() {
       const date = searchParams.get("date");
       const time = searchParams.get("time");
       const timeZone = searchParams.get("timeZone");
+      const ownerEmail = searchParams.get("ownerEmail");
 
       setFormData((prev) => ({
         ...prev,
         date,
         time,
         timeZone,
+        ownerEmail,
       }));
     }
   }, [searchParams]);
@@ -152,7 +160,10 @@ export default function ScheduleEvent() {
                 </div>
               </div>
               <div className="mt-6">
-                <p className="text-[14px] font-medium">Muhammad Talha</p>
+                <p className="text-[14px] font-medium">
+                  {/* {formData.ownerEmail} */}
+                  {formData.ownerEmail ? formData.ownerEmail : "undefine"}
+                </p>
               </div>
               <div className="">
                 <p className="text-[22px] font-bold">30 Minutes Meeting</p>
@@ -279,6 +290,7 @@ export default function ScheduleEvent() {
                           date: formData.date,
                           time: formData.time,
                           timeZone: formData.timeZone,
+                          ownerEmail: formData.ownerEmail,
                         },
                       }}
                     >

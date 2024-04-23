@@ -14,6 +14,7 @@ interface FormData {
   date: string | null;
   time: string | null;
   timeZone: string | null;
+  ownerEmail: string | null;
   // const serviceId = "service_20ro8tt";
   //   const templateId = "template_szfvbdm";
   //   const userId = "G7wOKA2XXop3K0YlX";
@@ -28,6 +29,7 @@ export default function CalendarInvitation() {
     date: null,
     time: null,
     timeZone: null,
+    ownerEmail: null,
   });
 
   useEffect(() => {
@@ -35,12 +37,14 @@ export default function CalendarInvitation() {
       const date = searchParams.get("date");
       const time = searchParams.get("time");
       const timeZone = searchParams.get("timeZone");
+      const ownerEmail = searchParams.get("ownerEmail");
 
       setFormData((prev) => ({
         ...prev,
         date,
         time,
         timeZone,
+        ownerEmail,
       }));
     }
   }, [searchParams]);

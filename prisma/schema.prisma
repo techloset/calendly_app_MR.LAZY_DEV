@@ -61,10 +61,24 @@ model ScheduleEvent {
   date           String
   // dayName        String
   timeZone       String
+  ownerEmail     String
   email          String
   additionalInfo String
   createdAt      DateTime @default(now())
 }
+
+// model ScheduleEventGet {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   name           String
+//   time           String
+//   date           String
+//   // dayName        String
+//   timeZone       String
+//   ownerEmail     String?
+//   email          String
+//   additionalInfo String
+//   createdAt      DateTime @default(now())
+// }
 
 model ProfileData {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId

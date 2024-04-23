@@ -29,6 +29,7 @@ interface Event {
   date: string;
   timeZone: string;
   email: string;
+  ownerEmail: string;
   additionalInfo: string;
   createdAt: string;
 }
@@ -47,6 +48,7 @@ interface SelectedDateTime {
   id: string | null;
   name: string | null;
   email: string | null;
+  ownerEmail: string | null;
   additionalInfo: string | null;
   date: string | null;
   time: string | null;
@@ -104,9 +106,6 @@ export default function SidebarPage() {
   );
 
   // Function to handle cancel action on the modal
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     console.log("djfjdkfj", sessions?.user?.email || "");
@@ -122,6 +121,9 @@ export default function SidebarPage() {
     setIsModalOpen(false); // You may want to close the modal after performing some action
   };
 
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     dispatch(fetchScheduleEvents());
   }, [dispatch]);
@@ -137,6 +139,7 @@ export default function SidebarPage() {
               email: event.email || "",
               additionalInfo: event.additionalInfo || "",
               date: event.date || "",
+              ownerEmail: event.ownerEmail || "",
               time: event.time || "",
               timeZone: event.timeZone || "",
               createdAt: event.createdAt || "",
@@ -214,7 +217,15 @@ export default function SidebarPage() {
         );
         break;
       case "pending":
-        setFilteredEvents([]);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        setFilteredEvents(
+          events.filter((event) => {
+            const eventDate = new Date(event.date);
+            eventDate.setHours(0, 0, 0, 0);
+            return eventDate.getTime() === today.getTime();
+          })
+        );
         break;
       case "dateRange":
         if (startDate && endDate) {
@@ -222,7 +233,8 @@ export default function SidebarPage() {
             events.filter(
               (event) =>
                 new Date(event.date) >= startDate &&
-                new Date(event.date) <= endDate
+                new Date(event.date) <= endDate &&
+                event.ownerEmail === sessions?.user?.email
             )
           );
         } else {
