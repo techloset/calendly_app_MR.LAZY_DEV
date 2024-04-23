@@ -89,24 +89,33 @@ export default function ScheduleEvent() {
     try {
       const response = await axios.post("/api/uploadData", formData);
       console.log("Form data uploaded successfully:", response.data);
+      handleSendEmailToOwner();
+      handleSendEmailToUser();
     } catch (error) {
       console.error("Error handling form submission:", error);
     }
   };
 
-  const handleSendEmail = async () => {
+  const handleSendEmailToOwner = async () => {
     try {
       const serviceId = "service_20ro8tt";
       const templateId = "template_szfvbdm";
       const userId = "G7wOKA2XXop3K0YlX";
 
       const templateParams = {
-        from_name: "Rana Asad Ali",
+        from_name: "Calendly with MR.LAZY",
         to_name: formData.name,
         message: formData.additionalInfo,
-        user_email: formData.email,
-        admin_name: "Rana Asad Ali",
-        reply_to: "ranaasadaly@gmail.com",
+        user_email: formData.ownerEmail,
+        admin_name: formData.ownerEmail,
+        reply_to: formData.email,
+
+        name: formData.name,
+        email: formData.email,
+        time: formData.time,
+        date: formData.date,
+        timeZone: formData.timeZone,
+        additionalInfo: formData.additionalInfo,
       };
 
       // Initialize EmailJS
@@ -115,9 +124,44 @@ export default function ScheduleEvent() {
       // Send the email
       await emailjs.send(serviceId, templateId, templateParams);
 
-      console.log("Email sent successfully!");
+      console.log("Email sent to owner successfully!");
     } catch (error) {
-      console.error("Error sending email:", error);
+      console.error("Error sending to owner email:", error);
+    }
+  };
+
+  const handleSendEmailToUser = async () => {
+    try {
+      const serviceId = "service_wru5tsd";
+      const templateId = "template_plmeesk";
+      const userId = "G7wOKA2XXop3K0YlX";
+
+      const templateParams = {
+        from_name: "Calendly with MR.LAZY",
+        to_name: formData.email,
+        message: formData.additionalInfo,
+        user_email: formData.email,
+        admin_name: formData.email,
+        reply_to: formData.email,
+        ownerName: formData.ownerEmail,
+
+        name: formData.name,
+        email: formData.email,
+        time: formData.time,
+        date: formData.date,
+        timeZone: formData.timeZone,
+        additionalInfo: formData.additionalInfo,
+      };
+
+      // Initialize EmailJS
+      emailjs.init(userId);
+
+      // Send the email
+      await emailjs.send(serviceId, templateId, templateParams);
+
+      console.log("Email sent to user successfully!");
+    } catch (error) {
+      console.error("Error sending to user email:", error);
     }
   };
 
@@ -278,25 +322,21 @@ export default function ScheduleEvent() {
                     </span>
                   </p>
                 </div>
-                <div onClick={handleSendEmail}>
-                  <div
-                    className="h-[44px] w-[10] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
-                    onClick={handleSubmit}
+                <div className="mt-3" onClick={handleSubmit}>
+                  <Link
+                    className="h-[44px] w-[150px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                    href={{
+                      pathname: "/calendarInvitation",
+                      query: {
+                        date: formData.date,
+                        time: formData.time,
+                        timeZone: formData.timeZone,
+                        ownerEmail: formData.ownerEmail,
+                      },
+                    }}
                   >
-                    <Link
-                      href={{
-                        pathname: "/calendarInvitation",
-                        query: {
-                          date: formData.date,
-                          time: formData.time,
-                          timeZone: formData.timeZone,
-                          ownerEmail: formData.ownerEmail,
-                        },
-                      }}
-                    >
-                      Schedule Event
-                    </Link>
-                  </div>
+                    Schedule Event
+                  </Link>
                 </div>
               </div>
             </div>
