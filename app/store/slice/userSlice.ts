@@ -1,62 +1,69 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../store";
+import axios from "axios";
 
 export interface UserData {
-  // id: string;
-  // image: string;
-  // name: string;
+  id: string;
+  image: string;
+  createdAt: string;
+  hashPassword: string;
+  updatedAt: string;
+  userName: string;
+  fullName: string;
   email: string;
-  // welcomeMessage: string;
-  // language: string;
-  // dateFormat: string;
-  // country: string;
-  // timeFormat: string;
-  // timeZone: string;
+  welcomeMessage: string;
+  language: string;
+  dateFormat: string;
+  country: string;
+  timeFormat: string;
+  timeZone: string;
 }
 
 export interface UserState {
   userData: UserData | null;
-  isLoading: boolean;
+  loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   userData: null,
-  isLoading: false,
+  loading: false,
   error: null,
 };
+
+export const fetchUserData = createAsyncThunk(
+  "user/fetchUserData",
+  async () => {
+    try {
+      const response = await axios.get("/api/getProfileCollection");
+      const result: UserData = response.data;
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    fetchUserDataStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    fetchUserDataSuccess: (state, action: PayloadAction<UserData | null>) => {
-      state.userData = action.payload;
-      state.isLoading = false;
-      state.error = null;
-    },
-    fetchUserDataFailure: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    clearUserData(state) {
-      state.userData = null;
-      state.isLoading = false;
-      state.error = null;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userData = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "An error occurred.";
+      });
   },
 });
 
-export const {
-  fetchUserDataStart,
-  fetchUserDataSuccess,
-  fetchUserDataFailure,
-  clearUserData,
-} = userSlice.actions;
-
-const userReducer = userSlice.reducer;
-export default userReducer;
+export default userSlice.reducer;

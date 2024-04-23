@@ -1,7 +1,6 @@
 // components/page.tsx
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import logo from "../../../../public/images/logo.svg";
 import person from "../../../../public/vectors/personn.png";
 import brading from "../../../../public/profile/star.png";
@@ -26,9 +25,10 @@ import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { fetchUserDataSuccess } from "@/app/store/slice/userSlice";
 import { useSession } from "next-auth/react";
 import { Modal } from "antd";
+import { fetchUserData } from "@/app/store/slice/userSlice";
+import Image from "next/image";
 
 interface Props {
   handleFileChange: (files: FileList | null) => void;
@@ -88,7 +88,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
   // console.log("kkkkkkkkk", sessions?.user.email);
 
-  const scheduleEvents = useAppSelector((state) => state.user.userData);
+  // const scheduleEvents = useAppSelector((state) => state.user.userData);
 
   // useEffect(() => {
   //   console.log("Session:", session);
@@ -148,6 +148,24 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   //   fetchData();
   // }, []);
 
+  const deleteUser = async () => {
+    try {
+      const response = await axios.delete("/api/deleteUser", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("User data deleted successfully");
+      } else {
+        console.error("Error:", response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: sessions?.user?.email || "",
@@ -162,53 +180,22 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const userDate = useAppSelector((state) => state.user.userData);
+  const userData = useAppSelector((state) => state.user.userData);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [user, setUser] = useState<User | null>(null);
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const scheduleEventss = useAppSelector(
+    (state) => state.fetchScheduleEvents.data
+  );
 
-  // const handleDynamicRoute = () => {
-  //   const email = "again@gmail.com"; // Get the email from wherever it's stored
-  //   router.push(`/dynamicRoute/${email}`);
-  // };
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
   const handleDynamicRoute = () => {
-    const email = sessions?.user.email; // Replace with actual email
+    const email = sessions?.user.email;
     window.location.href = `/goNext/${email}`;
   };
-
-  // useEffect(() => {
-  //   if (sessions && sessions.user) {
-  //     setSelectedHour(sessions.user.email ?? null);
-  //   }
-  // }, [sessions]);
-
-  // console.log("schedulell", scheduleEvents?.email);
-
-  // useEffect(() => {
-  //   const fetchProfileData = async () => {
-  //     try {
-  //       const response = await axios.get(`/api/getProfileData`, {
-  //         headers: {
-  //           Authorization: `mrlazy@gmail.com`,
-  //         },
-  //       });
-  //       console.log("Profile data:", response.data);
-  //       // console.log("sessions.user.email:", sessions?.user?.email);
-
-  //       // dispatch(fetchUserDataSuccess(response.data));
-  //       // console.log(sessions?.user?.email);
-  //     } catch (error) {
-  //       console.error(
-  //         "Error in fetch single profile data fetching profile data:",
-  //         error
-  //       );
-  //     }
-  //   };
-
-  //   fetchProfileData();
-  // }, [10000]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -219,6 +206,23 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/getProfileCollection");
+        console.log(response.data);
+      } catch (error: any) {
+        console.log("error in get profile data api", error.message);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      // Cleanup function if needed
+    };
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -289,20 +293,20 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* {sessions?.user?.image ? (
-                  <Link href={"/profile"} className="flex items-center gap-2">
-                    <Image
-                      src={sessions?.user.image}
-                      width={100}
-                      height={100}
-                      className="h-[37px] w-[37px] rounded-full "
-                      alt=""
-                    />
-                    <div>
-                      <Image src={downArrow} className="h-3 w-3" alt="Tab" />
-                    </div>
-                  </Link>
-                ) : ( */}
+                  {/* {userData?.image ? (
+                    <Link href={"/profile"} className="flex items-center gap-2">
+                      <Image
+                        src={userData?.image || ""}
+                        width={100}
+                        height={100}
+                        className="h-[37px] w-[37px] rounded-full "
+                        alt=""
+                      />
+                      <div>
+                        <Image src={downArrow} className="h-3 w-3" alt="Tab" />
+                      </div>
+                    </Link>
+                  ) : ( */}
                   <>
                     <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold ">
                       M
@@ -331,17 +335,21 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
                   <div className="mt-16 flex gap-7 items-center">
                     <div className="h-24 w-24 rounded-full">
-                      {/* {formData.image ? (
+                      {/* {userData?.image ? (
+                        <image
+                          src={userData?.image || ""}
+                          height={100}
+                          width={100}
+                          className="w-full h-full rounded-full"
+                          alt=""
+                        />
+                      ) : ( */}
                       <Image
-                        src={userDate?.image as string}
-                        width={100}
-                        height={100}
-                        className="h-24 w-24 rounded-full "
+                        src={avatar}
+                        className="w-full h-full rounded-full"
                         alt=""
                       />
-                    ) : (
-                    )} */}
-                      <Image src={avatar} className="w-full h-full" alt="" />
+                      {/* )} */}
                     </div>
                     <div className="">
                       <div>
@@ -382,7 +390,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                         value={formData.name}
                         onChange={handleChange}
                         name="name"
-                        // placeholder={userDate?.name || ""}
+                        placeholder={userData?.fullName || ""}
                       />
                     </div>
 
@@ -399,6 +407,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                         onChange={handleChange}
                         className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
                         name="welcomeMessage"
+                        placeholder={userData?.welcomeMessage || ""}
                         // placeholder={userDate?.welcomeMessage || ""}
                       />
                     </div>
@@ -519,7 +528,10 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                     </button>
                   </div>
                   <div>
-                    <button className="h-[44px] bg-red-600 text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">
+                    <button
+                      onClick={deleteUser}
+                      className="h-[44px] bg-red-600 text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
+                    >
                       Delete Account
                     </button>
                   </div>

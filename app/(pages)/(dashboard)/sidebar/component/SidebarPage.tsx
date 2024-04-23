@@ -15,7 +15,8 @@ import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { Divider, Form, Input, Modal, message } from "antd";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { useSession } from "next-auth/react";
-import { fetchUserDataSuccess } from "@/app/store/slice/userSlice";
+import axios from "axios";
+import { fetchUserData } from "@/app/store/slice/userSlice";
 
 interface DropdownProps {
   options: string[];
@@ -105,25 +106,36 @@ export default function SidebarPage() {
     (state) => state.fetchScheduleEvents.data
   );
 
-  // Function to handle cancel action on the modal
+  const userData = useAppSelector((state) => state.user.userData);
 
   useEffect(() => {
-    console.log("djfjdkfj", sessions?.user?.email || "");
-    const userData = {
-      email: sessions?.user?.email || "",
-    };
-    dispatch(fetchUserDataSuccess(userData));
-  }, [sessions?.user?.email]);
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
-  // Function to handle ok action on the modal
   const handleOk = () => {
-    // Implement your logic for handling ok action here
-    setIsModalOpen(false); // You may want to close the modal after performing some action
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("/api/getProfileCollection"); // Adjust the API route if necessary
+  //       console.log(response.data);
+  //     } catch (error: any) {
+  //       console.log("djflkdjfdkf", error.message);
+  //     }
+  //   };
+
+  //   fetchData();
+
+  //   return () => {
+  //   };
+  // }, []);
+
   useEffect(() => {
     dispatch(fetchScheduleEvents());
   }, [dispatch]);
@@ -265,12 +277,24 @@ export default function SidebarPage() {
               <div></div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <Link
-                    href={"/profile"}
-                    className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
-                  >
-                    M
-                  </Link>
+                  {userData ? (
+                    <Link href={"/profile"}>
+                      <Image
+                        src={userData?.image || ""}
+                        width={100}
+                        height={100}
+                        className="h-[37px] w-[37px] rounded-full "
+                        alt=""
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={"/profile"}
+                      className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
+                    >
+                      M
+                    </Link>
+                  )}
                   <div>
                     <Image src={downArrow} className="h-3 w-3" alt="Tab" />
                   </div>
