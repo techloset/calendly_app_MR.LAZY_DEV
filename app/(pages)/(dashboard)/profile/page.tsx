@@ -25,7 +25,7 @@ import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Modal } from "antd";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import Image from "next/image";
@@ -148,21 +148,25 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   //   fetchData();
   // }, []);
 
-  const deleteUser = async () => {
+  const handleDeleteAccount = async () => {
     try {
-      const response = await axios.delete("/api/deleteUser", {
+      const response = await axios.delete("/api/accountDelete", {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
       if (response.status === 200) {
-        console.log("User data deleted successfully");
+        console.log("User account deleted successfully");
+        signOut();
+        // router.push("/login"); // Redirect to login page
       } else {
         console.error("Error:", response.data);
+        // Display an error message to the user
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      console.error("Error:", error.message);
+      // Display an error message to the user
     }
   };
 
@@ -327,10 +331,10 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                     <p className="font-medium text-[16px]">Account details</p>
                   </div>
                   <div className="mt-4">
-                    {/* <p className="font-semibold text-[22px]">Profile</p> */}
-                    <p className="font-semibold text-[22px]">
+                    <p className="font-semibold text-[22px]">Profile</p>
+                    {/* <p className="font-semibold text-[22px]">
                       {sessions?.user.email}
-                    </p>
+                    </p> */}
                   </div>
 
                   <div className="mt-16 flex gap-7 items-center">
@@ -529,7 +533,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                   </div>
                   <div>
                     <button
-                      onClick={deleteUser}
+                      onClick={handleDeleteAccount}
                       className="h-[44px] bg-red-600 text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                     >
                       Delete Account

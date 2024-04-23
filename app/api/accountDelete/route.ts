@@ -24,9 +24,7 @@ export async function DELETE(req: IncomingMessage): Promise<NextResponse> {
     // Find and delete the user data based on the email
     const deleteResult = await prismadb.user.delete({
       where: {
-        email: {
-          equals: userEmail,
-        } as any,
+        email: userEmail,
       },
     });
 

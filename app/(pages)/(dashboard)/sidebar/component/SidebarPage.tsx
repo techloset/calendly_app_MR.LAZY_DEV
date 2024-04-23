@@ -245,8 +245,7 @@ export default function SidebarPage() {
             events.filter(
               (event) =>
                 new Date(event.date) >= startDate &&
-                new Date(event.date) <= endDate &&
-                event.ownerEmail === sessions?.user?.email
+                new Date(event.date) <= endDate
             )
           );
         } else {
@@ -277,7 +276,7 @@ export default function SidebarPage() {
               <div></div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  {userData ? (
+                  {/* {userData ? (
                     <Link href={"/profile"}>
                       <Image
                         src={userData?.image || ""}
@@ -287,14 +286,14 @@ export default function SidebarPage() {
                         alt=""
                       />
                     </Link>
-                  ) : (
-                    <Link
-                      href={"/profile"}
-                      className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
-                    >
-                      M
-                    </Link>
-                  )}
+                  ) : ( */}
+                  <Link
+                    href={"/profile"}
+                    className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
+                  >
+                    M
+                  </Link>
+                  {/* )} */}
                   <div>
                     <Image src={downArrow} className="h-3 w-3" alt="Tab" />
                   </div>
