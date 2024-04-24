@@ -26,9 +26,8 @@ interface Props {
 }
 
 interface FormData {
-  email: string;
   country: string;
-  name: string;
+  fullName: string;
   welcomeMessage: string;
   language: string;
   dateFormat: string;
@@ -101,25 +100,19 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
   };
 
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: sessions?.user?.email || "",
-    country: "",
+    fullName: "",
+    country: "country",
     welcomeMessage: "",
-    language: "",
-    dateFormat: "",
-    timeFormat: "",
-    timeZone: "",
-    image: "",
+    language: "language",
+    dateFormat: "dateFormat",
+    timeFormat: "timeFormat",
+    timeZone: "timeZone",
+    image: "https://via.placeholder.com/50x50",
   });
 
   useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
-
-  const handleDynamicRoute = () => {
-    const email = sessions?.user.email;
-    window.location.href = `/goNext/${email}`;
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -129,6 +122,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       ...prev,
       [name]: value,
     }));
+    // console.log("djfkdjfkjdkfjdkfjdklfjdkjfjdjf", formData);
   };
 
   // useEffect(() => {
@@ -170,12 +164,24 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       reader.onload = () => {
         setFormData((prev) => ({
           ...prev,
-          image: reader.result,
+          image: reader.result as string, // Cast to string
         }));
       };
       reader.readAsDataURL(files[0]);
     }
   };
+  // const handleFileInputChange = (files: FileList | null) => {
+  //   if (files) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setFormData((prev) => ({
+  //         ...prev,
+  //         image: reader.result,
+  //       }));
+  //     };
+  //     reader.readAsDataURL(files[0]);
+  //   }
+  // };
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -185,16 +191,28 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = async () => {
+  const UpdateProfile = async (e: any) => {
+    e.preventDefault();
+
     try {
-      await axios.post("/api/uploadProfile", formData);
-      console.log("Profile updated successfully!");
-      router.push("/sidebar");
+      const response = await axios.put("/api/register", formData);
+      console.log("response update profile", response);
+      dispatch(fetchUserData());
     } catch (error) {
       console.error("Error updating profile:", error);
-      console.log("Failed to update profile. Please try again later.");
     }
   };
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     await axios.post("/api/uploadProfile", formData);
+  //     console.log("Profile updated successfully!");
+  //     router.push("/sidebar");
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //     console.log("Failed to update profile. Please try again later.");
+  //   }
+  // };
 
   return (
     <>
@@ -241,11 +259,19 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
 
                   <div className="mt-16 flex gap-7 items-center">
                     <div className="h-24 w-24 rounded-full">
-                      <Image
-                        src={avatar}
-                        className="w-full h-full rounded-full"
-                        alt=""
-                      />
+                      {formData?.image ? (
+                        <Image
+                          src={formData.image as string}
+                          className="w-full h-full rounded-full"
+                          width={100}
+                          height={100}
+                          alt="Profile Image"
+                        />
+                      ) : (
+                        <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400">No Image</span>
+                        </div>
+                      )}
                     </div>
                     <div className="">
                       <div>
@@ -283,9 +309,9 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                       <input
                         type="text"
                         className="h-[40px] w-[450px] border-[1px] border-gray-300 px-3 rounded-md"
-                        value={formData.name}
+                        value={formData.fullName}
                         onChange={handleChange}
-                        name="name"
+                        name="fullName"
                         placeholder={userData?.fullName || ""}
                       />
                     </div>
@@ -410,7 +436,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
                     <button
-                      onClick={handleDynamicRoute}
+                      onClick={UpdateProfile}
                       className="h-[44px] bg-[#0069FF] text-white border-bg-[#0069FF] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold "
                     >
                       Save changes

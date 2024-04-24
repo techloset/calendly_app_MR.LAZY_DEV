@@ -72,6 +72,7 @@ export default function AvailabilityHours() {
         email: sessions?.user.email,
       });
       console.log("Form data uploaded successfully:", response.data);
+      window.location.assign("/sidebar");
     } catch (error) {
       console.error("Error handling form submission:", error);
     }

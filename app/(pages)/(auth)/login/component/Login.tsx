@@ -30,8 +30,9 @@ export default function Login() {
     });
 
     if (login?.ok) {
-      window.location.assign("/profile");
+      window.location.assign("/availabilityHours");
     } else if (login?.error) {
+      console.log("error in login function");
     }
 
     setLoading(false);

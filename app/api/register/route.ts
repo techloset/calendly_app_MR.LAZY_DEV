@@ -94,6 +94,7 @@
 import { NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
+import { getServerSession } from "next-auth";
 
 interface UserData {
   email: string;
@@ -177,6 +178,67 @@ export async function POST(req: Request): Promise<Response> {
     });
   } catch (err: any) {
     console.log("REGISTER_ERR: " + err);
+    return new Response("Internal Server Error", { status: 500 });
+  }
+}
+
+export async function PUT(req: Request): Promise<Response> {
+  try {
+    const session = await getServerSession({ req });
+
+    if (!session || !session.user?.email) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const userEmail: string = session.user.email;
+
+    const body = await req.json();
+    const {
+      fullName,
+      image,
+      welcomeMessage,
+      language,
+      dateFormat,
+      timeFormat,
+      country,
+      timeZone,
+    } = body;
+
+    if (
+      !fullName ||
+      !image ||
+      !welcomeMessage ||
+      !language ||
+      !dateFormat ||
+      !timeFormat ||
+      !country ||
+      !timeZone
+    ) {
+      return new Response("Missing data", { status: 400 });
+    }
+
+    const updatedUser = await prismadb.user.update({
+      where: {
+        email: userEmail,
+      },
+      data: {
+        fullName: fullName,
+        image: image,
+        welcomeMessage: welcomeMessage,
+        language: language,
+        dateFormat: dateFormat,
+        timeFormat: timeFormat,
+        country: country,
+        timeZone: timeZone,
+      },
+    });
+
+    return new Response(JSON.stringify(updatedUser), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err: any) {
+    console.log("UPDATE_ERR: " + err);
     return new Response("Internal Server Error", { status: 500 });
   }
 }

@@ -12,11 +12,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import emailjs from "emailjs-com";
 
-interface EmailData {
-  userEmail: string;
-  otherData: any;
-}
-
 interface FormData {
   name: string;
   email: string;
@@ -114,10 +109,8 @@ export default function ScheduleEvent() {
         additionalInfo: formData.additionalInfo,
       };
 
-      // Initialize EmailJS
       emailjs.init(userId);
 
-      // Send the email
       await emailjs.send(serviceId, templateId, templateParams);
 
       console.log("Email sent to owner successfully!");
@@ -149,10 +142,8 @@ export default function ScheduleEvent() {
         additionalInfo: formData.additionalInfo,
       };
 
-      // Initialize EmailJS
       emailjs.init(userId);
 
-      // Send the email
       await emailjs.send(serviceId, templateId, templateParams);
 
       console.log("Email sent to user successfully!");
