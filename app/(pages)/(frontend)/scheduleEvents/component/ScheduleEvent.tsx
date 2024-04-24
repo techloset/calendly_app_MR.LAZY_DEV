@@ -20,6 +20,7 @@ interface FormData {
   time: string | null;
   timeZone: string | null;
   ownerEmail: string | null;
+  ownerName: string | null;
 }
 interface propss {
   date: string | null;
@@ -43,6 +44,7 @@ export default function ScheduleEvent() {
     time: null,
     timeZone: null,
     ownerEmail: null,
+    ownerName: null,
   });
 
   const searchParams = useSearchParams();
@@ -54,6 +56,7 @@ export default function ScheduleEvent() {
       const time = searchParams.get("time");
       const timeZone = searchParams.get("timeZone");
       const ownerEmail = searchParams.get("ownerEmail");
+      const ownerName = searchParams.get("ownerName");
 
       setFormData((prev) => ({
         ...prev,
@@ -61,6 +64,7 @@ export default function ScheduleEvent() {
         time,
         timeZone,
         ownerEmail,
+        ownerName,
       }));
     }
   }, [searchParams]);
@@ -99,6 +103,7 @@ export default function ScheduleEvent() {
         message: formData.additionalInfo,
         user_email: formData.ownerEmail,
         admin_name: formData.ownerEmail,
+        ownerName: formData.ownerName,
         reply_to: formData.email,
 
         name: formData.name,
@@ -132,7 +137,7 @@ export default function ScheduleEvent() {
         user_email: formData.email,
         admin_name: formData.email,
         reply_to: formData.email,
-        ownerName: formData.ownerEmail,
+        ownerName: formData.ownerName,
 
         name: formData.name,
         email: formData.email,
@@ -172,8 +177,7 @@ export default function ScheduleEvent() {
               </div>
               <div className="mt-6">
                 <p className="text-[14px] font-medium">
-                  {/* {formData.ownerEmail} */}
-                  {formData.ownerEmail ? formData.ownerEmail : "undefine"}
+                  {formData.ownerName ? formData.ownerName : "undefine"}
                 </p>
               </div>
               <div className="">

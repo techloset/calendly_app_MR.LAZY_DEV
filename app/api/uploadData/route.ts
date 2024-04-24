@@ -10,14 +10,23 @@ interface UploadData {
   date: string;
   timeZone: string;
   ownerEmail: string;
+  ownerName: string;
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = await req.json();
 
-    const { name, email, additionalInfo, time, date, timeZone, ownerEmail } =
-      body;
+    const {
+      name,
+      email,
+      additionalInfo,
+      time,
+      date,
+      timeZone,
+      ownerEmail,
+      ownerName,
+    } = body;
 
     if (
       !email ||
@@ -26,7 +35,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       !time ||
       !date ||
       !timeZone ||
-      !ownerEmail
+      !ownerEmail ||
+      !ownerName
     ) {
       return new NextResponse("Missing data", { status: 400 });
     }
@@ -39,6 +49,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       date,
       timeZone,
       ownerEmail,
+      ownerName,
     };
 
     const createdData = await prismadb.scheduleEvent.create({

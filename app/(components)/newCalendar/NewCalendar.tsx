@@ -23,7 +23,6 @@ interface CalendarProps {
 
 interface AvailabilityData {
   selectedDays: string[];
-  // Define other properties if needed
 }
 
 const NewCalendar: React.FC<CalendarProps> = ({
@@ -46,7 +45,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
   }, [selectedDate]);
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  // const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   const selectDate = (date: Date) => {
     if (Array.isArray(availabilityData) && availabilityData.length > 0) {
@@ -110,7 +109,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
     <div className="calendar w-[380px] h-96">
       <div className="calendar-header flex justify-evenly items-center py-2 px-4">
         <button
-          onClick={prevMonth}
+          // onClick={prevMonth}
           className="btn btn-sm rounded-full p-2 hover:bg-[#b7ccea]"
         >
           <Image src={leftt} alt="Previous Month" />

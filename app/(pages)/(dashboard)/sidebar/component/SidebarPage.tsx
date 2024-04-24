@@ -14,11 +14,9 @@ import {
 } from "@/app/(components)/profileData/ProfileData";
 import Calendar from "react-calendar";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
-
-import { Divider, Form, Input, Modal, message } from "antd";
+import { Modal } from "antd";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { useSession } from "next-auth/react";
-import axios from "axios";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 
 interface DropdownProps {
@@ -93,7 +91,7 @@ export default function SidebarPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("past");
+  const [selectedCategory, setSelectedCategory] = useState<string>("upcoming");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);

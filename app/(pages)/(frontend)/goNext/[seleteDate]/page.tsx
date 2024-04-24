@@ -20,9 +20,12 @@ import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 import { useSession } from "next-auth/react";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import {
+  dayNames,
+  monthNames,
   timeSlots,
   timeZones,
 } from "@/app/(components)/profileData/ProfileData";
+import { fetchUserData } from "@/app/store/slice/userSlice";
 
 interface ProfileData {
   id: string;
@@ -67,6 +70,7 @@ const page: React.FC = ({ params }: any) => {
   const availabilityData = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
+  const userData = useAppSelector((state) => state.user.userData);
 
   if (availabilityData !== null) {
     const reversedAvailabilityData = [...availabilityData].reverse();
@@ -84,6 +88,10 @@ const page: React.FC = ({ params }: any) => {
   }
   useEffect(() => {
     dispatch(fetchAvailabilityData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchUserData());
   }, [dispatch]);
 
   const router = useRouter();
@@ -128,31 +136,6 @@ const page: React.FC = ({ params }: any) => {
 
     const date = new Date(year, month - 1, day);
 
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const dayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-
     const dayName = dayNames[date.getDay()];
     const monthName = monthNames[date.getMonth()];
 
@@ -176,7 +159,9 @@ const page: React.FC = ({ params }: any) => {
             <div className="w-[30%] border-[1px] px-7 py-7">
               <div>
                 <div className="mt-6">
-                  <p className="text-[14px] font-medium">{decodedValue}</p>
+                  <p className="text-[14px] font-medium">
+                    {userData?.fullName}
+                  </p>
                 </div>
                 <div className="">
                   <p className="text-[22px] font-bold">30 Minutes Meeting</p>
@@ -251,7 +236,8 @@ const page: React.FC = ({ params }: any) => {
                         </div>
                         {selectedDateTime.date &&
                         selectedDateTime.time &&
-                        selectedDateTime.timeZone ? (
+                        selectedDateTime.timeZone &&
+                        selectedDateTime.decodedValue ? (
                           <Link
                             href={{
                               pathname: "/scheduleEvents",
@@ -260,6 +246,7 @@ const page: React.FC = ({ params }: any) => {
                                 time: selectedDateTime.time,
                                 timeZone: selectedDateTime.timeZone,
                                 ownerEmail: selectedDateTime.decodedValue,
+                                ownerName: userData?.fullName,
                               },
                             }}
                             className="w-[110px] cursor-pointer h-[65px] flex

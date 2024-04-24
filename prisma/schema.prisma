@@ -41,6 +41,19 @@ model User {
   updatedAt      DateTime @updatedAt
 }
 
+model UpdateUser {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullName       String
+  image          String
+  welcomeMessage String
+  language       String
+  dateFormat     String
+  timeFormat     String
+  timeZone       String
+  country        String
+  updatedAt      DateTime @updatedAt
+}
+
 model ScheduleEvent {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   name           String
@@ -48,6 +61,7 @@ model ScheduleEvent {
   date           String
   timeZone       String
   ownerEmail     String
+  ownerName      String
   email          String
   additionalInfo String
   createdAt      DateTime @default(now())
