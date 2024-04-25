@@ -1,9 +1,5 @@
+import { CheckboxProps } from "@/app/constants/types";
 import React, { useState } from "react";
-
-interface CheckboxProps {
-  label: string;
-  onChange: (label: string, checked: boolean) => void;
-}
 
 const Checkbox: React.FC<CheckboxProps> = ({ label, onChange }) => {
   const [isChecked, setIsChecked] = useState(false);

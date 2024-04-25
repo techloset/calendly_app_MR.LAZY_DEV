@@ -18,66 +18,9 @@ import { Modal } from "antd";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { useSession } from "next-auth/react";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-
-interface DropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
-}
-
-interface Event {
-  id: string;
-  name: string;
-  time: string;
-  date: string;
-  timeZone: string;
-  email: string;
-  ownerEmail: string;
-  additionalInfo: string;
-  createdAt: string;
-}
-interface Modall {
-  id: string;
-  name: string;
-  time: string;
-  date: string;
-  timeZone: string;
-  email: string;
-  additionalInfo: string;
-  createdAt: string;
-}
-
-interface SelectedDateTime {
-  id: string | null;
-  name: string | null;
-  email: string | null;
-  ownerEmail: string | null;
-  additionalInfo: string | null;
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-  createdAt: string | null;
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
-  return (
-    <select
-      style={{
-        width: "100%",
-        height: "100%",
-        borderRadius: "8px",
-        border: "1px ",
-        paddingLeft: "10px",
-      }}
-      onChange={(e) => onSelect(e.target.value)}
-    >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-};
+import { EventSidebar, SelectedDateTimeSideBar } from "@/app/constants/types";
+import { Dropdown } from "@/app/(components)/dropdown/DropDown";
+import Modall from "@/app/(components)/modal/Modal";
 
 export default function SidebarPage() {
   const { data: sessions } = useSession();
@@ -88,13 +31,13 @@ export default function SidebarPage() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventSidebar[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<EventSidebar[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("upcoming");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventSidebar | null>(null);
   const scheduleEvents = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
@@ -119,8 +62,8 @@ export default function SidebarPage() {
   useEffect(() => {
     if (scheduleEvents) {
       if (Array.isArray(scheduleEvents)) {
-        const convertedEvents: Event[] = scheduleEvents.map(
-          (event: SelectedDateTime) => {
+        const convertedEvents: EventSidebar[] = scheduleEvents.map(
+          (event: SelectedDateTimeSideBar) => {
             return {
               id: event.id || "",
               name: event.name || "",
@@ -480,6 +423,20 @@ export default function SidebarPage() {
           </div>
         </div>
       </div>
+      <Modall
+        // Use a unique key for each Modall component
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        selectedEventAdditionalInfo={selectedEvent?.additionalInfo ?? ""}
+        selectedEventDate={selectedEvent?.date ?? ""}
+        selectedEventName={selectedEvent?.name ?? ""}
+        selectedEventEmail={selectedEvent?.email ?? ""}
+        selectedEventTime={selectedEvent?.time ?? ""}
+        selectedEventTimeZone={selectedEvent?.timeZone ?? ""}
+        isModalOpen={isModalOpen}
+      />
+      {/* 
+
 
       <Modal
         title=""
@@ -545,7 +502,7 @@ export default function SidebarPage() {
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

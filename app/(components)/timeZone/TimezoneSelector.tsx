@@ -1,16 +1,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import world from "../../../public/vectors/globe.png";
-
-interface TimeZone {
-  label: string;
-  value: string;
-}
-
-interface TimezoneSelectorProps {
-  timeZones: TimeZone[];
-  onChange: (value: string | null) => void;
-}
+import { TimeZone, TimezoneSelectorProps } from "@/app/constants/types";
 
 const TimezoneSelector: React.FC<TimezoneSelectorProps> = ({
   timeZones,

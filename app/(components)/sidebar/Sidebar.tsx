@@ -9,11 +9,7 @@ import avaibility from "../../../public/icons/avaibility.png";
 import adminCenter from "../../../public/icons/adminCenter.png";
 import singleLogo from "../../../public/icons/singleLogo.png";
 import Link from "next/link";
-
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { SidebarProps } from "@/app/constants/types";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname =

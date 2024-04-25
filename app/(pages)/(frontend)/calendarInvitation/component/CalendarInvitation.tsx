@@ -9,13 +9,7 @@ import world from "../../../../../public/vectors/globe.png";
 import sticker from "../../../../../public/vectors/sticker.png";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-
-interface FormData {
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-  ownerEmail: string | null;
-}
+import { FormData } from "@/app/constants/types";
 
 export default function CalendarInvitation() {
   const searchParams = useSearchParams();

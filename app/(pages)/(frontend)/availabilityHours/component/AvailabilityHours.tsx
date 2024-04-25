@@ -11,43 +11,15 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 import { useAppDispatch } from "@/app/store/store";
+import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 
-interface DropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
-  return (
-    <select
-      style={{
-        width: "100%",
-        height: "100%",
-        borderRadius: "8px",
-        border: "1px ",
-        paddingLeft: "10px",
-      }}
-      onChange={(e) => onSelect(e.target.value)}
-    >
-      {hoursTimes.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-};
 export default function AvailabilityHours() {
   const { data: sessions } = useSession();
   const dispatch = useAppDispatch();
   const [selectedHour1, setSelectedHour1] = useState<string | null>(null);
   const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  // const [checkEmail, setCheckEmail] = useState<string>();
 
-  // if (sessions && sessions.user && sessions.user.email) {
-  //   setCheckEmail(sessions.user.email);
-  // }
   const handleCheckboxChange = (label: string, checked: boolean) => {
     setSelectedDays((prev) => {
       if (checked) {
@@ -61,6 +33,22 @@ export default function AvailabilityHours() {
   useEffect(() => {
     dispatch(fetchAvailabilityData());
   }, [dispatch]);
+
+  // const handleAvailability = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post("/api/uploadAvailability", {
+  //       selectedDays,
+  //       selectedHour1,
+  //       selectedHour2,
+  //       email: sessions?.user.email,
+  //     });
+  //     console.log("Form data uploaded successfully:", response.data);
+  //     window.location.assign("/sidebar");
+  //   } catch (error) {
+  //     console.error("Error handling form submission:", error);
+  //   }
+  // };
 
   const handleAvailability = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,9 +1,5 @@
+import { TimeSlotProps } from "@/app/constants/types";
 import React from "react";
-
-interface TimeSlotProps {
-  time: string;
-  onClick: () => void;
-}
 
 const TimeSlot: React.FC<TimeSlotProps> = ({ time, onClick }) => {
   return (

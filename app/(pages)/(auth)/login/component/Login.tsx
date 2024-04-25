@@ -7,6 +7,7 @@ import googleLogo from "../../../../../public/icons/google.png";
 import eye from "../../../../../public/images/eye.png";
 import image from "../../../../public/images/logo1.png";
 import { useRouter } from "next/navigation";
+import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -49,9 +50,8 @@ export default function Login() {
           <p className="font-bold text-[14px] leading-6">Enter your email</p>
         </div>
         <div className="mt-2">
-          <input
+          <AuthInputField
             type="text"
-            className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
             placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -64,9 +64,8 @@ export default function Login() {
         </div>
 
         <div className="relative mt-2">
-          <input
+          <AuthInputField
             type="password"
-            className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

@@ -1,20 +1,8 @@
+import { AvailabilityData, AvailabilityliceState } from "@/app/constants/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface AvailabilityData {
-  selectedDays: string[];
-  selectedHour1: string;
-  selectedHour2: string;
-  email: string;
-}
-
-interface SliceState {
-  data: AvailabilityData | null;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: SliceState = {
+const initialState: AvailabilityliceState = {
   data: null,
   loading: false,
   error: null,

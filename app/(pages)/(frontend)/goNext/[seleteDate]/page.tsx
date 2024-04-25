@@ -9,11 +9,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NewCalendar from "@/app/(components)/newCalendar/NewCalendar";
-
-interface TimeZone {
-  label: string;
-  value: string;
-}
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
@@ -26,42 +21,7 @@ import {
   timeZones,
 } from "@/app/(components)/profileData/ProfileData";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-
-interface ProfileData {
-  id: string;
-  image: string;
-  name: string;
-  email: string;
-  welcomeMessage: string;
-  language: string;
-  dateFormat: string;
-  country: string;
-  timeFormat: string;
-  timeZone: string;
-}
-
-type SelectedDays = string[][];
-
-interface AvailabilityData {
-  selectedDays: SelectedDays;
-}
-
-interface AvailabilityState {
-  selectedDays: SelectedDays;
-  selectedHour1?: string;
-  selectedHour2?: string;
-}
-
-interface Error {
-  message: string;
-}
-
-interface SelectedDateTime {
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-  decodedValue: string | null;
-}
+import { SelectedDateTime } from "@/app/constants/types";
 
 const page: React.FC = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params.seleteDate);
@@ -139,7 +99,6 @@ const page: React.FC = ({ params }: any) => {
     const dayName = dayNames[date.getDay()];
     const monthName = monthNames[date.getMonth()];
 
-    // Format the date string
     const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
 
     return formattedDate;

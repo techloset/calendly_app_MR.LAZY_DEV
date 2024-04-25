@@ -5,6 +5,7 @@ import eye from "../../../../../public/images/eye.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 
 export default function SignUp() {
   const router = useRouter();
@@ -51,12 +52,19 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        <input
+        {/* <input
           type="text"
           className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
           placeholder="test@gmail.com"
           name="email"
           value={formData.email}
+          onChange={handleChange}
+        /> */}
+        <AuthInputField
+          type="text"
+          placeholder="test@gamil.com"
+          value={formData.email}
+          name="email"
           onChange={handleChange}
         />
       </div>
@@ -66,12 +74,19 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        <input
+        {/* <input
           type="text"
           name="fullName"
           className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
           placeholder="John Doe"
           value={formData.fullName}
+          onChange={handleChange}
+        /> */}
+        <AuthInputField
+          type="text"
+          placeholder="John Doe"
+          value={formData.fullName}
+          name="fullName"
           onChange={handleChange}
         />
       </div>
@@ -81,12 +96,19 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        <input
+        {/* <input
           type="text"
           className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
           placeholder="John Doe"
           name="userName"
           value={formData.userName}
+          onChange={handleChange}
+        /> */}
+        <AuthInputField
+          type="text"
+          placeholder="John Doe"
+          value={formData.userName}
+          name="userName"
           onChange={handleChange}
         />
       </div>
@@ -96,9 +118,16 @@ export default function SignUp() {
         </p>
       </div>
       <div className="relative mt-2">
-        <input
+        {/* <input
           type="password"
           className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
+          placeholder="password"
+          value={formData.password}
+          name="password"
+          onChange={handleChange}
+        /> */}
+        <AuthInputField
+          type="password"
           placeholder="password"
           value={formData.password}
           name="password"

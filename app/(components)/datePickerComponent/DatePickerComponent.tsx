@@ -3,10 +3,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import dayjs from "dayjs";
-
-interface DatePickerProps {
-  onDateChange: (date: string) => void;
-}
+import { DatePickerProps } from "@/app/constants/types";
 
 function DatePickerComponent({ onDateChange }: DatePickerProps): JSX.Element {
   const [value, setValue] = React.useState<dayjs.Dayjs | null>(null);

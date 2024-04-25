@@ -11,32 +11,12 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import emailjs from "emailjs-com";
-
-interface FormData {
-  name: string;
-  email: string;
-  additionalInfo: string;
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-  ownerEmail: string | null;
-  ownerName: string | null;
-}
-interface propss {
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-}
-
-interface EmailMessage {
-  from: string;
-  to: string;
-  subject: string;
-  text: string;
-}
+import ScheduleInputField from "@/app/(components)/scheduleInputField/ScheduleInputField";
+import TextArea from "@/app/(components)/textArea/TextArea";
+import { SecondFormData } from "@/app/constants/types";
 
 export default function ScheduleEvent() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SecondFormData>({
     name: "",
     email: "",
     additionalInfo: "",
@@ -234,26 +214,24 @@ export default function ScheduleEvent() {
                   <p className="font-semibold text-[15px]">Name *</p>
                 </div>
                 <div className="mt-1">
-                  <input
+                  <ScheduleInputField
                     type="text"
+                    placeholder="Enter your name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
-                    placeholder="Enter your name"
                   />
                 </div>
                 <div className="mt-2">
                   <p className="font-semibold text-[15px]">Email *</p>
                 </div>
                 <div className="mt-2">
-                  <input
+                  <ScheduleInputField
                     type="text"
+                    placeholder="Enter your email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="h-[50px] w-[470px] border-[1px] rounded-[8px] px-3"
-                    placeholder="Enter your email"
                   />
                 </div>
                 <div className="mt-4 h-[50px] w-[420px]">
@@ -263,14 +241,13 @@ export default function ScheduleEvent() {
                   </p>
                 </div>
                 <div className="mt-3">
-                  <textarea
+                  <TextArea
                     rows={3}
                     cols={6}
+                    placeholder=""
                     name="additionalInfo"
                     value={formData.additionalInfo}
                     onChange={handleChange}
-                    className="w-[470px] border-[1px] rounded-[8px] py-2 px-3"
-                    placeholder=""
                   />
                 </div>
                 <div className="mt-4 h-[50px] w-[430px]">

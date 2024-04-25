@@ -1,24 +1,11 @@
+import {
+  ScheduleEventsSliceState,
+  SelectedDateTime,
+} from "@/app/constants/types";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface SelectedDateTime {
-  id: string | null;
-  name: string | null;
-  email: string | null;
-  additionInfo: string | null;
-  date: string | null;
-  time: string | null;
-  timeZone: string | null;
-  createdAt: string | null;
-}
-
-interface SliceState {
-  data: SelectedDateTime | null;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: SliceState = {
+const initialState: ScheduleEventsSliceState = {
   data: null,
   loading: false,
   error: null,

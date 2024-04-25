@@ -15,15 +15,7 @@ import leftt from "../../../public/vectors/leftt.png";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
-
-interface CalendarProps {
-  selectedDate?: Date;
-  onDateChange?: (date: Date) => void;
-}
-
-interface AvailabilityData {
-  selectedDays: string[];
-}
+import { AvailabilityData, CalendarProps } from "@/app/constants/types";
 
 const NewCalendar: React.FC<CalendarProps> = ({
   selectedDate,

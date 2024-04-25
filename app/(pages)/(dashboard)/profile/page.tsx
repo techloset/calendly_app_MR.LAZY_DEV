@@ -1,4 +1,3 @@
-// components/page.tsx
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import downArrow from "../../../../public/profile/down-arrow.png";
@@ -20,6 +19,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Modal } from "antd";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import Image from "next/image";
+import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 
 interface Props {
   handleFileChange: (files: FileList | null) => void;
@@ -35,39 +35,6 @@ interface FormData {
   timeZone: string;
   image: string | ArrayBuffer | null;
 }
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
-interface DropdownProps {
-  options: string[];
-  onSelect: (option: string) => void;
-  defaultValue?: string;
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
-  return (
-    <select
-      style={{
-        width: "100%",
-        height: "100%",
-        borderRadius: "8px",
-        border: "1px ",
-        paddingLeft: "10px",
-      }}
-      onChange={(e) => onSelect(e.target.value)}
-    >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 const page: React.FC<Props> = ({ handleFileChange }) => {
   const { data: sessions } = useSession();
@@ -122,25 +89,7 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       ...prev,
       [name]: value,
     }));
-    // console.log("djfkdjfkjdkfjdkfjdklfjdkjfjdjf", formData);
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("/api/getProfileCollection");
-  //       console.log(response.data);
-  //     } catch (error: any) {
-  //       console.log("error in get profile data api", error.message);
-  //     }
-  //   };
-
-  //   fetchData();
-
-  //   return () => {
-  //     // Cleanup function if needed
-  //   };
-  // }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -164,25 +113,12 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       reader.onload = () => {
         setFormData((prev) => ({
           ...prev,
-          image: reader.result as string, // Cast to string
+          image: reader.result as string,
         }));
       };
       reader.readAsDataURL(files[0]);
     }
   };
-  // const handleFileInputChange = (files: FileList | null) => {
-  //   if (files) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setFormData((prev) => ({
-  //         ...prev,
-  //         image: reader.result,
-  //       }));
-  //     };
-  //     reader.readAsDataURL(files[0]);
-  //   }
-  // };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -202,17 +138,6 @@ const page: React.FC<Props> = ({ handleFileChange }) => {
       console.error("Error updating profile:", error);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     await axios.post("/api/uploadProfile", formData);
-  //     console.log("Profile updated successfully!");
-  //     router.push("/sidebar");
-  //   } catch (error) {
-  //     console.error("Error updating profile:", error);
-  //     console.log("Failed to update profile. Please try again later.");
-  //   }
-  // };
 
   return (
     <>
