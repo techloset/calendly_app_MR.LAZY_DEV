@@ -21,158 +21,29 @@ import { fetchUserData } from "@/app/store/slice/userSlice";
 import { EventSidebar, SelectedDateTimeSideBar } from "@/app/constants/types";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 import Modall from "@/app/(components)/modal/Modal";
+import SidebarTopMenu from "@/app/(components)/sidebarTopMenu/SidebarTopMenu";
+import SidebarSecondMenu from "@/app/(components)/sidebarSecondMenu/SidebarSecondMenu";
+import SidebarHook from "./SidebarHook";
 
 export default function SidebarPage() {
-  const { data: sessions } = useSession();
-  const dispatch = useAppDispatch();
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
-  const [newDate, setNewDate] = useState<string | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [events, setEvents] = useState<EventSidebar[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [filteredEvents, setFilteredEvents] = useState<EventSidebar[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("upcoming");
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventSidebar | null>(null);
-  const scheduleEvents = useAppSelector(
-    (state) => state.fetchScheduleEvents.data
-  );
-  const userData = useAppSelector((state) => state.user.userData);
-
-  useEffect(() => {
-    dispatch(fetchUserData());
-  }, [dispatch]);
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  useEffect(() => {
-    dispatch(fetchScheduleEvents());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (scheduleEvents) {
-      if (Array.isArray(scheduleEvents)) {
-        const convertedEvents: EventSidebar[] = scheduleEvents.map(
-          (event: SelectedDateTimeSideBar) => {
-            return {
-              id: event.id || "",
-              name: event.name || "",
-              email: event.email || "",
-              additionalInfo: event.additionalInfo || "",
-              date: event.date || "",
-              ownerEmail: event.ownerEmail || "",
-              time: event.time || "",
-              timeZone: event.timeZone || "",
-              createdAt: event.createdAt || "",
-            };
-          }
-        );
-        setEvents(convertedEvents);
-      } else {
-        console.error("scheduleEvents is not an array:", scheduleEvents);
-      }
-    }
-  }, [scheduleEvents]);
-
-  const handleImageClick = () => {
-    setShowCalendar(!showCalendar);
-  };
-
-  const handleDateChange = (date: any) => {
-    setSelectedDate(date);
-    setShowCalendar(false);
-    const formattedDate = date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-    });
-    setNewDate(formattedDate);
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  useEffect(() => {
-    filterEventsByCategory(selectedCategory);
-  }, [selectedCategory, events, startDate, endDate]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    filterEventsByCategory(selectedCategory);
-  }, [selectedCategory, events]);
-
-  const filterEventsByCategory = (category: string) => {
-    switch (category) {
-      case "upcoming":
-        setFilteredEvents(
-          events.filter((event) => new Date(event.date) > new Date())
-        );
-        break;
-      case "past":
-        setFilteredEvents(
-          events.filter((event) => new Date(event.date) < new Date())
-        );
-        break;
-      case "pending":
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        setFilteredEvents(
-          events.filter((event) => {
-            const eventDate = new Date(event.date);
-            eventDate.setHours(0, 0, 0, 0);
-            return eventDate.getTime() === today.getTime();
-          })
-        );
-        break;
-      case "dateRange":
-        if (startDate && endDate) {
-          setFilteredEvents(
-            events.filter(
-              (event) =>
-                new Date(event.date) >= startDate &&
-                new Date(event.date) <= endDate
-            )
-          );
-        } else {
-          setFilteredEvents(events);
-        }
-        break;
-      default:
-        setFilteredEvents(events);
-        break;
-    }
-  };
-
-  const uniqueDates = Array.from(
-    new Set(filteredEvents.map((event) => event.date))
-  );
-
+  const {
+    filteredEvents,
+    handleCancel,
+    handleDateChange,
+    handleImageClick,
+    handleOk,
+    isSidebarOpen,
+    selectedCategory,
+    selectedDate,
+    selectedEvent,
+    setIsModalOpen,
+    setSelectedCategory,
+    setSelectedEvent,
+    showCalendar,
+    toggleSidebar,
+    uniqueDates,
+    isModalOpen,
+  } = SidebarHook();
   return (
     <>
       <div className="flex">
@@ -183,46 +54,9 @@ export default function SidebarPage() {
           }`}
         >
           <div className="w-[100%]  px-6">
-            <div className="flex h-[60px] justify-between">
-              <div></div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={"/profile"}
-                    className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] bg-gray-400 text-[14px] font-semibold "
-                  >
-                    M
-                  </Link>
-                  {/* )} */}
-                  <div>
-                    <Image src={downArrow} className="h-3 w-3" alt="Tab" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            <SidebarTopMenu />
             <div>
-              <div className="h-full w-[45%] py-4">
-                <div className="mt-4">
-                  <p className="font-semibold text-[25px] leading-7">
-                    Scheduled events
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex mt-9 h-[60px] justify-between">
-                <div className="h-[46px] w-[151px] border-[1px] text-[14px] font-normal border-gray-300 rounded-md mt-2">
-                  <Dropdown
-                    options={DropdownData}
-                    onSelect={(option) => setSelectedHour(option)}
-                  />
-                </div>
-                <div className="flex items-center gap-3">
-                  <p className="font-normal text-[14px] text-gray-500">
-                    Displaying 1 of 1 Events
-                  </p>
-                </div>
-              </div>
+              <SidebarSecondMenu />
 
               <div className="mt-4">
                 <div className="h-[277px]">
@@ -424,7 +258,6 @@ export default function SidebarPage() {
         </div>
       </div>
       <Modall
-        // Use a unique key for each Modall component
         handleCancel={handleCancel}
         handleOk={handleOk}
         selectedEventAdditionalInfo={selectedEvent?.additionalInfo ?? ""}
@@ -435,74 +268,6 @@ export default function SidebarPage() {
         selectedEventTimeZone={selectedEvent?.timeZone ?? ""}
         isModalOpen={isModalOpen}
       />
-      {/* 
-
-
-      <Modal
-        title=""
-        open={isModalOpen}
-        onCancel={handleCancel}
-        onOk={handleOk}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Name :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-[90px]">
-                  {" "}
-                  {selectedEvent?.name}
-                </span>
-              </p>
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Email :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-24">
-                  {selectedEvent?.email}
-                </span>
-              </p>
-
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Time :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-[98px]">
-                  {selectedEvent?.time}
-                </span>
-              </p>
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Date :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-[102px]">
-                  {" "}
-                  {selectedEvent?.date}
-                </span>
-              </p>
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Time Zone :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-[58px]">
-                  {" "}
-                  {selectedEvent?.timeZone}
-                </span>
-              </p>
-              <p>
-                <span className="font-semibold" style={{ fontSize: "17px" }}>
-                  Additional Info :{" "}
-                </span>{" "}
-                <span style={{ fontSize: "17px" }} className="ml-[24px]">
-                  {selectedEvent?.additionalInfo}
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </Modal> */}
     </>
   );
 }
