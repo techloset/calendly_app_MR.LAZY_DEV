@@ -10,6 +10,9 @@ import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 export default function SignUp() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [selectedHour1, setSelectedHour1] = useState<string | null>("Empty");
+  const [selectedHour2, setSelectedHour2] = useState<string | null>("Empty");
+  const [selectedDays, setSelectedDays] = useState<string[]>(["Empty"]);
   const [formData, setFormData] = useState({
     email: "",
     fullName: "",
@@ -52,14 +55,6 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        {/* <input
-          type="text"
-          className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
-          placeholder="test@gmail.com"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        /> */}
         <AuthInputField
           type="text"
           placeholder="test@gamil.com"
@@ -74,14 +69,6 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        {/* <input
-          type="text"
-          name="fullName"
-          className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
-          placeholder="John Doe"
-          value={formData.fullName}
-          onChange={handleChange}
-        /> */}
         <AuthInputField
           type="text"
           placeholder="John Doe"
@@ -96,14 +83,6 @@ export default function SignUp() {
         </p>
       </div>
       <div className="mt-2">
-        {/* <input
-          type="text"
-          className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
-          placeholder="John Doe"
-          name="userName"
-          value={formData.userName}
-          onChange={handleChange}
-        /> */}
         <AuthInputField
           type="text"
           placeholder="John Doe"
@@ -118,14 +97,6 @@ export default function SignUp() {
         </p>
       </div>
       <div className="relative mt-2">
-        {/* <input
-          type="password"
-          className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
-          placeholder="password"
-          value={formData.password}
-          name="password"
-          onChange={handleChange}
-        /> */}
         <AuthInputField
           type="password"
           placeholder="password"

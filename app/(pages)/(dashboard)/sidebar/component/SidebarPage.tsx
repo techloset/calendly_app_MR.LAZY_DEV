@@ -1,29 +1,15 @@
 "use client";
 import Sidebar from "@/app/(components)/sidebar/Sidebar";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import downArrow from "../../../../../public/profile/down-arrow.png";
-import down from "../../../../../public/icons/down.png";
-import exportt from "../../../../../public/icons/export.png";
-import filterNew from "../../../../../public/icons/filterNew.png";
 import rightSmall from "../../../../../public/icons/rightSmall.png";
-import {
-  DropdownData,
-  colors,
-} from "@/app/(components)/profileData/ProfileData";
-import Calendar from "react-calendar";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { Modal } from "antd";
-import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
-import { useSession } from "next-auth/react";
-import { fetchUserData } from "@/app/store/slice/userSlice";
-import { EventSidebar, SelectedDateTimeSideBar } from "@/app/constants/types";
-import { Dropdown } from "@/app/(components)/dropdown/DropDown";
+import { colors } from "@/app/(components)/profileData/ProfileData";
 import Modall from "@/app/(components)/modal/Modal";
 import SidebarTopMenu from "@/app/(components)/sidebarTopMenu/SidebarTopMenu";
 import SidebarSecondMenu from "@/app/(components)/sidebarSecondMenu/SidebarSecondMenu";
-import SidebarHook from "./SidebarHook";
+import useSidebar from "./useSidebar";
+import SelectCategory from "@/app/(components)/selectCategory/SelectCategory";
+import ExportFilter from "@/app/(components)/exportFilter/ExportFilter";
 
 export default function SidebarPage() {
   const {
@@ -43,7 +29,7 @@ export default function SidebarPage() {
     toggleSidebar,
     uniqueDates,
     isModalOpen,
-  } = SidebarHook();
+  } = useSidebar();
   return (
     <>
       <div className="flex">
@@ -62,102 +48,14 @@ export default function SidebarPage() {
                 <div className="h-[277px]">
                   <div className="h-[64px] rounded-t-[6px] flex justify-between border-[1px] border-gray-300 items-center px-8">
                     <div>
-                      <div className="flex gap-3 mt-4">
-                        <div
-                          className={`h-[48px] w-[89px] border-b-[3px] ${
-                            selectedCategory === "upcoming"
-                              ? "border-blue-600"
-                              : "cursor-pointer hover:border-blue-600"
-                          } items-center flex justify-center`}
-                          onClick={() => setSelectedCategory("upcoming")}
-                        >
-                          <p className="text-[15px] font-normal">Upcoming</p>
-                        </div>
-                        <div
-                          className={`h-[48px] w-[89px] border-b-[3px] ${
-                            selectedCategory === "pending"
-                              ? "border-blue-600"
-                              : "cursor-pointer hover:border-blue-600"
-                          } items-center flex justify-center`}
-                          onClick={() => setSelectedCategory("pending")}
-                        >
-                          <p className="text-[15px] font-normal">Pending</p>
-                        </div>
-                        <div
-                          className={`h-[48px] w-[89px] border-b-[3px] ${
-                            selectedCategory === "past"
-                              ? "border-blue-600"
-                              : "cursor-pointer hover:border-blue-600"
-                          } items-center flex justify-center`}
-                          onClick={() => setSelectedCategory("past")}
-                        >
-                          <p className="text-[15px] font-normal">Past</p>
-                        </div>
-
-                        <div
-                          className={`h-[48px] w-[149px] flex border-b-[3px] ${
-                            selectedCategory === "dateRange"
-                              ? "border-blue-600"
-                              : "cursor-pointer hover:border-blue-600"
-                          } items-center flex justify-center`}
-                          onClick={() => setSelectedCategory("dateRange")}
-                        >
-                          <p className="text-[15px] w-[120px] items-center gap-3 flex font-normal">
-                            Date Range{" "}
-                            <span
-                              onClick={handleImageClick}
-                              className="cursor-pointer bg-gra"
-                            >
-                              <Image
-                                src={down}
-                                className="h-[12px] w-[12px]"
-                                alt=""
-                              />
-                            </span>
-                          </p>
-                        </div>
-                        <div className="w-[300px] absolute left-[47%] top-[11%] bg-white shadow-2xl p-3">
-                          {showCalendar && (
-                            <Calendar
-                              onChange={handleDateChange}
-                              value={selectedDate}
-                            />
-                          )}
-                        </div>
-                      </div>
+                      <SelectCategory
+                        handleImageClick={handleImageClick}
+                        selectedCategory={selectedCategory}
+                        setSelectedCategory={setSelectedCategory}
+                      />
                     </div>
-                    <div className="flex gap-2">
-                      <div className="flex gap-2 bg- border-[1px] border-black px-3 py-2 rounded-full ">
-                        <div>
-                          <Image
-                            src={exportt}
-                            className="h-[16px] w-[16px]"
-                            alt=""
-                          />
-                        </div>
-                        <div>
-                          <p className="font-normal text-[12px]">Export</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 border-[1px] border-black px-3 py-2 rounded-full ">
-                        <div>
-                          <Image
-                            src={filterNew}
-                            className="h-[16px] w-[16px]"
-                            alt=""
-                          />
-                        </div>
-                        <div>
-                          <p className="font-normal text-[12px]">Filter</p>
-                        </div>
-                        <div>
-                          <Image
-                            src={down}
-                            className="h-[16px] w-[16px]"
-                            alt=""
-                          />
-                        </div>
-                      </div>
+                    <div>
+                      <ExportFilter />
                     </div>
                   </div>
                   {uniqueDates.map((date, index) => (

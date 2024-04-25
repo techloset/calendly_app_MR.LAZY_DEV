@@ -1,10 +1,47 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import image from "../../../../public/images/logo1.png";
 import Link from "next/link";
 import eye from "../../../../public/images/eye.png";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchUserData } from "@/app/store/slice/userSlice";
 
 export default function Page() {
+  const dispatch = useAppDispatch();
+  // const userData = useAppSelector((state) => state.user.userData);
+
+  // const hashpassword = userData?.hashPassword;
+
+  // useEffect(() => {
+  //   dispatch(fetchUserData());
+  // }, [dispatch]);
+
+  const [formData, setFormData] = useState({
+    password: "",
+    newPassword1: "",
+    newPassword2: "",
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  // const handleResetPassword = async () => {
+  //   const hashedPasswordFromUserData = userData?.hashPassword;
+
+  //   if (!bcrypt.compareSync(formData.password, hashedPasswordFromUserData)) {
+  //     console.log("Current password is incorrect.");
+  //     return;
+  //   }
+
+  //   console.log("Password reset API call goes here...");
+  // };
+
   return (
     <div className="flex mt-16 justify-center">
       <div className="w-[440px] h-[580px] ">
@@ -24,7 +61,10 @@ export default function Page() {
             <input
               type="password"
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
-              placeholder="password"
+              placeholder="Old Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
             />
             <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
               <Image src={eye} alt="" />
@@ -37,7 +77,10 @@ export default function Page() {
             <input
               type="password"
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
-              placeholder="password"
+              placeholder="New Password"
+              name="newPassword1"
+              onChange={handleChange}
+              value={formData.newPassword1}
             />
             <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
               <Image src={eye} alt="" />
@@ -52,7 +95,10 @@ export default function Page() {
             <input
               type="password"
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
-              placeholder="password"
+              placeholder="New Password"
+              name="newPassword2"
+              value={formData.newPassword2}
+              onChange={handleChange}
             />
             <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
               <img src={eye.src} alt="" />

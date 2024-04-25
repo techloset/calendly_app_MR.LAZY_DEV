@@ -9,8 +9,10 @@ import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
-import { useAppDispatch } from "@/app/store/store";
+import availabilityData, {
+  fetchAvailabilityData,
+} from "@/app/store/slice/availabilityData";
+import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 
 export default function AvailabilityHours() {
@@ -19,6 +21,10 @@ export default function AvailabilityHours() {
   const [selectedHour1, setSelectedHour1] = useState<string | null>(null);
   const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  const AvailabilityData = useAppSelector((state) => {
+    state.fetchAvailabilityData.data;
+  });
 
   const handleCheckboxChange = (label: string, checked: boolean) => {
     setSelectedDays((prev) => {
@@ -65,6 +71,22 @@ export default function AvailabilityHours() {
       console.error("Error handling form submission:", error);
     }
   };
+
+  // const handleAvailability = async (e: any) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await axios.put("/api/updateAvailability", {
+  //       selectedDays,
+  //       selectedHour1,
+  //       selectedHour2,
+  //       email: sessions?.user.email,
+  //     });
+  //     console.log("Availability Update Successfull", response);
+  //   } catch (error) {
+  //     console.error("Error updating Availability:", error);
+  //   }
+  // };
 
   return (
     <div className="flex justify-center mt-7">

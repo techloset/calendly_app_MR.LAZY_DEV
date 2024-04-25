@@ -1,31 +1,12 @@
 "use client";
-import Sidebar from "@/app/(components)/sidebar/Sidebar";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import downArrow from "../../../../../public/profile/down-arrow.png";
-import down from "../../../../../public/icons/down.png";
-import exportt from "../../../../../public/icons/export.png";
-import filterNew from "../../../../../public/icons/filterNew.png";
-import rightSmall from "../../../../../public/icons/rightSmall.png";
-import {
-  DropdownData,
-  colors,
-} from "@/app/(components)/profileData/ProfileData";
-import Calendar from "react-calendar";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { Modal } from "antd";
 import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { useSession } from "next-auth/react";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import { EventSidebar, SelectedDateTimeSideBar } from "@/app/constants/types";
-import { Dropdown } from "@/app/(components)/dropdown/DropDown";
-import Modall from "@/app/(components)/modal/Modal";
-import SidebarTopMenu from "@/app/(components)/sidebarTopMenu/SidebarTopMenu";
-import SidebarSecondMenu from "@/app/(components)/sidebarSecondMenu/SidebarSecondMenu";
 
-const SidebarHook = () => {
-  const { data: sessions } = useSession();
+const useSidebar = () => {
   const dispatch = useAppDispatch();
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [newDate, setNewDate] = useState<string | null>(null);
@@ -195,4 +176,4 @@ const SidebarHook = () => {
   };
 };
 
-export default SidebarHook;
+export default useSidebar;
