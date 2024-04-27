@@ -56,10 +56,9 @@ export default function AvailabilityHours() {
   //   }
   // };
 
-  const handleAvailability = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAvailability = async () => {
     try {
-      const response = await axios.post("/api/uploadAvailability", {
+      const response = await axios.post("/api/getAvailability", {
         selectedDays,
         selectedHour1,
         selectedHour2,

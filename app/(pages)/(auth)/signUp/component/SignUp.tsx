@@ -20,7 +20,8 @@ export default function SignUp() {
     fullName: "",
     userName: "",
     password: "",
-    image: "Empty",
+    image:
+      "https://res.cloudinary.com/dqwzzzyby/image/upload/v1714204006/cloudinary_images/ed6oycbgtth4u1vibsbk.png",
     welcomeMessage: "Empty",
     language: "Empty",
     timeFormat: "Empty",

@@ -62,7 +62,7 @@ export default function ScheduleEvent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/uploadData", formData);
+      const response = await axios.post("/api/getEventsData", formData);
       console.log("Form data uploaded successfully:", response.data);
       handleSendEmailToOwner();
       handleSendEmailToUser();

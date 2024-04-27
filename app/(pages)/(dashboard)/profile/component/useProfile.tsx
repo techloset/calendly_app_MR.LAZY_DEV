@@ -47,15 +47,9 @@ const useProfile = () => {
     (state) => state.fetchScheduleEvents.data
   );
 
-  // const handleUpload = (info: any) => {
-  //   const url = info.info.secure_url;
-  //   setImageUrl(url);
-  //   console.log("Uploaded image URL:", url);
-  // };
-
   const handleDeleteAccount = async () => {
     try {
-      const response = await axios.delete("/api/accountDelete", {
+      const response = await axios.delete("/api/register", {
         headers: {
           "Content-Type": "application/json",
         },

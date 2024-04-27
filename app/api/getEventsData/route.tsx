@@ -1,23 +1,4 @@
-// // getData.ts
-// import { NextRequest, NextResponse } from "next/server";
-// import prismadb from "../../libs/prismadb";
-
-// export async function GET(req: NextRequest): Promise<NextResponse> {
-//   try {
-//     // Fetch data from the collection
-//     const data = await prismadb.scheduleEvent.findMany();
-
-//     return new NextResponse(JSON.stringify(data), {
-//       status: 200,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   } catch (err) {
-//     console.error("Error:", err);
-//     return new NextResponse("Internal Server Error", { status: 500 });
-//   }
-// }
-
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 import { getSession } from "next-auth/react";
 import { IncomingMessage } from "http";
@@ -53,6 +34,70 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
     }
 
     return new NextResponse(JSON.stringify(userData), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+interface UploadData {
+  name: string;
+  email: string;
+  additionalInfo: string;
+  time: string;
+  date: string;
+  timeZone: string;
+  ownerEmail: string;
+  ownerName: string;
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  try {
+    const body = await req.json();
+
+    const {
+      name,
+      email,
+      additionalInfo,
+      time,
+      date,
+      timeZone,
+      ownerEmail,
+      ownerName,
+    } = body;
+
+    if (
+      !email ||
+      !name ||
+      !additionalInfo ||
+      !time ||
+      !date ||
+      !timeZone ||
+      !ownerEmail ||
+      !ownerName
+    ) {
+      return new NextResponse("Missing data", { status: 400 });
+    }
+
+    const newData: UploadData = {
+      name: name,
+      email: email,
+      additionalInfo: additionalInfo,
+      time,
+      date,
+      timeZone,
+      ownerEmail,
+      ownerName,
+    };
+
+    const createdData = await prismadb.scheduleEvent.create({
+      data: newData,
+    });
+
+    return new NextResponse(JSON.stringify(createdData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

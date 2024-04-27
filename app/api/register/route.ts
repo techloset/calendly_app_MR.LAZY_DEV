@@ -1,96 +1,3 @@
-// import { NextApiRequest, NextApiResponse } from "next";
-// import prismadb from "../../libs/prismadb";
-// import bcrypt from "bcrypt";
-// import { Prisma } from "@prisma/client";
-
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   try {
-//     if (req.method !== "POST") {
-//       return res.status(405).json({ error: "Method Not Allowed" });
-//     }
-
-//     const { email, fullName, userName, password } = req.body;
-
-//     if (!email || !fullName || !userName || !password) {
-//       return res.status(400).json({ error: "Missing data" });
-//     }
-
-//     const userAlreadyExist = await prismadb.user.findFirst({
-//       where: { email },
-//     });
-
-//     if (userAlreadyExist) {
-//       return res.status(400).json({ error: "User already exists" });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 12);
-
-//     const userData: Prisma.UserCreateInput = {
-//       email,
-//       fullName,
-//       userName,
-//       password: hashedPassword,
-//     } as any;
-
-//     const newUser = await prismadb.user.create({
-//       data: userData,
-//     });
-
-//     return res.status(200).json(newUser);
-//   } catch (err) {
-//     console.error("REGISTER_ERR:", err);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// }
-
-// import { NextApiRequest, NextApiResponse } from "next";
-// import prismadb from "../../libs/prismadb";
-// import bcrypt from "bcrypt";
-
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   try {
-//     if (req.method !== "POST") {
-//       return res.status(405).json({ error: "Method Not Allowed" });
-//     }
-
-//     const { email, name, userName, password } = req.body;
-
-//     if (!email || !name || !userName || !password) {
-//       return res.status(400).json({ error: "Missing data" });
-//     }
-
-//     const userAlreadyExist = await prismadb.user.findFirst({
-//       where: { email },
-//     });
-
-//     if (userAlreadyExist) {
-//       return res.status(400).json({ error: "User already exists" });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 12);
-
-//     const newUser = await prismadb.user.create({
-//       data: {
-//         email,
-//         name,
-//         userName,
-//         password: hashedPassword,
-//       } as any,
-//     });
-
-//     return res.status(200).json(newUser);
-//   } catch (err: any) {
-//     console.error("REGISTER_ERR:", err);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// }
-
 import { NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
@@ -243,47 +150,75 @@ export async function PUT(req: Request): Promise<Response> {
   }
 }
 
-// import { NextApiRequest, NextApiResponse } from "next";
-// import prismadb from "../../libs/prismadb";
-// import bcrypt from "bcrypt";
+import { IncomingMessage } from "http";
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   try {
-//     if (req.method !== "POST") {
-//       return res.status(405).json({ error: "Method Not Allowed" });
-//     }
+export async function GET(req: IncomingMessage): Promise<NextResponse> {
+  try {
+    const session = await getServerSession({ req });
 
-//     const { email, name, userName, password } = req.body;
+    console.log("session", session);
 
-//     if (!email || !name || !userName || !password) {
-//       return res.status(400).json({ error: "Missing data" });
-//     }
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
-//     const userAlreadyExist = await prismadb.user.findFirst({
-//       where: { email },
-//     });
+    const userEmail = session.user?.email;
 
-//     if (userAlreadyExist) {
-//       return res.status(400).json({ error: "User already exists" });
-//     }
+    if (!userEmail) {
+      return new NextResponse("User email not found", { status: 400 });
+    }
 
-//     const hashedPassword = await bcrypt.hash(password, 12);
+    const userData = await prismadb.user.findFirst({
+      where: {
+        email: {
+          equals: userEmail,
+        },
+      },
+    });
 
-//     const newUser = await prismadb.user.create({
-//       data: {
-//         email,
-//         name,
-//         userName,
-//         password: hashedPassword,
-//       } as any,
-//     });
+    if (!userData) {
+      return new NextResponse("User data not found", { status: 404 });
+    }
 
-//     return res.status(200).json(newUser);
-//   } catch (err: any) {
-//     console.error("REGISTER_ERR:", err);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// }
+    return new NextResponse(JSON.stringify(userData), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+export async function DELETE(req: IncomingMessage): Promise<NextResponse> {
+  try {
+    const session = await getServerSession({ req });
+
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const userEmail = session.user?.email;
+
+    if (!userEmail) {
+      return new NextResponse("User email not found", { status: 400 });
+    }
+
+    const deleteResult = await prismadb.user.delete({
+      where: {
+        email: userEmail,
+      },
+    });
+
+    if (!deleteResult) {
+      return new NextResponse("User data not found", { status: 404 });
+    }
+
+    return new NextResponse("User data deleted successfully", {
+      status: 200,
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}

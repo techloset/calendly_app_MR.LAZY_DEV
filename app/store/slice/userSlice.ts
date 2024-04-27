@@ -13,7 +13,7 @@ export const fetchUserData = createAsyncThunk(
   "user/fetchUserData",
   async () => {
     try {
-      const response = await axios.get("/api/getProfileCollection");
+      const response = await axios.get("/api/register");
       const result: UserData = response.data;
       return result;
     } catch (error) {

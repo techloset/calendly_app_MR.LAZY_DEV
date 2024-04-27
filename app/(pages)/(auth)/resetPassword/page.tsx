@@ -7,16 +7,19 @@ import open from "../../../../public/icons/open.png";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchUserData } from "@/app/store/slice/userSlice";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const dispatch = useAppDispatch();
-  // const userData = useAppSelector((state) => state.user.userData);
+  const router = useRouter();
+  const userData = useAppSelector((state) => state.user.userData);
 
   // const hashpassword = userData?.hashPassword;
 
-  // useEffect(() => {
-  //   dispatch(fetchUserData());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
 
   const [show, setShow] = useState(false);
 
@@ -38,6 +41,8 @@ export default function Page() {
     password: "",
     newPassword1: "",
     newPassword2: "",
+    hashPasswordd:
+      "$2b$12$AbOoW7D.oLYRP5FrmAZeHODVrZnpwPIWukOOIwYBltU/tXyfo5bGm",
   });
 
   const handleChange = (e: any) => {
@@ -48,16 +53,15 @@ export default function Page() {
     }));
   };
 
-  // const handleResetPassword = async () => {
-  //   const hashedPasswordFromUserData = userData?.hashPassword;
-
-  //   if (!bcrypt.compareSync(formData.password, hashedPasswordFromUserData)) {
-  //     console.log("Current password is incorrect.");
-  //     return;
-  //   }
-
-  //   console.log("Password reset API call goes here...");
-  // };
+  const handleResetPassword = async () => {
+    try {
+      const response = await axios.put("/api/resetPassword", formData);
+      console.log("User password updated:", response.data);
+      router.push("/profile");
+    } catch (error) {
+      console.error("Error updating user password:", error);
+    }
+  };
 
   return (
     <div className="flex mt-16 justify-center">
@@ -151,7 +155,10 @@ export default function Page() {
             </p>
           </div>
           <div className="flex items-center justify-center mt-4">
-            <button className="h-[44px] bg-[#0069FF] border-[#0069FF] text-center flex items-center justify-center rounded-[32px] w-[122px] border-[1px] text-white text-[12px] font-bold ">
+            <button
+              onClick={handleResetPassword}
+              className="h-[44px] bg-[#0069FF] border-[#0069FF] text-center flex items-center justify-center rounded-[32px] w-[122px] border-[1px] text-white text-[12px] font-bold "
+            >
               Reset password
             </button>
           </div>
