@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import eye from "../../../../../public/images/eye.png";
+import open from "../../../../../public/icons/open.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -10,6 +11,7 @@ import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 export default function SignUp() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const [selectedHour1, setSelectedHour1] = useState<string | null>("Empty");
   const [selectedHour2, setSelectedHour2] = useState<string | null>("Empty");
   const [selectedDays, setSelectedDays] = useState<string[]>(["Empty"]);
@@ -33,6 +35,10 @@ export default function SignUp() {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const click = () => {
+    setShow(!show);
   };
 
   const handleSubmit = async () => {
@@ -98,14 +104,21 @@ export default function SignUp() {
       </div>
       <div className="relative mt-2">
         <AuthInputField
-          type="password"
+          type={show ? "text" : "password"}
           placeholder="password"
           value={formData.password}
           name="password"
           onChange={handleChange}
         />
-        <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-          <Image src={eye} alt="" />
+        <span
+          onClick={click}
+          className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
+        >
+          {show ? (
+            <Image className="h-4 w-4" src={open} alt="" />
+          ) : (
+            <Image src={eye} alt="" />
+          )}
         </span>
       </div>
       <div className="h-[6px] w-[374px] rounded-[8px] mt-2 bg-[#F2F2F2]"></div>

@@ -21,7 +21,7 @@ import {
   timeZones,
 } from "@/app/(components)/profileData/ProfileData";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-import { SelectedDateTime } from "@/app/constants/types";
+import { SelectedDateTime, SelectedDateTimeFirst } from "@/app/constants/types";
 
 const page: React.FC = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params.seleteDate);
@@ -60,12 +60,13 @@ const page: React.FC = ({ params }: any) => {
     dispatch(fetchAvailabilityData());
   }, [dispatch]);
 
-  const [selectedDateTime, setSelectedDateTime] = useState<SelectedDateTime>({
-    date: null,
-    time: null,
-    timeZone: null,
-    decodedValue: decodedValue,
-  });
+  const [selectedDateTime, setSelectedDateTime] =
+    useState<SelectedDateTimeFirst>({
+      date: null,
+      time: null,
+      timeZone: null,
+      decodedValue: decodedValue,
+    });
 
   useEffect(() => {
     dispatch(fetchAvailabilityData());

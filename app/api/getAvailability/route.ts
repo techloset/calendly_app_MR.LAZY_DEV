@@ -31,7 +31,7 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
 
     const userEmail = session.user?.email;
 
-    console.log("session", userEmail);
+    // console.log("session", userEmail);
 
     if (!userEmail) {
       return new NextResponse("User email not found", { status: 400 });
@@ -50,6 +50,65 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
     }
 
     return new NextResponse(JSON.stringify(userData), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+// updateData.ts
+import { NextRequest } from "next/server";
+
+interface AvailabilityData {
+  selectedDays: string[];
+  selectedHour1: string;
+  selectedHour2: string;
+  email: string;
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    // const session = req.session; // Assuming session management is set up
+    const session = await getServerSession({ req });
+
+    // Check if the user is logged in
+    if (!session || !session.user || !session.user.email) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const userEmail = session.user.email;
+
+    const body = await req.json();
+
+    const { selectedDays, selectedHour1, selectedHour2, email } = body;
+
+    if (!selectedDays || !selectedHour1 || !selectedHour2 || !email) {
+      return new NextResponse("Missing data", { status: 400 });
+    }
+
+    if (email !== userEmail) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const newData: AvailabilityData = {
+      selectedDays,
+      selectedHour1,
+      selectedHour2,
+      email,
+    };
+
+    // Assuming you have a unique identifier like an ID to identify the data to be updated
+    const id = body.id; // Adjust this based on your actual implementation
+
+    const updatedData = await prismadb.availability.update({
+      where: { id, email: userEmail }, // Update data only if email matches session user's email
+      data: newData,
+    });
+
+    return new NextResponse(JSON.stringify(updatedData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

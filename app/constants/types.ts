@@ -7,7 +7,7 @@ export interface FormData {
   ownerEmail: string | null;
 }
 
-export interface SelectedDateTime {
+export interface SelectedDateTimeFirst {
   date: string | null;
   time: string | null;
   timeZone: string | null;

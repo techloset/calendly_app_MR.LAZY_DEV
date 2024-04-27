@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import image from "../../../../public/images/logo1.png";
 import Link from "next/link";
 import eye from "../../../../public/images/eye.png";
+import open from "../../../../public/icons/open.png";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchUserData } from "@/app/store/slice/userSlice";
@@ -16,6 +17,22 @@ export default function Page() {
   // useEffect(() => {
   //   dispatch(fetchUserData());
   // }, [dispatch]);
+
+  const [show, setShow] = useState(false);
+
+  const click = () => {
+    setShow(!show);
+  };
+  const [show2, setShow2] = useState(false);
+
+  const click2 = () => {
+    setShow2(!show2);
+  };
+  const [show3, setShow3] = useState(false);
+
+  const click3 = () => {
+    setShow3(!show3);
+  };
 
   const [formData, setFormData] = useState({
     password: "",
@@ -59,15 +76,22 @@ export default function Page() {
           </div>
           <div className="relative mt-2">
             <input
-              type="password"
+              type={show ? "text" : "password"}
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
               placeholder="Old Password"
               name="password"
               value={formData.password}
               onChange={handleChange}
             />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-              <Image src={eye} alt="" />
+            <span
+              onClick={click}
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              {show ? (
+                <Image className="h-4 w-4" src={open} alt="" />
+              ) : (
+                <Image src={eye} alt="" />
+              )}
             </span>
           </div>
           <div>
@@ -75,15 +99,22 @@ export default function Page() {
           </div>
           <div className="relative mt-2">
             <input
-              type="password"
+              type={show2 ? "text" : "password"}
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
               placeholder="New Password"
               name="newPassword1"
               onChange={handleChange}
               value={formData.newPassword1}
             />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-              <Image src={eye} alt="" />
+            <span
+              onClick={click2}
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              {show2 ? (
+                <Image className="h-4 w-4" src={open} alt="" />
+              ) : (
+                <Image src={eye} alt="" />
+              )}
             </span>
           </div>
           <div>
@@ -93,15 +124,23 @@ export default function Page() {
           </div>
           <div className="relative mt-2">
             <input
-              type="password"
+              type={show3 ? "text" : "password"}
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4 pr-10"
               placeholder="New Password"
               name="newPassword2"
               value={formData.newPassword2}
               onChange={handleChange}
             />
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-              <img src={eye.src} alt="" />
+            <span
+              onClick={click3}
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              {}
+              {show3 ? (
+                <Image className="h-4 w-4" src={open} alt="" />
+              ) : (
+                <Image src={eye} alt="" />
+              )}
             </span>
           </div>
           <div className="h-[6px] w-[374px] rounded-[8px] mt-2 bg-[#F2F2F2]"></div>

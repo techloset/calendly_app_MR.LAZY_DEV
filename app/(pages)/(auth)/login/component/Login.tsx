@@ -6,6 +6,7 @@ import Link from "next/link";
 import googleLogo from "../../../../../public/icons/google.png";
 import eye from "../../../../../public/images/eye.png";
 import image from "../../../../public/images/logo1.png";
+import open from "../../../../../public/icons/open.png";
 import { useRouter } from "next/navigation";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 export default function Login() {
@@ -14,6 +15,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
+
+  const [show, setShow] = useState(false);
+
+  const click = () => {
+    setShow(!show);
+  };
 
   useEffect(() => {
     if (session) {
@@ -65,13 +72,20 @@ export default function Login() {
 
         <div className="relative mt-2">
           <AuthInputField
-            type="password"
+            type={show ? "text" : "password"}
             placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <span className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer">
-            <Image src={eye} alt="" />
+          <span
+            onClick={click}
+            className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          >
+            {show ? (
+              <Image className="h-4 w-4" src={open} alt="" />
+            ) : (
+              <Image src={eye} alt="" />
+            )}
           </span>
         </div>
 

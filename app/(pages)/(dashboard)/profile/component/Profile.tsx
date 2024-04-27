@@ -22,6 +22,7 @@ import Image from "next/image";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 import useProfile from "./useProfile";
 import ProfileModal from "@/app/(components)/profileModal/ProfileModal";
+import { CldUploadButton } from "next-cloudinary";
 
 interface Props {
   handleFileChange: (files: FileList | null) => void;
@@ -47,7 +48,7 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
     handleChange,
     handleClick,
     handleDeleteAccount,
-    handleFileInputChange,
+    // handleFileInputChange,
     handleOk,
     isModalOpen,
     setFormData,
@@ -55,8 +56,10 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
     UpdateProfile,
     sessions,
     userData,
+    handleUpload,
+    imageUrl,
+    setImageUrl,
   } = useProfile();
-
   return (
     <>
       <div>
@@ -102,36 +105,86 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
 
                   <div className="mt-16 flex gap-7 items-center">
                     <div className="h-24 w-24 rounded-full">
-                      {formData?.image ? (
-                        <Image
-                          src={formData.image as string}
-                          className="w-full h-full rounded-full"
-                          width={100}
-                          height={100}
-                          alt="Profile Image"
-                        />
+                      {/* {formData?.image ? ( */}
+                      {/* <Image
+                        src={imageUrl}
+                        className="w-full h-full rounded-full"
+                        width={100}
+                        height={100}
+                        alt="Profile Image"
+                      /> */}
+
+                      {/* {imageUrl ? (
+                        <>
+                          <img
+                            src={imageUrl}
+                            className="w-full h-full rounded-full"
+                            alt="Uploaded"
+                          />
+                        </>
+                      ) : ( */}
+                      {formData.image ? (
+                        <>
+                          {userData?.image && (
+                            <div className="w-full h-full relative">
+                              <Image
+                                src={formData?.image.toString()}
+                                className="absolute inset-0 w-full h-full rounded-full"
+                                layout="fill"
+                                objectFit="cover"
+                                alt="Uploaded"
+                              />
+                            </div>
+                          )}
+                        </>
                       ) : (
+                        <>
+                          {userData?.image && (
+                            <div className="w-full h-full relative">
+                              <Image
+                                src={userData?.image.toString()}
+                                className="absolute inset-0 w-full h-full rounded-full"
+                                layout="fill"
+                                objectFit="cover"
+                                alt="Uploaded"
+                              />
+                            </div>
+                          )}
+                        </>
+                      )}
+                      {/* )} */}
+
+                      {/* ) : (
                         <div className="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
                           <span className="text-gray-400">No Image</span>
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="">
                       <div>
-                        <button
+                        {/* <button
                           onClick={handleClick}
                           className="h-[37px] gap-2 text-center hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold"
                         >
                           Upload picture
-                        </button>
-                        <input
+                        </button> */}
+                        <div className="h-[37px] w-[120px] gap-2 text-center hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold">
+                          {/* Cloudinary Upload Button component */}
+                          <CldUploadButton
+                            uploadPreset="m9zho07z" // Your upload preset
+                            onSuccess={handleUpload} // Callback function to handle successful uploads
+                          />
+                          {/* Display uploaded image URL */}
+                          {/* {imageUrl && <img src={imageUrl} alt="Uploaded" />} */}
+                        </div>
+                        {/* <input
                           ref={fileInputRef}
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) =>
                             handleFileInputChange(e.target.files)
                           }
-                        />
+                        /> */}
                       </div>
                       <div className="mt-4">
                         <p className="text-[13px]">

@@ -41,10 +41,17 @@ const useProfile = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.user.userData);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const scheduleEventss = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
+
+  // const handleUpload = (info: any) => {
+  //   const url = info.info.secure_url;
+  //   setImageUrl(url);
+  //   console.log("Uploaded image URL:", url);
+  // };
 
   const handleDeleteAccount = async () => {
     try {
@@ -73,10 +80,12 @@ const useProfile = () => {
     dateFormat: "dateFormat",
     timeFormat: "timeFormat",
     timeZone: "timeZone",
-    image: "https://via.placeholder.com/50x50",
+    image: "",
   });
 
-  useEffect(() => {
+  //via.placeholder.com/50x50
+
+  https: useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
 
@@ -106,18 +115,30 @@ const useProfile = () => {
     }
   };
 
-  const handleFileInputChange = (files: FileList | null) => {
-    if (files) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setFormData((prev) => ({
-          ...prev,
-          image: reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(files[0]);
-    }
+  const handleUpload = (info: any) => {
+    const url = info.info.secure_url;
+    setImageUrl(url);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      image: url,
+    }));
+    console.log("Uploaded image URL:", url);
+    // console.log("formData", formData);
   };
+
+  // const handleFileInputChange = (files: FileList | null) => {
+  //   if (files) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setFormData((prev) => ({
+  //         ...prev,
+  //         image: imageUrl,
+  //         // image: reader.result as string,
+  //       }));
+  //     };
+  //     reader.readAsDataURL(files[0]);
+  //   }
+  // };
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -137,13 +158,17 @@ const useProfile = () => {
       console.error("Error updating profile:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("formData", formData);
+  }, [formData]);
   return {
     setIsModalOpen,
     sessions,
     formData,
     handleClick,
     fileInputRef,
-    handleFileInputChange,
+    // handleFileInputChange,
     handleChange,
     setFormData,
     currentTime,
@@ -153,6 +178,9 @@ const useProfile = () => {
     handleCancel,
     handleOk,
     userData,
+    setImageUrl,
+    imageUrl,
+    handleUpload,
   };
 };
 
