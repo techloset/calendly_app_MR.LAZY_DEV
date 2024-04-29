@@ -13,8 +13,10 @@ import backArrow from "../../../public/profile/backArrow.png";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const ProfileSidebar = () => {
+  const router = useRouter();
   return (
     <div className="w-[20%] flex flex-col justify-between px-2 py-4 h-[1100px] border-gray-300 border-[1px]">
       <div>
@@ -106,6 +108,7 @@ const ProfileSidebar = () => {
         <div
           onClick={() => {
             signOut();
+            router.push("/login");
           }}
           className="flex items-center gap-5 mt-3 pl-4 py-2 cursor-pointer hover:bg-[#F2F8FF]"
         >

@@ -112,11 +112,16 @@
 
 import { AuthOptions, User } from "next-auth";
 import prismadb from "./prismadb";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import Credentials from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
     Credentials({
       name: "credentials",
       credentials: {

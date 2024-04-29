@@ -25,6 +25,17 @@ export interface SecondFormData {
   ownerName: string | null;
 }
 
+export interface FormData3 {
+  country: string;
+  fullName: string;
+  welcomeMessage: string;
+  language: string;
+  dateFormat: string;
+  timeFormat: string;
+  timeZone: string;
+  image: string | ArrayBuffer | null;
+}
+
 export interface AvailabilityData {
   selectedDays: string[];
   selectedHour1: string;

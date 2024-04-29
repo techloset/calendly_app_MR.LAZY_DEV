@@ -3,20 +3,6 @@ import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 
-interface UserData {
-  email: string;
-  hashedPassword: string;
-  fullName: string;
-  userName: string;
-  image: string;
-  welcomeMessage: string;
-  language: string;
-  dateFormat: string;
-  timeFormat: string;
-  country: string;
-  timeZone: string;
-}
-
 export async function POST(req: Request): Promise<Response> {
   try {
     const body = await req.json();
@@ -77,7 +63,7 @@ export async function POST(req: Request): Promise<Response> {
         country: country,
         timeZone: timeZone,
       },
-    } as { data: UserData });
+    } as { data: UserDataSignUp });
 
     return new Response(JSON.stringify(newUser), {
       status: 200,
@@ -111,19 +97,6 @@ export async function PUT(req: Request): Promise<Response> {
       timeZone,
     } = body;
 
-    if (
-      !fullName ||
-      !image ||
-      !welcomeMessage ||
-      !language ||
-      !dateFormat ||
-      !timeFormat ||
-      !country ||
-      !timeZone
-    ) {
-      return new Response("Missing data", { status: 400 });
-    }
-
     const updatedUser = await prismadb.user.update({
       where: {
         email: userEmail,
@@ -151,6 +124,7 @@ export async function PUT(req: Request): Promise<Response> {
 }
 
 import { IncomingMessage } from "http";
+import { UserDataSignUp } from "@/app/constants/types";
 
 export async function GET(req: IncomingMessage): Promise<NextResponse> {
   try {

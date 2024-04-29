@@ -422,7 +422,6 @@ const Page: React.FC<Props> = ({ handleFileChange }) => {
   return (
     <div>
       <Profile handleFileChange={handleFileChange} />{" "}
-      {/* Pass the handleFileChange prop */}
     </div>
   );
 };

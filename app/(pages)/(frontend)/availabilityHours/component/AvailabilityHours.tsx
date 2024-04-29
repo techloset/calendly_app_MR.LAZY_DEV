@@ -7,85 +7,16 @@ import Checkbox from "@/app/(components)/checkBox/CheckBox";
 import Image from "next/image";
 import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import availabilityData, {
-  fetchAvailabilityData,
-} from "@/app/store/slice/availabilityData";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
+import useAvailabilityHours from "./useAvailabilityHours";
 
 export default function AvailabilityHours() {
-  const { data: sessions } = useSession();
-  const dispatch = useAppDispatch();
-  const [selectedHour1, setSelectedHour1] = useState<string | null>(null);
-  const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-
-  const AvailabilityData = useAppSelector((state) => {
-    state.fetchAvailabilityData.data;
-  });
-
-  const handleCheckboxChange = (label: string, checked: boolean) => {
-    setSelectedDays((prev) => {
-      if (checked) {
-        return [...prev, label];
-      } else {
-        return prev.filter((day) => day !== label);
-      }
-    });
-  };
-
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  // const handleAvailability = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post("/api/uploadAvailability", {
-  //       selectedDays,
-  //       selectedHour1,
-  //       selectedHour2,
-  //       email: sessions?.user.email,
-  //     });
-  //     console.log("Form data uploaded successfully:", response.data);
-  //     window.location.assign("/sidebar");
-  //   } catch (error) {
-  //     console.error("Error handling form submission:", error);
-  //   }
-  // };
-
-  const handleAvailability = async () => {
-    try {
-      const response = await axios.post("/api/getAvailability", {
-        selectedDays,
-        selectedHour1,
-        selectedHour2,
-        email: sessions?.user.email,
-      });
-      console.log("Form data uploaded successfully:", response.data);
-      window.location.assign("/sidebar");
-    } catch (error) {
-      console.error("Error handling form submission:", error);
-    }
-  };
-
-  // const handleAvailability = async (e: any) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await axios.put("/api/updateAvailability", {
-  //       selectedDays,
-  //       selectedHour1,
-  //       selectedHour2,
-  //       email: sessions?.user.email,
-  //     });
-  //     console.log("Availability Update Successfull", response);
-  //   } catch (error) {
-  //     console.error("Error updating Availability:", error);
-  //   }
-  // };
+  const {
+    handleAvailability,
+    handleCheckboxChange,
+    setSelectedHour1,
+    setSelectedHour2,
+  } = useAvailabilityHours();
 
   return (
     <div className="flex justify-center mt-7">

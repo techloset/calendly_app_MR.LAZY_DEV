@@ -41,8 +41,7 @@ export default function Page() {
     password: "",
     newPassword1: "",
     newPassword2: "",
-    hashPasswordd:
-      "$2b$12$AbOoW7D.oLYRP5FrmAZeHODVrZnpwPIWukOOIwYBltU/tXyfo5bGm",
+    hashPasswordd: userData?.hashPassword,
   });
 
   const handleChange = (e: any) => {

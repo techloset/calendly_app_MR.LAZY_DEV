@@ -22,90 +22,17 @@ import {
 } from "@/app/(components)/profileData/ProfileData";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import { SelectedDateTime, SelectedDateTimeFirst } from "@/app/constants/types";
+import { BeatLoader } from "react-spinners";
+import useSeleteDate from "./component/useSeleteDate";
 
-const page: React.FC = ({ params }: any) => {
-  const decodedValue = decodeURIComponent(params.seleteDate);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const dispatch = useAppDispatch();
-  const availabilityData = useAppSelector(
-    (state) => state.fetchAvailabilityData.data
-  );
-  const userData = useAppSelector((state) => state.user.userData);
-
-  if (availabilityData !== null) {
-    const reversedAvailabilityData = [...availabilityData].reverse();
-    const availabilityObject = reversedAvailabilityData[0];
-
-    if (availabilityObject !== undefined) {
-      const { selectedHour1, selectedHour2 } = availabilityObject;
-      console.log("selectedHour1:", selectedHour1);
-      console.log("selectedHour2:", selectedHour2);
-    } else {
-      console.error("availabilityData array is empty.");
-    }
-  } else {
-    console.error("availabilityData is null.");
-  }
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchUserData());
-  }, [dispatch]);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  const [selectedDateTime, setSelectedDateTime] =
-    useState<SelectedDateTimeFirst>({
-      date: null,
-      time: null,
-      timeZone: null,
-      decodedValue: decodedValue,
-    });
-
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  const handleDateChange = (date: Date) => {
-    const formattedDate = format(date, "EEEE, d MMMM yyyy");
-    setSelectedDate(date);
-    setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
-  };
-
-  const handleTimeSlotClick = (time: string) => {
-    setSelectedDateTime((prev) => ({ ...prev, time }));
-  };
-
-  const handleTimeZoneChange = (value: string | null) => {
-    setSelectedDateTime((prev) => ({ ...prev, timeZone: value }));
-  };
-
-  useEffect(() => {
-    console.log("Selected Date Time:", selectedDateTime);
-  }, [selectedDateTime]);
-
-  console.log("select", selectedDate);
-
-  const formatDate = (inputDate: any) => {
-    const [day, month, year] = inputDate.split("/");
-
-    const date = new Date(year, month - 1, day);
-
-    const dayName = dayNames[date.getDay()];
-    const monthName = monthNames[date.getMonth()];
-
-    const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
-
-    return formattedDate;
-  };
-
-  const formattedDate = formatDate("06/04/2024");
+const page = ({ params }: any) => {
+  const {
+    handleDateChange,
+    handleTimeSlotClick,
+    handleTimeZoneChange,
+    selectedDateTime,
+    userData,
+  } = useSeleteDate({ params });
 
   return (
     <div>

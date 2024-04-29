@@ -52,7 +52,7 @@ export default function Login() {
 
   return (
     <SessionProvider session={session}>
-      <div className="max-w-[440px] h-[390px] border-[1px] border-[#DADADA] rounded-[6px] p-[24px]">
+      <div className="max-w-[440px] h-[440px] border-[1px] border-[#DADADA] rounded-[6px] p-[24px]">
         <div>
           <p className="font-bold text-[14px] leading-6">Enter your email</p>
         </div>

@@ -1,44 +1,16 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import tick from "../../../../../public/vectors/check.png";
 import tab from "../../../../../public/vectors/newTab.png";
 import person from "../../../../../public/vectors/person.png";
 import calendar from "../../../../../public/vectors/diary.png";
 import world from "../../../../../public/vectors/globe.png";
 import sticker from "../../../../../public/vectors/sticker.png";
-import { useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { FormData } from "@/app/constants/types";
+import useCalendarInvitation from "./useCalendarInvitation";
 
 export default function CalendarInvitation() {
-  const searchParams = useSearchParams();
-
-  const session = useSession();
-
-  const [formData, setFormData] = useState<FormData>({
-    date: null,
-    time: null,
-    timeZone: null,
-    ownerEmail: null,
-  });
-
-  useEffect(() => {
-    if (searchParams) {
-      const date = searchParams.get("date");
-      const time = searchParams.get("time");
-      const timeZone = searchParams.get("timeZone");
-      const ownerEmail = searchParams.get("ownerEmail");
-
-      setFormData((prev) => ({
-        ...prev,
-        date,
-        time,
-        timeZone,
-        ownerEmail,
-      }));
-    }
-  }, [searchParams]);
+  const { formData, session } = useCalendarInvitation();
   return (
     <div>
       <div className="flex justify-center items-center mt-14">

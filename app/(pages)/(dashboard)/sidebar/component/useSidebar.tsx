@@ -20,6 +20,9 @@ const useSidebar = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("upcoming");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
+  const sliceLoading = useAppSelector(
+    (state) => state.fetchScheduleEvents.loading
+  );
   const [selectedEvent, setSelectedEvent] = useState<EventSidebar | null>(null);
   const scheduleEvents = useAppSelector(
     (state) => state.fetchScheduleEvents.data
@@ -173,6 +176,7 @@ const useSidebar = () => {
     handleOk,
     selectedEvent,
     isModalOpen,
+    sliceLoading,
   };
 };
 

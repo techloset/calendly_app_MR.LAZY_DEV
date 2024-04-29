@@ -46,16 +46,16 @@ const SelectCategory: React.FC<Props> = ({
         <p className="text-[15px] font-normal">Past</p>
       </div>
       <div
-        className={`h-[48px] w-[149px] flex border-b-[3px] ${
+        className={`h-[48px] w-[129px] flex border-b-[3px] ${
           selectedCategory === "dateRange"
             ? "border-blue-600"
             : "cursor-pointer hover:border-blue-600"
         } items-center flex justify-center`}
         onClick={() => setSelectedCategory("dateRange")}
       >
-        <p className="text-[15px] w-[120px] items-center gap-3 flex font-normal">
+        <p className="text-[15px] w-[110px] items-center gap-3 flex font-normal">
           Date Range{" "}
-          <span onClick={handleImageClick} className="cursor-pointer bg-gra">
+          <span onClick={handleImageClick} className="cursor-pointer">
             <Image src={down} className="h-[12px] w-[12px]" alt="" />
           </span>
         </p>

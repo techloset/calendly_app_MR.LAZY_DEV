@@ -1,53 +1,30 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import downArrow from "../../../../../public/profile/down-arrow.png";
-import i from "../../../../../public/profile/i.png";
-import inviteUser from "../../../../../public/profile/inviteUser.png";
-import avatar from "../../../../public/profile/avatar.png";
-import {
-  countriesArray,
-  countryCityData,
-  hoursOptions,
-  timesArray,
-} from "@/app/(components)/profileData/ProfileData";
-import Link from "next/link";
-import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { signOut, useSession } from "next-auth/react";
-import { Modal } from "antd";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-import Image from "next/image";
-import { Dropdown } from "@/app/(components)/dropdown/DropDown";
+import { FormData3 } from "@/app/constants/types";
 
-interface Props {
-  handleFileChange: (files: FileList | null) => void;
-}
-
-interface FormData {
-  country: string;
-  fullName: string;
-  welcomeMessage: string;
-  language: string;
-  dateFormat: string;
-  timeFormat: string;
-  timeZone: string;
-  image: string | ArrayBuffer | null;
-}
 const useProfile = () => {
   const { data: sessions } = useSession();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.user.userData);
+  const [mainLoading, setMainLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const sliceLoading = useAppSelector((state) => state.user.loading);
   const [currentTime, setCurrentTime] = useState(new Date());
   const scheduleEventss = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
 
   const handleDeleteAccount = async () => {
+    setLoading2(true);
     try {
       const response = await axios.delete("/api/register", {
         headers: {
@@ -57,16 +34,21 @@ const useProfile = () => {
 
       if (response.status === 200) {
         console.log("User account deleted successfully");
+        setLoading2(false);
         signOut();
       } else {
         console.error("Error:", response.data);
+        setLoading2(false);
       }
     } catch (error: any) {
       console.error("Error:", error.message);
+      setLoading2(false);
+    } finally {
+      setLoading2(false);
     }
   };
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormData3>({
     fullName: "",
     country: "country",
     welcomeMessage: "",
@@ -77,10 +59,15 @@ const useProfile = () => {
     image: "",
   });
 
-  //via.placeholder.com/50x50
-
-  https: useEffect(() => {
+  // useEffect(() => {
+  //   {
+  //     userData ? setMainLoading(false) : setMainLoading(true);
+  //   }
+  // }, []);
+  useEffect(() => {
+    // setMainLoading(true);
     dispatch(fetchUserData());
+    // setMainLoading(false);
   }, [dispatch]);
 
   const handleChange = (
@@ -117,22 +104,8 @@ const useProfile = () => {
       image: url,
     }));
     console.log("Uploaded image URL:", url);
-    // console.log("formData", formData);
   };
 
-  // const handleFileInputChange = (files: FileList | null) => {
-  //   if (files) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setFormData((prev) => ({
-  //         ...prev,
-  //         image: imageUrl,
-  //         // image: reader.result as string,
-  //       }));
-  //     };
-  //     reader.readAsDataURL(files[0]);
-  //   }
-  // };
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -143,13 +116,17 @@ const useProfile = () => {
 
   const UpdateProfile = async (e: any) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const response = await axios.put("/api/register", formData);
       console.log("response update profile", response);
       dispatch(fetchUserData());
+      setLoading(false);
     } catch (error) {
       console.error("Error updating profile:", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -162,7 +139,6 @@ const useProfile = () => {
     formData,
     handleClick,
     fileInputRef,
-    // handleFileInputChange,
     handleChange,
     setFormData,
     currentTime,
@@ -175,6 +151,13 @@ const useProfile = () => {
     setImageUrl,
     imageUrl,
     handleUpload,
+    loading,
+    setLoading,
+    loading2,
+    setLoading2,
+    mainLoading,
+    setMainLoading,
+    sliceLoading,
   };
 };
 
