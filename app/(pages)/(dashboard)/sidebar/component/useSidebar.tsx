@@ -5,6 +5,7 @@ import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { useSession } from "next-auth/react";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import { EventSidebar, SelectedDateTimeSideBar } from "@/app/constants/types";
+import { showToast } from "@/app/constants/toastify";
 
 const useSidebar = () => {
   const dispatch = useAppDispatch();

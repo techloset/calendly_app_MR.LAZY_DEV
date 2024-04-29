@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
+import { ClipLoader } from "react-spinners";
+import { showToast } from "@/app/constants/toastify";
 
 export default function SignUp() {
   const router = useRouter();
@@ -46,9 +48,14 @@ export default function SignUp() {
     setLoading(true);
     try {
       await axios.post("/api/register", formData);
+      showToast("SignUp Successfull", "success");
+
       router.push("/login");
+      setLoading(false);
     } catch (err) {
       console.log(err);
+      showToast("Error in SignUp", "error");
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -140,7 +147,17 @@ export default function SignUp() {
           onClick={handleSubmit}
           className="h-[44px] bg-[#0069FF] border-[#0069FF] text-center flex items-center justify-center rounded-[32px] w-[92px] border-[1px] text-white text-[12px] font-bold "
         >
-          Sign Up
+          {loading ? (
+            <ClipLoader
+              color={"white"}
+              loading={loading}
+              size={25}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          ) : (
+            <>Sign Up</>
+          )}
         </button>
       </div>
       <div className="mt-1 mr-3">

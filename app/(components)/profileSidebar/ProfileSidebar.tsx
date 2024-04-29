@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/constants/toastify";
 
 const ProfileSidebar = () => {
   const router = useRouter();
@@ -109,6 +110,7 @@ const ProfileSidebar = () => {
           onClick={() => {
             signOut();
             router.push("/login");
+            showToast("User Logout Successfull", "success");
           }}
           className="flex items-center gap-5 mt-3 pl-4 py-2 cursor-pointer hover:bg-[#F2F8FF]"
         >

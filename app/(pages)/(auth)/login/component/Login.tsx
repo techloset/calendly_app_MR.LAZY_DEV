@@ -9,12 +9,28 @@ import image from "../../../../public/images/logo1.png";
 import open from "../../../../../public/icons/open.png";
 import { useRouter } from "next/navigation";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
+import axios from "axios";
+import { ClipLoader } from "react-spinners";
+import { showToast } from "@/app/constants/toastify";
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
+  const [formData, setFormData] = useState({
+    email: session?.user.email,
+    fullName: "",
+    userName: "",
+    password: "",
+    image: session?.user.image,
+    welcomeMessage: "Empty",
+    language: "Empty",
+    timeFormat: "Empty",
+    dateFormat: "Empty",
+    country: "Empty",
+    timeZone: "Empty",
+  });
 
   const [show, setShow] = useState(false);
 
@@ -38,9 +54,13 @@ export default function Login() {
     });
 
     if (login?.ok) {
+      showToast("User Login Successfull", "success");
       window.location.assign("/availabilityHours");
+      setLoading(false);
     } else if (login?.error) {
       console.log("error in login function");
+      showToast("Error in User Login", "error");
+      setLoading(false);
     }
 
     setLoading(false);
@@ -48,6 +68,14 @@ export default function Login() {
 
   const handleSignIn = async () => {
     await signIn("google");
+    // setLoading(true);
+    // try {
+    //   await axios.post("/api/register", formData);
+    // } catch (err) {
+    //   console.log(err);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
@@ -111,7 +139,17 @@ export default function Login() {
             onClick={login}
             className="h-[44px] bg-[#0069FF] border-[#0069FF] text-center flex items-center justify-center rounded-[32px] w-[92px] border-[1px] text-white text-[12px] font-bold "
           >
-            Login
+            {loading ? (
+              <ClipLoader
+                color={"white"}
+                loading={loading}
+                size={25}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            ) : (
+              <>Login</>
+            )}
           </button>
         </div>
         <div className="flex items-center justify-center mt-4">

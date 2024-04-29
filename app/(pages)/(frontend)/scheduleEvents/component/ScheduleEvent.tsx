@@ -12,7 +12,7 @@ import TextArea from "@/app/(components)/textArea/TextArea";
 import useScheduleEvent from "./useScheduleEvent";
 
 export default function ScheduleEvent() {
-  const { formData, handleBack, handleChange, handleSubmit } =
+  const { formData, handleBack, handleChange, handleSubmit, sessionss } =
     useScheduleEvent();
 
   return (

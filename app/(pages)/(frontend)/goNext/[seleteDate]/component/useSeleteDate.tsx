@@ -32,6 +32,7 @@ const useSeleteDate = ({ params }: any) => {
     (state) => state.fetchAvailabilityData.data
   );
   const userData = useAppSelector((state) => state.user.userData);
+  const sessionss = useSession();
 
   if (availabilityData !== null) {
     const reversedAvailabilityData = [...availabilityData].reverse();
@@ -39,8 +40,6 @@ const useSeleteDate = ({ params }: any) => {
 
     if (availabilityObject !== undefined) {
       const { selectedHour1, selectedHour2 } = availabilityObject;
-      console.log("selectedHour1:", selectedHour1);
-      console.log("selectedHour2:", selectedHour2);
     } else {
       console.error("availabilityData array is empty.");
     }
@@ -114,6 +113,7 @@ const useSeleteDate = ({ params }: any) => {
     handleDateChange,
     handleTimeZoneChange,
     handleTimeSlotClick,
+    sessionss,
   };
 };
 

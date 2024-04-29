@@ -6,7 +6,7 @@ import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
 import { data } from "@/app/(components)/profileData/ProfileData";
 import { EventAnalysis, SelectedDateTimeAnalysis } from "@/app/constants/types";
 import AnalysisBox from "@/app/(components)/analysisBox/AnalysisBox";
-import GraphCart from "@/app/(components)/graphCart/graphCart";
+import GraphCart from "@/app/(components)/graphCart/GraphCart";
 
 export default function Analysis() {
   const [totall, setTotall] = useState<number>(0);

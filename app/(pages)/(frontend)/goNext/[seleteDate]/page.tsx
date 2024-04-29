@@ -32,6 +32,7 @@ const page = ({ params }: any) => {
     handleTimeZoneChange,
     selectedDateTime,
     userData,
+    sessionss,
   } = useSeleteDate({ params });
 
   return (
@@ -47,7 +48,7 @@ const page = ({ params }: any) => {
               <div>
                 <div className="mt-6">
                   <p className="text-[14px] font-medium">
-                    {userData?.fullName}
+                    {userData ? userData?.fullName : sessionss.data?.user.name}
                   </p>
                 </div>
                 <div className="">
@@ -133,7 +134,9 @@ const page = ({ params }: any) => {
                                 time: selectedDateTime.time,
                                 timeZone: selectedDateTime.timeZone,
                                 ownerEmail: selectedDateTime.decodedValue,
-                                ownerName: userData?.fullName,
+                                ownerName: userData
+                                  ? userData?.fullName
+                                  : sessionss.data?.user.name,
                               },
                             }}
                             className="w-[110px] cursor-pointer h-[65px] flex

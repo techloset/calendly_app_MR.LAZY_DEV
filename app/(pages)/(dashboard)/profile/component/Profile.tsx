@@ -50,24 +50,16 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
     formData,
     handleCancel,
     handleChange,
-    handleClick,
     handleDeleteAccount,
     handleOk,
     isModalOpen,
     setFormData,
     setIsModalOpen,
     UpdateProfile,
-    sessions,
     userData,
     handleUpload,
-    imageUrl,
-    setImageUrl,
     loading,
-    setLoading,
     loading2,
-    setLoading2,
-    mainLoading,
-    setMainLoading,
     sliceLoading,
   } = useProfile();
 
@@ -100,16 +92,34 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
                     <div className="flex items-center gap-2">
                       <>
                         <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] border-[1px] bg-gray-400 text-[14px] font-semibold ">
-                          {userData?.image && (
-                            <div className="w-full h-full relative">
-                              <Image
-                                src={userData?.image.toString()}
-                                className="absolute inset-0 w-full h-full rounded-full"
-                                layout="fill"
-                                objectFit="cover"
-                                alt="Uploaded"
-                              />
-                            </div>
+                          {userData?.image ? (
+                            <>
+                              {userData?.image && (
+                                <div className="w-full h-full relative">
+                                  <Image
+                                    src={userData?.image.toString()}
+                                    className="absolute inset-0 w-full h-full rounded-full"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    alt="Uploaded"
+                                  />
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {sessionss.data?.user.image && (
+                                <div className="w-full h-full relative">
+                                  <Image
+                                    src={sessionss.data.user.image.toString()}
+                                    className="absolute inset-0 w-full h-full rounded-full"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    alt="Uploaded"
+                                  />
+                                </div>
+                              )}
+                            </>
                           )}
                         </div>
                         <div>
@@ -138,19 +148,7 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
 
                       <div className="mt-16 flex gap-7 items-center">
                         <div className="h-24 w-24 rounded-full">
-                          {sessionss.data?.user.image ? (
-                            <>
-                              <div className="w-full h-full relative">
-                                <Image
-                                  src={sessionss.data.user.image.toString()}
-                                  className="absolute inset-0 w-full h-full rounded-full"
-                                  layout="fill"
-                                  objectFit="cover"
-                                  alt="Uploaded"
-                                />
-                              </div>
-                            </>
-                          ) : (
+                          {userData?.image ? (
                             <>
                               {formData.image ? (
                                 <>
@@ -182,12 +180,25 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
                                 </>
                               )}
                             </>
+                          ) : (
+                            <>
+                              {sessionss.data?.user.image && (
+                                <div className="w-full h-full relative">
+                                  <Image
+                                    src={sessionss.data?.user.image.toString()}
+                                    className="absolute inset-0 w-full h-full rounded-full"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    alt="Uploaded"
+                                  />
+                                </div>
+                              )}
+                            </>
                           )}
                         </div>
                         <div className="">
                           <div>
                             <div className="h-[37px] w-[120px] gap-2 text-center hover:bg-[#0069FF] hover:text-white transition duration-2000 active:bg-[#006aff87] border-black flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[12px] font-bold">
-                              {/* Cloudinary Upload Button component */}
                               <CldUploadButton
                                 uploadPreset="m9zho07z"
                                 onSuccess={handleUpload}
@@ -213,7 +224,11 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
                             value={formData.fullName}
                             onChange={handleChange}
                             name="fullName"
-                            placeholder={userData?.fullName || ""}
+                            placeholder={
+                              userData?.fullName
+                                ? userData?.fullName
+                                : sessionss?.data?.user.name || ""
+                            }
                           />
                         </div>
                         <div className="mt-7">
@@ -226,7 +241,11 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
                             onChange={handleChange}
                             className="h-[90px] border-[1px] w-[450px] border-gray-300 px-3 rounded-md"
                             name="welcomeMessage"
-                            placeholder={userData?.welcomeMessage || ""}
+                            placeholder={
+                              userData
+                                ? userData?.welcomeMessage
+                                : "Hi Everyone"
+                            }
                           />
                         </div>
 

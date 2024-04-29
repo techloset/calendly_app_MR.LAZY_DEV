@@ -9,13 +9,18 @@ import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/constants/toastify";
 
 export default function Page() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const userData = useAppSelector((state) => state.user.userData);
 
-  // const hashpassword = userData?.hashPassword;
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+
+  console.log("djfkdjf", userData?.hashPassword);
 
   useEffect(() => {
     dispatch(fetchUserData());
@@ -56,9 +61,12 @@ export default function Page() {
     try {
       const response = await axios.put("/api/resetPassword", formData);
       console.log("User password updated:", response.data);
+      showToast("Password Reset Successfull", "success");
+
       router.push("/profile");
     } catch (error) {
       console.error("Error updating user password:", error);
+      showToast("Error in Reset Password", "error");
     }
   };
 

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { signOut, useSession } from "next-auth/react";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import { FormData3 } from "@/app/constants/types";
+import { showToast } from "@/app/constants/toastify";
 
 const useProfile = () => {
   const { data: sessions } = useSession();
@@ -34,14 +35,17 @@ const useProfile = () => {
 
       if (response.status === 200) {
         console.log("User account deleted successfully");
+        showToast("Account Delete Successfull", "success");
         setLoading2(false);
         signOut();
       } else {
         console.error("Error:", response.data);
+        showToast("Error in Account Delete", "error");
         setLoading2(false);
       }
     } catch (error: any) {
       console.error("Error:", error.message);
+      showToast("Error in Account Delete", "error");
       setLoading2(false);
     } finally {
       setLoading2(false);
@@ -120,10 +124,12 @@ const useProfile = () => {
     try {
       const response = await axios.put("/api/register", formData);
       console.log("response update profile", response);
+      showToast("Profile Updated Successfull", "success");
       dispatch(fetchUserData());
       setLoading(false);
     } catch (error) {
       console.error("Error updating profile:", error);
+      showToast("Error in Profile Update", "error");
       setLoading(false);
     } finally {
       setLoading(false);
@@ -133,6 +139,7 @@ const useProfile = () => {
   useEffect(() => {
     console.log("formData", formData);
   }, [formData]);
+
   return {
     setIsModalOpen,
     sessions,

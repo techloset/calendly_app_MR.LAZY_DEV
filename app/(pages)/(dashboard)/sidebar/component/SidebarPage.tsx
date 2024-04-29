@@ -125,7 +125,7 @@ export default function SidebarPage() {
                                     </div>
                                   </div>
                                   <div
-                                    className=" h-[48px] flex items-center mt-6 w-[68px]"
+                                    className=" h-[48px] cursor-pointer flex items-center mt-6 w-[68px]"
                                     onClick={() => {
                                       setSelectedEvent(event);
                                       setIsModalOpen(true);

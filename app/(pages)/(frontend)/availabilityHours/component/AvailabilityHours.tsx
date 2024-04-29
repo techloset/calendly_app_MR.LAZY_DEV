@@ -9,6 +9,7 @@ import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 import useAvailabilityHours from "./useAvailabilityHours";
+import { ClipLoader } from "react-spinners";
 
 export default function AvailabilityHours() {
   const {
@@ -16,6 +17,7 @@ export default function AvailabilityHours() {
     handleCheckboxChange,
     setSelectedHour1,
     setSelectedHour2,
+    loading,
   } = useAvailabilityHours();
 
   return (
@@ -102,9 +104,19 @@ export default function AvailabilityHours() {
             <div className="flex justify-center">
               <button
                 onClick={handleAvailability}
-                className="h-[44px] border-[#0069FF] bg-[#0069FF] text-center flex items-center text-white justify-center rounded-[32px] px-3 border-[1px] text-[13px] font-bold "
+                className="h-[44px] w-[80px] border-[#0069FF] bg-[#0069FF] text-center flex items-center text-white justify-center rounded-[32px] px-3 border-[1px] text-[13px] font-bold "
               >
-                Continue
+                {loading ? (
+                  <ClipLoader
+                    color={"white"}
+                    loading={loading}
+                    size={25}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  <>Continue</>
+                )}
               </button>
             </div>
           </div>

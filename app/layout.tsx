@@ -7,6 +7,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import NextAuthSessionProvider from "./providers/NextAuthSessionProvider";
 import ReduxProvider from "./providers/ReduxProvider";
+import Toast from "./constants/toastify";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +27,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+          <ToastContainer />
         </ReduxProvider>
       </body>
     </html>

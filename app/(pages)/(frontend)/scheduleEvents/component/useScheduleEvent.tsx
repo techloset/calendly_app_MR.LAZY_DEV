@@ -5,6 +5,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import emailjs from "emailjs-com";
 import { SecondFormData } from "@/app/constants/types";
+import { useSession } from "next-auth/react";
+import { showToast } from "@/app/constants/toastify";
 
 const useScheduleEvent = () => {
   const [formData, setFormData] = useState<SecondFormData>({
@@ -20,6 +22,7 @@ const useScheduleEvent = () => {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  const sessionss = useSession();
 
   useEffect(() => {
     if (searchParams) {
@@ -55,10 +58,13 @@ const useScheduleEvent = () => {
     try {
       const response = await axios.post("/api/getEventsData", formData);
       console.log("Form data uploaded successfully:", response.data);
+      showToast("ScheduleEvent Request Send Successfull", "success");
+
       handleSendEmailToOwner();
       handleSendEmailToUser();
     } catch (error) {
       console.error("Error handling form submission:", error);
+      showToast("Error in ScheduleEvent Request Send", "error");
     }
   };
 
@@ -136,6 +142,7 @@ const useScheduleEvent = () => {
     formData,
     handleChange,
     handleSubmit,
+    sessionss,
   };
 };
 

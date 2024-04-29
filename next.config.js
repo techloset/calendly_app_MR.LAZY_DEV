@@ -6,7 +6,6 @@ module.exports = {
     //     domains: ['via.placeholder.com'],
     // },
     images: {
-        domains: ['res.cloudinary.com'],
-        domains: ['lh3.googleusercontent.com'],
+        domains: ['res.cloudinary.com', 'lh3.googleusercontent.com'],
     },
 }

@@ -117,6 +117,7 @@ import bcrypt from "bcrypt";
 import Credentials from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
+  pages: { signIn: "/login" },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",

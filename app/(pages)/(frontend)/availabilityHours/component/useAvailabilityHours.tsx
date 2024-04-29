@@ -6,10 +6,12 @@ import availabilityData, {
   fetchAvailabilityData,
 } from "@/app/store/slice/availabilityData";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { showToast } from "@/app/constants/toastify";
 const useAvailabilityHours = () => {
   const { data: sessions } = useSession();
   const dispatch = useAppDispatch();
   const [selectedHour1, setSelectedHour1] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [selectedHour2, setSelectedHour2] = useState<string | null>(null);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
@@ -28,6 +30,7 @@ const useAvailabilityHours = () => {
   }, [dispatch]);
 
   const handleAvailability = async () => {
+    setLoading(true);
     try {
       const response = await axios.post("/api/getAvailability", {
         selectedDays,
@@ -36,10 +39,17 @@ const useAvailabilityHours = () => {
         email: sessions?.user.email,
       });
       console.log("Form data uploaded successfully:", response.data);
+      showToast("Availability Hours Added Successfull", "success");
+
       window.location.assign("/sidebar");
+      setLoading(false);
     } catch (error) {
       console.error("Error handling form submission:", error);
+      showToast("Error in Availability Hours Added", "error");
+
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   return {
@@ -47,6 +57,7 @@ const useAvailabilityHours = () => {
     setSelectedHour2,
     handleCheckboxChange,
     handleAvailability,
+    loading,
   };
 };
 
