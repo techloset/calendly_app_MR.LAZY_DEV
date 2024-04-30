@@ -21,44 +21,38 @@ import {
   timeZones,
 } from "@/app/(components)/profileData/ProfileData";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-import { SelectedDateTime, SelectedDateTimeFirst } from "@/app/constants/types";
-import { BeatLoader } from "react-spinners";
+import {
+  AvailabilityData,
+  SelectedDateTime,
+  SelectedDateTimeFirst,
+} from "@/app/constants/types";
 
 const useSeleteDate = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params.seleteDate);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const dispatch = useAppDispatch();
-  const availabilityData: any = useAppSelector(
+  const availabilityData: AvailabilityData | null = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
+
   const userData = useAppSelector((state) => state.user.userData);
   const sessionss = useSession();
 
-  if (availabilityData !== null) {
-    const reversedAvailabilityData = [...availabilityData].reverse();
-    const availabilityObject = reversedAvailabilityData[0];
-
-    if (availabilityObject !== undefined) {
-      const { selectedHour1, selectedHour2 } = availabilityObject;
-    } else {
-      console.error("availabilityData array is empty.");
-    }
-  } else {
-    console.error("availabilityData is null.");
-  }
   useEffect(() => {
     dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
 
-  const router = useRouter();
-
   useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
+    if (availabilityData !== null) {
+      const reversedAvailabilityData = [...availabilityData].reverse();
+      const availabilityObject = reversedAvailabilityData[0];
+    } else {
+      console.error("availabilityData is null.");
+    }
+  }, [availabilityData]);
+
+  const router = useRouter();
 
   const [selectedDateTime, setSelectedDateTime] =
     useState<SelectedDateTimeFirst>({
@@ -67,10 +61,6 @@ const useSeleteDate = ({ params }: any) => {
       timeZone: null,
       decodedValue: decodedValue,
     });
-
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
 
   const handleDateChange = (date: Date) => {
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
@@ -118,3 +108,4 @@ const useSeleteDate = ({ params }: any) => {
 };
 
 export default useSeleteDate;
+``;

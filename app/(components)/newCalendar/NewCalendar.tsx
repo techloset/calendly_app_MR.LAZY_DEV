@@ -37,34 +37,45 @@ const NewCalendar: React.FC<CalendarProps> = ({
   }, [selectedDate]);
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  // const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
-
+  const prevMonth = () => {
+    const today = new Date();
+    const firstDayOfCurrentMonth = startOfMonth(currentDate);
+    if (firstDayOfCurrentMonth > today) {
+      setCurrentDate(subMonths(currentDate, 1));
+    } else {
+      console.error("Cannot move to previous month from today's date.");
+    }
+  };
   const selectDate = (date: Date) => {
-    if (Array.isArray(availabilityData) && availabilityData.length > 0) {
-      const lastAvailableData = availabilityData[availabilityData.length - 1];
-      const today = new Date();
-      const selectedDayIndex = date.getDay();
-      const selectedDay = [
-        "Sundays",
-        "Mondays",
-        "Tuesdays",
-        "Wednesdays",
-        "Thursdays",
-        "Fridays",
-        "Saturdays",
-      ][selectedDayIndex];
-      const allowedDays = lastAvailableData.selectedDays || [];
+    const today = new Date();
+    if (date > today) {
+      if (Array.isArray(availabilityData) && availabilityData.length > 0) {
+        const lastAvailableData = availabilityData[availabilityData.length - 1];
+        const selectedDayIndex = date.getDay();
+        const selectedDay = [
+          "Sundays",
+          "Mondays",
+          "Tuesdays",
+          "Wednesdays",
+          "Thursdays",
+          "Fridays",
+          "Saturdays",
+        ][selectedDayIndex];
+        const allowedDays = lastAvailableData.selectedDays || [];
 
-      if (allowedDays.includes(selectedDay)) {
-        setCurrentDate(date);
-        setSelected(date);
-        onDateChange?.(date);
-        return;
+        if (allowedDays.includes(selectedDay)) {
+          setCurrentDate(date);
+          setSelected(date);
+          onDateChange?.(date);
+          return;
+        } else {
+          console.error("Selected day is not allowed. Date:", date);
+        }
       } else {
-        console.error("Selected day is not allowed. Date:", date);
+        console.error("Availability data is empty or not an array.");
       }
     } else {
-      console.error("Availability data is empty or not an array.");
+      console.error("Selected date cannot be before today's date.");
     }
   };
 
@@ -101,7 +112,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
     <div className="calendar w-[380px] h-96">
       <div className="calendar-header flex justify-evenly items-center py-2 px-4">
         <button
-          // onClick={prevMonth}
+          onClick={prevMonth}
           className="btn btn-sm rounded-full p-2 hover:bg-[#b7ccea]"
         >
           <Image src={leftt} alt="Previous Month" />

@@ -70,7 +70,7 @@ export interface UserData {
   id: string;
   image: string;
   createdAt: string;
-  hashPassword: string;
+  hashedPassword: string;
   updatedAt: string;
   userName: string;
   fullName: string;
@@ -207,4 +207,34 @@ export interface SelectedDateTimeSideBar {
   time: string | null;
   timeZone: string | null;
   createdAt: string | null;
+}
+
+export interface UserDataSignUp {
+  email: string;
+  hashedPassword: string;
+  fullName: string;
+  userName: string;
+  image: string;
+  welcomeMessage: string;
+  language: string;
+  dateFormat: string;
+  timeFormat: string;
+  country: string;
+  timeZone: string;
+}
+
+// types.ts
+export interface TimeSlotProps {
+  time: string;
+  onClick: () => void;
+}
+
+export interface TimeSlotData {
+  time: string;
+  label: string;
+}
+
+export interface DropdownOption {
+  value: string;
+  label: string;
 }

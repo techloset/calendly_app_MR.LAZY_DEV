@@ -11,7 +11,7 @@ export async function PUT(req: Request): Promise<Response> {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userEmail = session?.user.email;
+    const userEmail = session?.user?.email;
 
     const body = await req.json();
     const { password, newPassword1, newPassword2, hashPasswordd } = body;

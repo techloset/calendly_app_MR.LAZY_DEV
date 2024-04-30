@@ -20,12 +20,6 @@ export default function Page() {
     dispatch(fetchUserData());
   }, [dispatch]);
 
-  console.log("djfkdjf", userData?.hashPassword);
-
-  useEffect(() => {
-    dispatch(fetchUserData());
-  }, [dispatch]);
-
   const [show, setShow] = useState(false);
 
   const click = () => {
@@ -46,7 +40,7 @@ export default function Page() {
     password: "",
     newPassword1: "",
     newPassword2: "",
-    hashPasswordd: userData?.hashPassword,
+    hashPasswordd: userData?.hashedPassword,
   });
 
   const handleChange = (e: any) => {
