@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import second from "../../../../../public/images/second.png";
 import progressBar from "../../../../../public/images/progressBar.png";
 import speaker from "../../../../../public/vectors/speaker.png";

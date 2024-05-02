@@ -3,11 +3,11 @@ import prismadb from "../../libs/prismadb";
 import { getSession } from "next-auth/react";
 import { IncomingMessage } from "http";
 import { getServerSession } from "next-auth";
+import { MySession } from "@/app/constants/types";
 
 export async function GET(req: IncomingMessage): Promise<NextResponse> {
   try {
-    const session = await getServerSession({ req });
-
+    const session = (await getServerSession(req as any)) as MySession;
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -29,7 +29,6 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
     });
 
     if (!userData) {
-      // Return not found response if user data is not available
       return new NextResponse("User data not found", { status: 404 });
     }
 

@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import downArrow from "../../../../../public/profile/down-arrow.png";
-import i from "../../../../../public/profile/i.png";
 import inviteUser from "../../../../../public/profile/inviteUser.png";
-import avatar from "../../../../public/profile/avatar.png";
 import {
   countriesArray,
   countryCityData,
@@ -12,12 +10,6 @@ import {
 } from "@/app/(components)/profileData/ProfileData";
 import Link from "next/link";
 import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { getSession, signOut, useSession } from "next-auth/react";
-import { Modal } from "antd";
-import { fetchUserData } from "@/app/store/slice/userSlice";
 import Image from "next/image";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 import useProfile from "./useProfile";
@@ -25,33 +17,20 @@ import ProfileModal from "@/app/(components)/profileModal/ProfileModal";
 import { CldUploadButton } from "next-cloudinary";
 import ProfileFieldName from "@/app/(components)/profileFieldName/ProfileFieldName";
 import ClipLoader from "react-spinners/ClipLoader";
+import { BeatLoader } from "react-spinners";
+import { useSession } from "next-auth/react";
+import { PropsProfile } from "@/app/constants/types";
+import ProfilePagePicture from "@/app/(components)/profilePagePicture/ProfilePagePicture";
 
-interface Props {
-  handleFileChange: (files: FileList | null) => void;
-}
-
-interface FormData {
-  country: string;
-  fullName: string;
-  welcomeMessage: string;
-  language: string;
-  dateFormat: string;
-  timeFormat: string;
-  timeZone: string;
-  image: string | ArrayBuffer | null;
-}
-import { BeatLoader, DotLoader } from "react-spinners";
-
-const Profile: React.FC<Props> = ({ handleFileChange }) => {
+const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
   const sessionss = useSession();
   const {
     currentTime,
-    fileInputRef,
     formData,
     handleCancel,
     handleChange,
     handleDeleteAccount,
-    handleOk,
+
     isModalOpen,
     setFormData,
     setIsModalOpen,
@@ -62,6 +41,15 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
     loading2,
     sliceLoading,
   } = useProfile();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleLogout = () => {};
+
+  // Function to toggle the dropdown
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   return (
     <>
@@ -91,44 +79,7 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       <>
-                        <div className="h-[37px] w-[37px] text-center flex items-center justify-center rounded-[32px] border-[1px] bg-gray-400 text-[14px] font-semibold ">
-                          {userData?.image ? (
-                            <>
-                              {userData?.image && (
-                                <div className="w-full h-full relative">
-                                  <Image
-                                    src={userData?.image.toString()}
-                                    className="absolute inset-0 w-full h-full rounded-full"
-                                    layout="fill"
-                                    objectFit="cover"
-                                    alt="Uploaded"
-                                  />
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {sessionss.data?.user.image && (
-                                <div className="w-full h-full relative">
-                                  <Image
-                                    src={sessionss.data.user.image.toString()}
-                                    className="absolute inset-0 w-full h-full rounded-full"
-                                    layout="fill"
-                                    objectFit="cover"
-                                    alt="Uploaded"
-                                  />
-                                </div>
-                              )}
-                            </>
-                          )}
-                        </div>
-                        <div>
-                          <Image
-                            src={downArrow}
-                            className="h-3 w-3"
-                            alt="Tab"
-                          />
-                        </div>
+                        <ProfilePagePicture />
                       </>
                     </div>
                   </div>
@@ -398,11 +349,7 @@ const Profile: React.FC<Props> = ({ handleFileChange }) => {
             </div>
           </div>
 
-          <ProfileModal
-            handleCancel={handleCancel}
-            handleOk={handleOk}
-            isModalOpen={isModalOpen}
-          />
+          <ProfileModal handleCancel={handleCancel} isModalOpen={isModalOpen} />
         </>
       )}
     </>

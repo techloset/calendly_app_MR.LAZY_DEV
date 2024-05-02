@@ -1,69 +1,13 @@
 "use client";
 import Sidebar from "@/app/(components)/sidebar/Sidebar";
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { fetchScheduleEvents } from "@/app/store/slice/scheduleEventsData";
-import { data } from "@/app/(components)/profileData/ProfileData";
-import { EventAnalysis, SelectedDateTimeAnalysis } from "@/app/constants/types";
+import React from "react";
 import AnalysisBox from "@/app/(components)/analysisBox/AnalysisBox";
 import GraphCart from "@/app/(components)/graphCart/GraphCart";
+import useAnalysis from "./useAnalysis";
 
 export default function Analysis() {
-  const [totall, setTotall] = useState<number>(0);
-  const [upcoming, setUpcoming] = useState<number>(0);
-  const [past, setPast] = useState<number>(0);
-
-  const dispatch = useAppDispatch();
-
-  const [events, setEvents] = useState<EventAnalysis[]>([]);
-  const scheduleEvents = useAppSelector(
-    (state) => state.fetchScheduleEvents.data
-  );
-
-  useEffect(() => {
-    dispatch(fetchScheduleEvents());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (scheduleEvents) {
-      if (Array.isArray(scheduleEvents)) {
-        const convertedEvents: EventAnalysis[] = scheduleEvents.map(
-          (event: SelectedDateTimeAnalysis) => {
-            return {
-              id: event.id || "",
-              name: event.name || "",
-              email: event.email || "",
-              additionInfo: event.additionInfo || "",
-              date: event.date || "",
-              time: event.time || "",
-              timeZone: event.timeZone || "",
-              createdAt: event.createdAt || "",
-            };
-          }
-        );
-        setEvents(convertedEvents);
-      } else {
-        console.error("scheduleEvents is not an array:", scheduleEvents);
-      }
-    }
-  }, [scheduleEvents]);
-
-  useEffect(() => {
-    setTotall(events.length);
-    setUpcoming(
-      events.filter((event) => new Date(event.date) > new Date()).length
-    );
-    setPast(events.filter((event) => new Date(event.date) < new Date()).length);
-  }, [events]);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const pending = 0;
-
+  const { isSidebarOpen, past, pending, toggleSidebar, totall, upcoming } =
+    useAnalysis();
   return (
     <>
       <div className="flex">

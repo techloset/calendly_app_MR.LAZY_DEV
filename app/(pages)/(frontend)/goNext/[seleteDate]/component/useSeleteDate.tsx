@@ -1,58 +1,33 @@
 "use client";
-import TimeSlot from "@/app/(components)/timeSlot/TimeSlot";
-import TimezoneSelector from "@/app/(components)/timeZone/TimezoneSelector";
-import Image from "next/image";
-import clock from "../../../../../public/vectors/clock.png";
-import tool from "../../../../../public/vectors/tool.png";
-import sticker from "../../../../../public/vectors/sticker.png";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import NewCalendar from "@/app/(components)/newCalendar/NewCalendar";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 import { useSession } from "next-auth/react";
-import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
 import {
   dayNames,
   monthNames,
-  timeSlots,
-  timeZones,
 } from "@/app/(components)/profileData/ProfileData";
 import { fetchUserData } from "@/app/store/slice/userSlice";
-import {
-  AvailabilityData,
-  SelectedDateTime,
-  SelectedDateTimeFirst,
-} from "@/app/constants/types";
+import { AvailabilityData, SelectedDateTimeFirst } from "@/app/constants/types";
 
 const useSeleteDate = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params.seleteDate);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const dispatch = useAppDispatch();
+
   const availabilityData: AvailabilityData | null = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
 
-  const userData = useAppSelector((state) => state.user.userData);
-  const sessionss = useSession();
-
   useEffect(() => {
     dispatch(fetchAvailabilityData());
-    dispatch(fetchUserData());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (availabilityData !== null) {
-      const reversedAvailabilityData = [...availabilityData].reverse();
-      const availabilityObject = reversedAvailabilityData[0];
-    } else {
-      console.error("availabilityData is null.");
-    }
-  }, [availabilityData]);
+  console.log("avaialbiiliill", availabilityData);
 
-  const router = useRouter();
+  const userData = useAppSelector((state) => state.user.userData);
+  const sessionss = useSession();
 
   const [selectedDateTime, setSelectedDateTime] =
     useState<SelectedDateTimeFirst>({
@@ -94,8 +69,6 @@ const useSeleteDate = ({ params }: any) => {
 
     return formattedDate;
   };
-
-  const formattedDate = formatDate("06/04/2024");
 
   return {
     userData,

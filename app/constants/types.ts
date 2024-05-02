@@ -238,3 +238,13 @@ export interface DropdownOption {
   value: string;
   label: string;
 }
+
+export interface PropsProfile {
+  handleFileChange: (files: FileList | null) => void;
+}
+
+export interface MySession {
+  user: {
+    email: string;
+  };
+}

@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { signOut, useSession } from "next-auth/react";
@@ -10,7 +9,6 @@ import { showToast } from "@/app/constants/toastify";
 
 const useProfile = () => {
   const { data: sessions } = useSession();
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.user.userData);
   const [mainLoading, setMainLoading] = useState(false);
@@ -20,9 +18,6 @@ const useProfile = () => {
   const [imageUrl, setImageUrl] = useState("");
   const sliceLoading = useAppSelector((state) => state.user.loading);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const scheduleEventss = useAppSelector(
-    (state) => state.fetchScheduleEvents.data
-  );
 
   const handleDeleteAccount = async () => {
     setLoading2(true);
@@ -63,15 +58,8 @@ const useProfile = () => {
     image: "",
   });
 
-  // useEffect(() => {
-  //   {
-  //     userData ? setMainLoading(false) : setMainLoading(true);
-  //   }
-  // }, []);
   useEffect(() => {
-    // setMainLoading(true);
     dispatch(fetchUserData());
-    // setMainLoading(false);
   }, [dispatch]);
 
   const handleChange = (

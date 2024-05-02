@@ -1,82 +1,27 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { signIn, useSession, SessionProvider } from "next-auth/react";
+import React from "react";
+import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import googleLogo from "../../../../../public/icons/google.png";
 import eye from "../../../../../public/images/eye.png";
-import image from "../../../../public/images/logo1.png";
 import open from "../../../../../public/icons/open.png";
-import { useRouter } from "next/navigation";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
-import axios from "axios";
 import { ClipLoader } from "react-spinners";
-import { showToast } from "@/app/constants/toastify";
+import useLogin from "./useLogin";
 export default function Login() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
-  const [formData, setFormData] = useState({
-    email: session?.user.email,
-    fullName: "",
-    userName: "",
-    password: "",
-    image: session?.user.image,
-    welcomeMessage: "Empty",
-    language: "Empty",
-    timeFormat: "Empty",
-    dateFormat: "Empty",
-    country: "Empty",
-    timeZone: "Empty",
-  });
-
-  const [show, setShow] = useState(false);
-
-  const click = () => {
-    setShow(!show);
-  };
-
-  useEffect(() => {
-    if (session) {
-      router.push("/profile");
-    }
-  }, [session, router]);
-
-  const login = async () => {
-    setLoading(true);
-
-    const login = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (login?.ok) {
-      showToast("User Login Successfull", "success");
-      window.location.assign("/availabilityHours");
-      setLoading(false);
-    } else if (login?.error) {
-      console.log("error in login function");
-      showToast("Error in User Login", "error");
-      setLoading(false);
-    }
-
-    setLoading(false);
-  };
-
-  const handleSignIn = async () => {
-    await signIn("google");
-    // setLoading(true);
-    // try {
-    //   await axios.post("/api/register", formData);
-    // } catch (err) {
-    //   console.log(err);
-    // } finally {
-    //   setLoading(false);
-    // }
-  };
+  const {
+    click,
+    email,
+    handleSignIn,
+    loading,
+    login,
+    password,
+    session,
+    setEmail,
+    setPassword,
+    show,
+  } = useLogin();
 
   return (
     <SessionProvider session={session}>

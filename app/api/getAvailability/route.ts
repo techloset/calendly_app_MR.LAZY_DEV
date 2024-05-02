@@ -1,20 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import prismadb from "../../libs/prismadb";
-
-// export async function GET(req: NextRequest): Promise<NextResponse> {
-//   try {
-//     const data = await prismadb.availability.findMany();
-
-//     return new NextResponse(JSON.stringify(data), {
-//       status: 200,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   } catch (err) {
-//     console.error("Error:", err);
-//     return new NextResponse("Internal Server Error", { status: 500 });
-//   }
-// }
-
 import { NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 import { getSession } from "next-auth/react";
@@ -23,15 +6,12 @@ import { getServerSession } from "next-auth";
 
 export async function GET(req: IncomingMessage): Promise<NextResponse> {
   try {
-    const session = await getServerSession({ req });
-
+    const session = (await getServerSession(req as any)) as MySession;
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const userEmail = session.user?.email;
-
-    // console.log("session", userEmail);
 
     if (!userEmail) {
       return new NextResponse("User email not found", { status: 400 });
@@ -59,8 +39,8 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
   }
 }
 
-// updateData.ts
 import { NextRequest } from "next/server";
+import { MySession } from "@/app/constants/types";
 
 interface AvailabilityData {
   selectedDays: string[];
@@ -71,10 +51,7 @@ interface AvailabilityData {
 
 export async function PUT(req: NextRequest) {
   try {
-    // const session = req.session; // Assuming session management is set up
-    const session = await getServerSession({ req });
-
-    // Check if the user is logged in
+    const session = (await getServerSession(req as any)) as MySession;
     if (!session || !session.user || !session.user.email) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -100,11 +77,10 @@ export async function PUT(req: NextRequest) {
       email,
     };
 
-    // Assuming you have a unique identifier like an ID to identify the data to be updated
-    const id = body.id; // Adjust this based on your actual implementation
+    const id = body.id;
 
     const updatedData = await prismadb.availability.update({
-      where: { id, email: userEmail }, // Update data only if email matches session user's email
+      where: { id, email: userEmail },
       data: newData,
     });
 

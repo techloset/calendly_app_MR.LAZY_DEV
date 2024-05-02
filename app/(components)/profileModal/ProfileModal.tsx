@@ -1,23 +1,34 @@
 "use client";
+import Toast, { showToast } from "@/app/constants/toastify";
 import { Modal } from "antd";
 import { useSession } from "next-auth/react";
 import React from "react";
 
 export interface Modalll {
-  handleOk: () => void;
   isModalOpen: boolean;
   handleCancel: () => void;
 }
 
-export default function ProfileModal({
-  isModalOpen,
-  handleCancel,
-  handleOk,
-}: Modalll) {
+export default function ProfileModal({ isModalOpen, handleCancel }: Modalll) {
   const { data: sessions } = useSession();
 
+  const handleOk = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = `http://localhost:3000/goNext/${sessions?.user.email}`;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  };
+
   return (
-    <Modal title="" open={isModalOpen} onCancel={handleCancel} onOk={handleOk}>
+    <Modal
+      title=""
+      open={isModalOpen}
+      onCancel={handleCancel}
+      onOk={handleOk}
+      okText="Copy"
+    >
       <div className="container">
         <div className="row">
           <div className="col">

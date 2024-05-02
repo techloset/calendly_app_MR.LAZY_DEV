@@ -9,7 +9,6 @@ import { showToast } from "@/app/constants/toastify";
 
 const useSidebar = () => {
   const dispatch = useAppDispatch();
-  const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [newDate, setNewDate] = useState<string | null>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -28,7 +27,6 @@ const useSidebar = () => {
   const scheduleEvents = useAppSelector(
     (state) => state.fetchScheduleEvents.data
   );
-  const userData = useAppSelector((state) => state.user.userData);
 
   useEffect(() => {
     dispatch(fetchUserData());

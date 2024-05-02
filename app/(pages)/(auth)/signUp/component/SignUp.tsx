@@ -4,63 +4,13 @@ import Link from "next/link";
 import eye from "../../../../../public/images/eye.png";
 import open from "../../../../../public/icons/open.png";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import axios from "axios";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 import { ClipLoader } from "react-spinners";
-import { showToast } from "@/app/constants/toastify";
+import useSignUp from "./useSignUp";
 
 export default function SignUp() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [show, setShow] = useState(false);
-  const [selectedHour1, setSelectedHour1] = useState<string | null>("Empty");
-  const [selectedHour2, setSelectedHour2] = useState<string | null>("Empty");
-  const [selectedDays, setSelectedDays] = useState<string[]>(["Empty"]);
-  const [formData, setFormData] = useState({
-    email: "",
-    fullName: "",
-    userName: "",
-    password: "",
-    image:
-      "https://res.cloudinary.com/dqwzzzyby/image/upload/v1714204006/cloudinary_images/ed6oycbgtth4u1vibsbk.png",
-    welcomeMessage: "Empty",
-    language: "Empty",
-    timeFormat: "Empty",
-    dateFormat: "Empty",
-    country: "Empty",
-    timeZone: "Empty",
-  });
-
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const click = () => {
-    setShow(!show);
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await axios.post("/api/register", formData);
-      showToast("SignUp Successfull", "success");
-
-      router.push("/login");
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      showToast("Error in SignUp", "error");
-      setLoading(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const { click, formData, handleChange, handleSubmit, loading, show } =
+    useSignUp();
   return (
     <div className="max-w-[440px] h-[550px] border-[1px] border-[#DADADA] rounded-[6px] p-[24px]">
       <div>

@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { signIn, useSession, SessionProvider } from "next-auth/react";
+import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import googleLogo from "../../../../public/icons/google.png";
-import eye from "../../../../public/images/eye.png";
 import image from "../../../../public/images/logo1.png";
-import { useRouter } from "next/navigation";
 import Login from "./component/Login";
 
 export default function LoginPage() {
