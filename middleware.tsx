@@ -8,6 +8,3 @@ export default withAuth(function middleware(request: NextRequest) {}, {
 export const config = {
   matcher: ["/", "/profile", "/sidebar", "/availabilityHours", "/analysis"],
 };
-
-// export { default } from "next-auth/middleware";
-// export const config = { matcher: ["/", "/add", "/main", "/reset"] };
