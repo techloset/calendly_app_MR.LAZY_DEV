@@ -48,7 +48,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
   };
   const selectDate = (date: Date) => {
     const today = new Date();
-    if (date > today) {
+    if (date >= today) {
       if (Array.isArray(availabilityData) && availabilityData.length > 0) {
         const lastAvailableData = availabilityData[availabilityData.length - 1];
         const selectedDayIndex = date.getDay();
@@ -144,6 +144,8 @@ const NewCalendar: React.FC<CalendarProps> = ({
                 : ""
             } ${!isDateAllowed(day) ? "text-[#c7cbd2]" : ""} ${
               isToday(day) ? "items-center justify-center flex flex-col" : ""
+            } ${
+              day < new Date() ? "text-gray-400" : "" // Add this line to conditionally apply gray color to past dates
             }`}
             onClick={() => selectDate(day)}
           >

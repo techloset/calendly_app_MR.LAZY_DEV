@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
-import { getSession } from "next-auth/react";
 import { IncomingMessage } from "http";
 import { getServerSession } from "next-auth";
-import { MySession } from "@/app/constants/types";
+import { MySession, UploadDataApi } from "@/app/constants/types";
 
-export async function GET(req: IncomingMessage): Promise<NextResponse> {
+export async function GET(req: IncomingMessage) {
   try {
     const session = (await getServerSession(req as any)) as MySession;
     if (!session) {
@@ -42,18 +41,7 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
   }
 }
 
-interface UploadData {
-  name: string;
-  email: string;
-  additionalInfo: string;
-  time: string;
-  date: string;
-  timeZone: string;
-  ownerEmail: string;
-  ownerName: string;
-}
-
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
@@ -81,7 +69,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return new NextResponse("Missing data", { status: 400 });
     }
 
-    const newData: UploadData = {
+    const newData: UploadDataApi = {
       name: name,
       email: email,
       additionalInfo: additionalInfo,

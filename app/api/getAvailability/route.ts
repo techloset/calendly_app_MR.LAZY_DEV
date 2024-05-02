@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
-import { getSession } from "next-auth/react";
 import { IncomingMessage } from "http";
 import { getServerSession } from "next-auth";
 
-export async function GET(req: IncomingMessage): Promise<NextResponse> {
+export async function GET(req: IncomingMessage) {
   try {
     const session = (await getServerSession(req as any)) as MySession;
     if (!session) {
@@ -40,14 +39,7 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
 }
 
 import { NextRequest } from "next/server";
-import { MySession } from "@/app/constants/types";
-
-interface AvailabilityData {
-  selectedDays: string[];
-  selectedHour1: string;
-  selectedHour2: string;
-  email: string;
-}
+import { AvailabilityData, MySession } from "@/app/constants/types";
 
 export async function PUT(req: NextRequest) {
   try {
@@ -94,7 +86,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 

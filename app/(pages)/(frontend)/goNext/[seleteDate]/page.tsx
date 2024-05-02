@@ -28,6 +28,8 @@ import {
 } from "@/app/constants/types";
 import { BeatLoader } from "react-spinners";
 import useSeleteDate from "./component/useSeleteDate";
+import TimezoneDropdown from "@/app/(components)/timeZone/TimezoneSelector";
+import moment from "moment-timezone";
 
 const page = ({ params }: any) => {
   const dispatch = useAppDispatch();
@@ -35,6 +37,14 @@ const page = ({ params }: any) => {
   const availabilityData = useAppSelector(
     (state) => state.fetchAvailabilityData.data
   );
+
+  const [selectedTimezone, setSelectedTimezone] = useState("");
+
+  const handleSelectTimezone = (timezone: any) => {
+    setSelectedTimezone(timezone);
+  };
+
+  const timezones = moment.tz.names();
 
   useEffect(() => {
     dispatch(fetchAvailabilityData());
@@ -150,10 +160,12 @@ const page = ({ params }: any) => {
                       <p className="font-bold text-[18px]">Time zone</p>
                     </div>
                     <div>
-                      <TimezoneSelector
+                      {/* <TimezoneSelector
                         timeZones={timeZones}
                         onChange={handleTimeZoneChange}
-                      />{" "}
+                      />{" "} */}
+
+                      <TimezoneDropdown onChange={handleTimeZoneChange} />
                     </div>
                     <div className="mt-3">
                       <button className="h-[44px] gap-2 border-gray-400 text-center flex items-center justify-center rounded-[32px] px-4 border-[1px] text-[14px] font-bold ">

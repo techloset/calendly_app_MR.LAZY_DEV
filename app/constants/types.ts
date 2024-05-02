@@ -149,7 +149,6 @@ export interface TimeZone {
 }
 
 export interface TimezoneSelectorProps {
-  timeZones: TimeZone[];
   onChange: (value: string | null) => void;
 }
 

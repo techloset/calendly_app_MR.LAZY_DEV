@@ -8,6 +8,7 @@ import {
   hoursOptions,
   timesArray,
 } from "@/app/(components)/profileData/ProfileData";
+import iso6391 from "iso-639-1";
 import Link from "next/link";
 import ProfileSidebar from "@/app/(components)/profileSidebar/ProfileSidebar";
 import Image from "next/image";
@@ -21,6 +22,7 @@ import { BeatLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
 import { PropsProfile } from "@/app/constants/types";
 import ProfilePagePicture from "@/app/(components)/profilePagePicture/ProfilePagePicture";
+import moment from "moment-timezone";
 
 const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
   const sessionss = useSession();
@@ -43,8 +45,7 @@ const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
   } = useProfile();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const handleLogout = () => {};
+  const timezones = moment.tz.names();
 
   // Function to toggle the dropdown
   const toggleDropdown = () => {
@@ -280,7 +281,7 @@ const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
 
                             <div className="h-[40px] mt-2 w-[450px] border-[1px] border-[#B2B2B2] rounded-[8px]">
                               <Dropdown
-                                options={countryCityData}
+                                options={timezones}
                                 onSelect={(option) =>
                                   setFormData((prev) => ({
                                     ...prev,

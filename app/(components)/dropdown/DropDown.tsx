@@ -12,8 +12,8 @@ export const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
       }}
       onChange={(e) => onSelect(e.target.value)}
     >
-      {options.map((option, index) => (
-        <option key={index} value={option}>
+      {options.map((option, onSelect) => (
+        <option key={onSelect} value={option}>
           {option}
         </option>
       ))}

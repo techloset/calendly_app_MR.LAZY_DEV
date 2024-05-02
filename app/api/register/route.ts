@@ -3,7 +3,7 @@ import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
 
@@ -75,9 +75,9 @@ export async function POST(req: Request): Promise<Response> {
   }
 }
 
-export async function PUT(req: Request): Promise<Response> {
+export async function PUT(req: Request) {
   try {
-    const session = await getServerSession({ req });
+    const session = (await getServerSession(req as any)) as MySession;
 
     if (!session || !session.user?.email) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -124,11 +124,11 @@ export async function PUT(req: Request): Promise<Response> {
 }
 
 import { IncomingMessage } from "http";
-import { UserDataSignUp } from "@/app/constants/types";
+import { MySession, UserDataSignUp } from "@/app/constants/types";
 
-export async function GET(req: IncomingMessage): Promise<NextResponse> {
+export async function GET(req: IncomingMessage) {
   try {
-    const session = await getServerSession({ req });
+    const session = (await getServerSession(req as any)) as MySession;
 
     console.log("session", session);
 
@@ -164,9 +164,9 @@ export async function GET(req: IncomingMessage): Promise<NextResponse> {
   }
 }
 
-export async function DELETE(req: IncomingMessage): Promise<NextResponse> {
+export async function DELETE(req: IncomingMessage) {
   try {
-    const session = await getServerSession({ req });
+    const session = (await getServerSession(req as any)) as MySession;
 
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });

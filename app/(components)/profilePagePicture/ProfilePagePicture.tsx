@@ -1,12 +1,13 @@
 "use client";
 import { useAppSelector } from "@/app/store/store";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import downArrow from "../../../public/profile/down-arrow.png";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/app/constants/toastify";
 
 export default function ProfilePagePicture() {
   const userData = useAppSelector((state) => state.user.userData);
@@ -18,8 +19,6 @@ export default function ProfilePagePicture() {
   const handleGoProfile = () => {
     router.push("/profile");
   };
-  const handleLogout = () => {};
-
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -96,7 +95,11 @@ export default function ProfilePagePicture() {
               Reset Password
             </Link>
             <button
-              onClick={handleLogout}
+              onClick={() => {
+                signOut();
+                router.push("/login");
+                showToast("User Logout Successfull", "success");
+              }}
               className=" border-b-stone-300 flex items-start rounded-sm text-red-400 text-[15px] hover:bg-red-100"
             >
               Logout
