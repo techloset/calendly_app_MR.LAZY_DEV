@@ -1,6 +1,6 @@
+import { link } from "@/app/constants/images";
 import Image from "next/image";
 import React from "react";
-import link from "../../../public/vectors/link.png";
 export default function MenuHeader() {
   return (
     <div className="bg-white shadow-lg h-[60px] flex justify-center">

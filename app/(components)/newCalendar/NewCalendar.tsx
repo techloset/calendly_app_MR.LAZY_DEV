@@ -10,12 +10,11 @@ import {
   isToday,
 } from "date-fns";
 
-import rightt from "../../../public/vectors/rightt.png";
-import leftt from "../../../public/vectors/leftt.png";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
 import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
-import { AvailabilityData, CalendarProps } from "@/app/constants/types";
+import { CalendarProps } from "@/app/constants/types";
+import { leftt, rightt } from "@/app/constants/images";
 
 const NewCalendar: React.FC<CalendarProps> = ({
   selectedDate,
@@ -24,8 +23,8 @@ const NewCalendar: React.FC<CalendarProps> = ({
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selected, setSelected] = useState<Date | null>(null);
   const dispatch = useAppDispatch();
-  const availabilityData: AvailabilityData | null = useAppSelector(
-    (state) => state.fetchAvailabilityData.data
+  const availabilityData: any = useAppSelector(
+    (state) => state.ownerAvailability.ownerAvailability
   );
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
           "Fridays",
           "Saturdays",
         ][selectedDayIndex];
-        const allowedDays = lastAvailableData.selectedDays || [];
+        const allowedDays = lastAvailableData?.selectedDays || [];
 
         if (allowedDays.includes(selectedDay)) {
           setCurrentDate(date);
@@ -144,9 +143,7 @@ const NewCalendar: React.FC<CalendarProps> = ({
                 : ""
             } ${!isDateAllowed(day) ? "text-[#c7cbd2]" : ""} ${
               isToday(day) ? "items-center justify-center flex flex-col" : ""
-            } ${
-              day < new Date() ? "text-gray-400" : "" // Add this line to conditionally apply gray color to past dates
-            }`}
+            } ${day < new Date() ? "text-gray-400" : ""}`}
             onClick={() => selectDate(day)}
           >
             {format(day, "d")}

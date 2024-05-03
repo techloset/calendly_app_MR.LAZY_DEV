@@ -3,12 +3,10 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import googleLogo from "../../../../../public/icons/google.png";
-import eye from "../../../../../public/images/eye.png";
-import open from "../../../../../public/icons/open.png";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 import { ClipLoader } from "react-spinners";
 import useLogin from "./useLogin";
+import { eye, googleLogo, open } from "@/app/constants/images";
 export default function Login() {
   const {
     click,
@@ -55,7 +53,7 @@ export default function Login() {
             className="absolute right-6 top-1/2 transform -translate-y-1/2 cursor-pointer"
           >
             {show ? (
-              <Image className="h-4 w-4" src={open} alt="" />
+              <Image className="h-4 w-4" src={open} alt="hello" />
             ) : (
               <Image src={eye} alt="" />
             )}

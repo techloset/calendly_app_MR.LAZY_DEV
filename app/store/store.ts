@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import selectedDateTimeSliceReducer from "./slice/selectedDateTimeSlice";
 import fetchScheduleEventsSliceReducer from "./slice/scheduleEventsData";
 import fetchAvailabilityDataSliceReducer from "./slice/availabilityData";
+import ownerSliceReducer from "./slice/ownerData";
 import userReducer from "./slice/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
@@ -9,9 +9,10 @@ import type { TypedUseSelectorHook } from "react-redux";
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    selectedDateTime: selectedDateTimeSliceReducer,
     fetchScheduleEvents: fetchScheduleEventsSliceReducer,
+    ownerSlice: fetchScheduleEventsSliceReducer,
     fetchAvailabilityData: fetchAvailabilityDataSliceReducer,
+    ownerAvailability: ownerSliceReducer,
   },
 });
 

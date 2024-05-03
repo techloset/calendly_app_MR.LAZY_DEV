@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import image from "../../../../public/images/logo1.png";
 import Image from "next/image";
 import SignUp from "./component/SignUp";
+import { image } from "@/app/constants/images";
 
 export default function Page() {
   return (

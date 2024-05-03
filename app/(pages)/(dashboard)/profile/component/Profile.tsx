@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import downArrow from "../../../../../public/profile/down-arrow.png";
-import inviteUser from "../../../../../public/profile/inviteUser.png";
 import {
   countriesArray,
   countryCityData,
@@ -23,6 +21,7 @@ import { useSession } from "next-auth/react";
 import { PropsProfile } from "@/app/constants/types";
 import ProfilePagePicture from "@/app/(components)/profilePagePicture/ProfilePagePicture";
 import moment from "moment-timezone";
+import { inviteUser } from "@/app/constants/images";
 
 const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
   const sessionss = useSession();

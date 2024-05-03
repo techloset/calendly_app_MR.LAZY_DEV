@@ -2,7 +2,6 @@
 import Sidebar from "@/app/(components)/sidebar/Sidebar";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import rightSmall from "../../../../../public/icons/rightSmall.png";
 import { colors } from "@/app/(components)/profileData/ProfileData";
 import Modall from "@/app/(components)/modal/Modal";
 import SidebarTopMenu from "@/app/(components)/sidebarTopMenu/SidebarTopMenu";
@@ -11,6 +10,7 @@ import useSidebar from "./useSidebar";
 import SelectCategory from "@/app/(components)/selectCategory/SelectCategory";
 import ExportFilter from "@/app/(components)/exportFilter/ExportFilter";
 import { BeatLoader } from "react-spinners";
+import { rightSmall } from "@/app/constants/images";
 
 export default function SidebarPage() {
   const {

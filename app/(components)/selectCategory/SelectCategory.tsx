@@ -1,6 +1,6 @@
 import React from "react";
-import down from "../../../public/icons/down.png";
 import Image from "next/image";
+import { down2 } from "@/app/constants/images";
 
 interface Props {
   selectedCategory: string;
@@ -56,7 +56,7 @@ const SelectCategory: React.FC<Props> = ({
         <p className="text-[15px] w-[110px] items-center gap-3 flex font-normal">
           Date Range{" "}
           <span onClick={handleImageClick} className="cursor-pointer">
-            <Image src={down} className="h-[12px] w-[12px]" alt="" />
+            <Image src={down2} className="h-[12px] w-[12px]" alt="" />
           </span>
         </p>
       </div>

@@ -1,8 +1,5 @@
 "use client";
 import React from "react";
-import second from "../../../../../public/images/second.png";
-import progressBar from "../../../../../public/images/progressBar.png";
-import speaker from "../../../../../public/vectors/speaker.png";
 import Checkbox from "@/app/(components)/checkBox/CheckBox";
 import Image from "next/image";
 import { hoursTimes } from "@/app/(components)/profileData/ProfileData";
@@ -10,6 +7,7 @@ import Link from "next/link";
 import { Dropdown } from "@/app/(components)/dropdown/DropDown";
 import useAvailabilityHours from "./useAvailabilityHours";
 import { ClipLoader } from "react-spinners";
+import { progressBar, second, speaker } from "@/app/constants/images";
 
 export default function AvailabilityHours() {
   const {

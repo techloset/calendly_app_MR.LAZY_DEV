@@ -3,11 +3,11 @@ import { useAppSelector } from "@/app/store/store";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import downArrow from "../../../public/profile/down-arrow.png";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/app/constants/toastify";
+import { downArrow } from "@/app/constants/images";
 
 export default function ProfilePagePicture() {
   const userData = useAppSelector((state) => state.user.userData);

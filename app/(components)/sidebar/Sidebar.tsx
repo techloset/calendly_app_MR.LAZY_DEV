@@ -1,15 +1,17 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import logo from "../../../public/images/logo.svg";
-import openClose from "../../../public/icons/openClose.png";
-import scheduleHome from "../../../public/icons/scheduleHome.png";
-import analysis from "../../../public/icons/analysis.png";
-import avaibility from "../../../public/icons/avaibility.png";
-import adminCenter from "../../../public/icons/adminCenter.png";
-import singleLogo from "../../../public/icons/singleLogo.png";
 import Link from "next/link";
 import { SidebarProps } from "@/app/constants/types";
+import {
+  adminCenter,
+  analysis,
+  avaibility,
+  logo2,
+  openClose,
+  scheduleHome,
+  singleLogo,
+} from "@/app/constants/images";
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname =
@@ -24,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="flex justify-between items-center">
           <div>
             <Image
-              src={logo}
+              src={logo2}
               className={`h-[40px] w-[150px] ${!isOpen && "hidden"}`}
               alt=""
             />

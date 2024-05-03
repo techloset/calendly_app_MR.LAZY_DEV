@@ -1,8 +1,5 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import downArrow from "../../../public/profile/down-arrow.png";
 import { useAppSelector } from "@/app/store/store";
 import { useSession } from "next-auth/react";
 import ProfilePagePicture from "../profilePagePicture/ProfilePagePicture";

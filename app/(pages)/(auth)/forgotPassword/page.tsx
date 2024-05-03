@@ -1,13 +1,14 @@
 import React from "react";
-import image from "../../../../public/images/logo1.png";
 import Link from "next/link";
+import { image } from "@/app/constants/images";
+import Image from "next/image";
 
 export default function Page() {
   return (
     <div className="flex mt-28 justify-center">
       <div className="w-[440px] h-[580px] ">
         <div className="flex justify-center">
-          <img src={image.src} className="w-[182px] h-[43px]" alt="Logo" />
+          <Image src={image} className="w-[182px] h-[43px]" alt="Logo" />
         </div>
         <div className="flex text-center justify-center">
           <p className="font-bold text-[20px] text-[#1A1A1A] leading-7">

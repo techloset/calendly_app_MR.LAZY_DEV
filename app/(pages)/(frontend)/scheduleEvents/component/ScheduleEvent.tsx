@@ -1,15 +1,17 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import sticker from "../../../../../public/vectors/sticker.png";
-import clock from "../../../../../public/icons/clock.png";
-import diary from "../../../../../public/icons/diary.png";
-import global from "../../../../../public/icons/globe.png";
-import backArrow from "../../../../../public/vectors/backArrow.png";
 import Link from "next/link";
 import ScheduleInputField from "@/app/(components)/scheduleInputField/ScheduleInputField";
 import TextArea from "@/app/(components)/textArea/TextArea";
 import useScheduleEvent from "./useScheduleEvent";
+import {
+  backArrow,
+  clock2,
+  diary,
+  global,
+  sticker3,
+} from "@/app/constants/images";
 
 export default function ScheduleEvent() {
   const { formData, handleBack, handleChange, handleSubmit, sessionss } =
@@ -31,7 +33,8 @@ export default function ScheduleEvent() {
               </div>
               <div className="mt-6">
                 <p className="text-[14px] font-medium">
-                  {formData.ownerName ? formData.ownerName : "undefine"}
+                  {/* {formData.ownerName ? formData.ownerName : "undefine"} */}
+                  {formData.ownerName}
                 </p>
               </div>
               <div className="">
@@ -39,7 +42,7 @@ export default function ScheduleEvent() {
               </div>
               <div className="mt-4 flex gap-1 items-center">
                 <div>
-                  <Image src={clock} className="h-4 w-4" alt="" />
+                  <Image src={clock2} className="h-4 w-4" alt="" />
                 </div>
                 <div>
                   <p className="text-[14px] font-medium">30 Min</p>
@@ -156,7 +159,7 @@ export default function ScheduleEvent() {
             </div>
             <div>
               <Image
-                src={sticker}
+                src={sticker3}
                 className="h-15 w-15"
                 style={{}}
                 alt="tick"

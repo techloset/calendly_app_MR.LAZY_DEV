@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import eye from "../../../../public/images/eye.png";
-import open from "../../../../public/icons/open.png";
 import Image from "next/image";
 import useResetPassword from "./useResetPassword";
+import { eye, open } from "@/app/constants/images";
 
 export default function ResetPassword() {
   const {

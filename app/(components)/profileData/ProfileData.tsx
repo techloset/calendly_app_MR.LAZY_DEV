@@ -490,8 +490,6 @@ export let countryCityData = [
 export let DropdownData = ["My Calendly"];
 
 export let hoursTimes = [
-  "8:00 am",
-  "9:00 am",
   "10:00 am",
   "11:00 am",
   "12:00 pm",
@@ -512,6 +510,29 @@ export let timeSlots = [
   { time: "12:00pm", label: "12:00pm - 12:30pm" },
   { time: "12:30pm", label: "12:30pm - 1:00pm" },
   { time: "1:00pm", label: "1:00pm - 1:30pm" },
+];
+
+export let timeSlotsBig = [
+  { time: "8:00am", label: "8:00am - 8:30am" },
+  { time: "8:30am", label: "8:30am - 9:00am" },
+  { time: "9:00am", label: "9:00am - 9:30am" },
+  { time: "9:30am", label: "9:30am - 10:00am" },
+  { time: "10:00am", label: "10:00am - 10:30am" },
+  { time: "10:30am", label: "10:30am - 11:00am" },
+  { time: "11:00am", label: "11:00am - 11:30am" },
+  { time: "11:30am", label: "11:30am - 12:00pm" },
+  { time: "12:00pm", label: "12:00pm - 12:30pm" },
+  { time: "12:30pm", label: "12:30pm - 1:00pm" },
+  { time: "1:00pm", label: "1:00pm - 1:30pm" },
+  { time: "1:30pm", label: "1:30pm - 2:00pm" },
+  { time: "2:00pm", label: "2:00pm - 2:30pm" },
+  { time: "2:30pm", label: "2:30pm - 3:00pm" },
+  { time: "3:00pm", label: "3:00pm - 3:30pm" },
+  { time: "3:30pm", label: "3:30pm - 4:00pm" },
+  { time: "4:00pm", label: "4:00pm - 4:30pm" },
+  { time: "4:30pm", label: "4:30pm - 5:00pm" },
+  { time: "5:00pm", label: "5:00pm - 5:30pm" },
+  { time: "5:30pm", label: "5:30pm - 6:00pm" },
 ];
 
 export let timeZones = [

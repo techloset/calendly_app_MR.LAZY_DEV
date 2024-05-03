@@ -2,31 +2,28 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 import { useSession } from "next-auth/react";
+import { timeSlotsBig } from "@/app/(components)/profileData/ProfileData";
 import {
-  dayNames,
-  monthNames,
-} from "@/app/(components)/profileData/ProfileData";
-import { fetchUserData } from "@/app/store/slice/userSlice";
-import { AvailabilityData, SelectedDateTimeFirst } from "@/app/constants/types";
+  AvailabilityData,
+  SelectedDateTimeFirst,
+  UserData,
+} from "@/app/constants/types";
+import axios from "axios";
+import { setOwnerAvailability } from "@/app/store/slice/ownerData";
 
 const useSeleteDate = ({ params }: any) => {
-  const decodedValue = decodeURIComponent(params.seleteDate);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const decodedValue = decodeURIComponent(params?.seleteDate || "");
+  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [newOwnerData, setNewOwnerData] = useState<any>();
   const dispatch = useAppDispatch();
 
-  const availabilityData: AvailabilityData | null = useAppSelector(
-    (state) => state.fetchAvailabilityData.data
+  const availabilityDataLoading: AvailabilityData | null = useAppSelector(
+    (state) => state.ownerAvailability.ownerAvailability
   );
 
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
-  console.log("avaialbiiliill", availabilityData);
-
   const userData = useAppSelector((state) => state.user.userData);
+  const [ownerData, setOwnerData] = useState<UserData>();
   const sessionss = useSession();
 
   const [selectedDateTime, setSelectedDateTime] =
@@ -37,9 +34,72 @@ const useSeleteDate = ({ params }: any) => {
       decodedValue: decodedValue,
     });
 
+  const email = decodedValue;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post("/api/goNext", { email });
+        setOwnerData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post("/api/goNextAvailability", {
+          email,
+        });
+        dispatch(setOwnerAvailability(response.data));
+        setNewOwnerData(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+  }, [dispatch, email]);
+
+  const reversedOwnerData = newOwnerData ? [...newOwnerData].reverse() : [];
+  const firstOwnerData =
+    reversedOwnerData && reversedOwnerData.length > 0
+      ? reversedOwnerData[0]
+      : undefined;
+
+  const one = firstOwnerData?.selectedHour1;
+  const two = firstOwnerData?.selectedHour2;
+
+  let selectedHour1 = one;
+  let selectedHour2 = two;
+
+  const selectedTime1 = convertTo24Hour(selectedHour1);
+  const selectedTime2 = convertTo24Hour(selectedHour2);
+
+  function convertTo24Hour(time: any) {
+    if (typeof time === "string" && time.match(/\d+:\d+\s*[ap]m/i)) {
+      const [hour, minute, period]: any = time.match(/\d+|\D+/g);
+      let hourInt = parseInt(hour);
+      if (period.toLowerCase() === "pm" && hourInt !== 12) {
+        hourInt += 12;
+      } else if (period.toLowerCase() === "am" && hourInt === 12) {
+        hourInt = 0;
+      }
+      return `${hourInt}:${minute}`;
+    }
+    return "00:00";
+  }
+
+  const filteredTimeSlots = timeSlotsBig.filter((slot) => {
+    const slotTime = convertTo24Hour(slot.time);
+    return slotTime >= selectedTime1 && slotTime <= selectedTime2;
+  });
+
   const handleDateChange = (date: Date) => {
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
-    setSelectedDate(date);
+    // setSelectedDate(date);
     setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
   };
 
@@ -51,25 +111,6 @@ const useSeleteDate = ({ params }: any) => {
     setSelectedDateTime((prev) => ({ ...prev, timeZone: value }));
   };
 
-  useEffect(() => {
-    console.log("Selected Date Time:", selectedDateTime);
-  }, [selectedDateTime]);
-
-  console.log("select", selectedDate);
-
-  const formatDate = (inputDate: any) => {
-    const [day, month, year] = inputDate.split("/");
-
-    const date = new Date(year, month - 1, day);
-
-    const dayName = dayNames[date.getDay()];
-    const monthName = monthNames[date.getMonth()];
-
-    const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
-
-    return formattedDate;
-  };
-
   return {
     userData,
     selectedDateTime,
@@ -77,6 +118,10 @@ const useSeleteDate = ({ params }: any) => {
     handleTimeZoneChange,
     handleTimeSlotClick,
     sessionss,
+    filteredTimeSlots,
+    decodedValue,
+    availabilityDataLoading,
+    ownerData,
   };
 };
 

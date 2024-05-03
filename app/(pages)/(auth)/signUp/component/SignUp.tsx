@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import eye from "../../../../../public/images/eye.png";
-import open from "../../../../../public/icons/open.png";
 import Image from "next/image";
 import AuthInputField from "@/app/(components)/authInputField/AuthInputField";
 import { ClipLoader } from "react-spinners";
 import useSignUp from "./useSignUp";
+import { eye, open } from "@/app/constants/images";
 
 export default function SignUp() {
   const { click, formData, handleChange, handleSubmit, loading, show } =

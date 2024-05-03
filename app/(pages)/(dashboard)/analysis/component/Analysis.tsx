@@ -8,6 +8,7 @@ import useAnalysis from "./useAnalysis";
 export default function Analysis() {
   const { isSidebarOpen, past, pending, toggleSidebar, totall, upcoming } =
     useAnalysis();
+
   return (
     <>
       <div className="flex">

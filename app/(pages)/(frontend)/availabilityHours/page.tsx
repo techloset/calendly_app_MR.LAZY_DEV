@@ -1,6 +1,6 @@
-import image from "../../../../public/images/logo1.png";
 import Image from "next/image";
 import AvailabilityHours from "./component/AvailabilityHours";
+import { image } from "@/app/constants/images";
 
 const Page: React.FC = () => {
   return (

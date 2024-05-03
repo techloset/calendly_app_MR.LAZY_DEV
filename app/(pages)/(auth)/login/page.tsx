@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import image from "../../../../public/images/logo1.png";
 import Login from "./component/Login";
+import { image } from "@/app/constants/images";
 
 export default function LoginPage() {
   return (
