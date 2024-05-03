@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import availabilityData, {
-  fetchAvailabilityData,
-} from "@/app/store/slice/availabilityData";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
+import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
+import { useAppDispatch } from "@/app/store/store";
 import { showToast } from "@/app/constants/toastify";
 const useAvailabilityHours = () => {
   const { data: sessions } = useSession();
@@ -38,7 +36,6 @@ const useAvailabilityHours = () => {
         selectedHour2,
         email: sessions?.user.email,
       });
-      console.log("Form data uploaded successfully:", response.data);
       showToast("Availability Hours Added Successfull", "success");
 
       window.location.assign("/sidebar");

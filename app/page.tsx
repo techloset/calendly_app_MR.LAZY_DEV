@@ -1,10 +1,5 @@
-"use client";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
+import SidebarPage from "./(pages)/(dashboard)/sidebar/component/SidebarPage";
 export default function page() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/sidebar");
-  }, []);
-  return <div></div>;
+  return <SidebarPage />;
 }

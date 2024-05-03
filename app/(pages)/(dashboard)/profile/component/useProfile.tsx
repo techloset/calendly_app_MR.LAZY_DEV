@@ -6,6 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import { fetchUserData } from "@/app/store/slice/userSlice";
 import { FormData3 } from "@/app/constants/types";
 import { showToast } from "@/app/constants/toastify";
+import moment from "moment-timezone";
 
 const useProfile = () => {
   const { data: sessions } = useSession();
@@ -18,6 +19,8 @@ const useProfile = () => {
   const [imageUrl, setImageUrl] = useState("");
   const sliceLoading = useAppSelector((state) => state.user.loading);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const timezones = moment.tz.names();
 
   const handleDeleteAccount = async () => {
     setLoading2(true);
@@ -98,10 +101,6 @@ const useProfile = () => {
     console.log("Uploaded image URL:", url);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -141,7 +140,7 @@ const useProfile = () => {
     handleDeleteAccount,
     isModalOpen,
     handleCancel,
-    handleOk,
+    timezones,
     userData,
     setImageUrl,
     imageUrl,

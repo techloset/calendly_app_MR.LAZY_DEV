@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   countriesArray,
-  countryCityData,
   hoursOptions,
   timesArray,
 } from "@/app/(components)/profileData/ProfileData";
@@ -20,10 +19,9 @@ import { BeatLoader } from "react-spinners";
 import { useSession } from "next-auth/react";
 import { PropsProfile } from "@/app/constants/types";
 import ProfilePagePicture from "@/app/(components)/profilePagePicture/ProfilePagePicture";
-import moment from "moment-timezone";
 import { inviteUser } from "@/app/constants/images";
 
-const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
+const Profile: React.FC<PropsProfile> = () => {
   const sessionss = useSession();
   const {
     currentTime,
@@ -31,7 +29,7 @@ const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
     handleCancel,
     handleChange,
     handleDeleteAccount,
-
+    timezones,
     isModalOpen,
     setFormData,
     setIsModalOpen,
@@ -42,14 +40,6 @@ const Profile: React.FC<PropsProfile> = ({ handleFileChange }) => {
     loading2,
     sliceLoading,
   } = useProfile();
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const timezones = moment.tz.names();
-
-  // Function to toggle the dropdown
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
 
   return (
     <>

@@ -1,41 +1,15 @@
 "use client";
 import TimeSlot from "@/app/(components)/timeSlot/TimeSlot";
-import TimezoneSelector from "@/app/(components)/timeZone/TimezoneSelector";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import NewCalendar from "@/app/(components)/newCalendar/NewCalendar";
-import { format } from "date-fns";
-import { useAppDispatch, useAppSelector } from "@/app/store/store";
-import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
-import { useSession } from "next-auth/react";
 import MenuHeader from "@/app/(components)/menuHeader/MenuHeader";
-import {
-  dayNames,
-  monthNames,
-  timeSlots,
-  timeZones,
-} from "@/app/(components)/profileData/ProfileData";
-import { fetchUserData } from "@/app/store/slice/userSlice";
-import {
-  AvailabilityData,
-  SelectedDateTime,
-  SelectedDateTimeFirst,
-} from "@/app/constants/types";
 import { BeatLoader } from "react-spinners";
 import useSeleteDate from "./component/useSeleteDate";
 import TimezoneDropdown from "@/app/(components)/timeZone/TimezoneSelector";
-import moment from "moment-timezone";
 import { clock, sticker2, tool } from "@/app/constants/images";
 
 const page = ({ params }: any) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAvailabilityData());
-  }, [dispatch]);
-
   const {
     handleDateChange,
     handleTimeSlotClick,
@@ -68,8 +42,7 @@ const page = ({ params }: any) => {
                   <div>
                     <div className="mt-6">
                       <p className="text-[14px] font-medium">
-                        {/* {userData ? userData?.fullName : sessionss.data?.user.name} */}
-                        {ownerData?.fullName}
+                        {ownerData ? ownerData?.fullName : decodedValue}
                       </p>
                     </div>
                     <div className="">
@@ -117,11 +90,6 @@ const page = ({ params }: any) => {
                           <p className="font-bold text-[18px]">Time zone</p>
                         </div>
                         <div>
-                          {/* <TimezoneSelector
-                        timeZones={timeZones}
-                        onChange={handleTimeZoneChange}
-                      />{" "} */}
-
                           <TimezoneDropdown onChange={handleTimeZoneChange} />
                         </div>
                         <div className="mt-3">

@@ -1,20 +1,22 @@
 import React from "react";
-import logo from "../../../public/images/logo.svg";
-import person from "../../../public/vectors/personn.png";
-import brading from "../../../public/profile/star.png";
-import link from "../../../public/profile/link.png";
-import preference from "../../../public/profile/list.png";
-import sync from "../../../public/profile/calendar.png";
-import help from "../../../public/profile/help.png";
-import setting from "../../../public/profile/setting.png";
-import logout from "../../../public/profile/logout.png";
-import downArrow from "../../../public/profile/down-arrow.png";
-import backArrow from "../../../public/profile/backArrow.png";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/app/constants/toastify";
+import {
+  backArrow2,
+  brading,
+  downArrow2,
+  help,
+  link2,
+  logo,
+  logout,
+  person,
+  preference,
+  setting,
+  sync,
+} from "@/app/constants/images";
 
 const ProfileSidebar = () => {
   const router = useRouter();
@@ -28,7 +30,7 @@ const ProfileSidebar = () => {
           <Link href={"/sidebar"} className="flex items-center gap-2">
             <div>
               <Image
-                src={backArrow}
+                src={backArrow2}
                 className="w-4 cursor-pointer h-4"
                 alt=""
               />
@@ -63,7 +65,7 @@ const ProfileSidebar = () => {
         </div>
         <div className="flex gap-5 mt-3 py-2 cursor-pointer pl-4 hover:bg-[#F2F8FF]">
           <div>
-            <Image src={link} className="w-6 h-6" alt="" />
+            <Image src={link2} className="w-6 h-6" alt="" />
           </div>
           <div>
             <p className=" font-medium text-[18px]">My Link</p>
@@ -103,7 +105,7 @@ const ProfileSidebar = () => {
             <p className="font-medium text-xl">Help</p>
           </div>
           <div>
-            <Image src={downArrow} className="w-3 mt-1 h-3" alt="" />
+            <Image src={downArrow2} className="w-3 mt-1 h-3" alt="" />
           </div>
         </div>
         <div

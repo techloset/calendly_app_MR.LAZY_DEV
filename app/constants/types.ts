@@ -247,3 +247,27 @@ export interface MySession {
     email: string;
   };
 }
+
+export interface UploadDataApi {
+  name: string;
+  email: string;
+  additionalInfo: string;
+  time: string;
+  date: string;
+  timeZone: string;
+  ownerEmail: string;
+  ownerName: string;
+}
+
+export interface AnalysisBoxx {
+  total: number;
+  boxName: string;
+}
+
+export interface AuthInputFieldd {
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
+  placeholder?: string;
+  name?: string;
+}

@@ -14,7 +14,6 @@ import { setOwnerAvailability } from "@/app/store/slice/ownerData";
 
 const useSeleteDate = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params?.seleteDate || "");
-  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [newOwnerData, setNewOwnerData] = useState<any>();
   const dispatch = useAppDispatch();
 
@@ -99,7 +98,6 @@ const useSeleteDate = ({ params }: any) => {
 
   const handleDateChange = (date: Date) => {
     const formattedDate = format(date, "EEEE, d MMMM yyyy");
-    // setSelectedDate(date);
     setSelectedDateTime((prev) => ({ ...prev, date: formattedDate }));
   };
 

@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.custom-calendar {
-  width: 400px;
-  height: 400px;
-}
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
 body {

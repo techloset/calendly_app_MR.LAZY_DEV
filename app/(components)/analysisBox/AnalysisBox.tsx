@@ -1,11 +1,7 @@
+import { AnalysisBoxx } from "@/app/constants/types";
 import React from "react";
 
-interface AnalysisBox {
-  total: number;
-  boxName: string;
-}
-
-const AnalysisBox: React.FC<AnalysisBox> = ({ boxName, total }) => {
+const AnalysisBox: React.FC<AnalysisBoxx> = ({ boxName, total }) => {
   return (
     <div className="h-[200px] py-3 px-3 pt-4 w-[20%] shadow-2xl">
       <div>

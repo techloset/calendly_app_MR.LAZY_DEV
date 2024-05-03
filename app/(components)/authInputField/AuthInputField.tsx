@@ -1,19 +1,13 @@
+import { AuthInputFieldd } from "@/app/constants/types";
 import React, { ChangeEvent } from "react";
 
-interface AuthInputField {
-  value?: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  type?: string;
-  placeholder?: string;
-  name?: string;
-}
 const AuthInputField = ({
   value,
   type,
   placeholder,
   name,
   onChange,
-}: AuthInputField) => {
+}: AuthInputFieldd) => {
   return (
     <input
       type={type}

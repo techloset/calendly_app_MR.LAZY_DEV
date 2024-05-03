@@ -1,8 +1,7 @@
+import { PropsProfile } from "@/app/constants/types";
 import Profile from "./component/Profile";
-interface Props {
-  handleFileChange: (files: FileList | null) => void;
-}
-const Page: React.FC<Props> = ({ handleFileChange }) => {
+
+const Page: React.FC<PropsProfile> = ({ handleFileChange }) => {
   return (
     <div>
       <Profile handleFileChange={handleFileChange} />{" "}

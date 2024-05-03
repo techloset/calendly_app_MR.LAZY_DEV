@@ -32,10 +32,7 @@ export default function ScheduleEvent() {
                 </div>
               </div>
               <div className="mt-6">
-                <p className="text-[14px] font-medium">
-                  {/* {formData.ownerName ? formData.ownerName : "undefine"} */}
-                  {formData.ownerName}
-                </p>
+                <p className="text-[14px] font-medium">{formData.ownerName}</p>
               </div>
               <div className="">
                 <p className="text-[22px] font-bold">30 Minutes Meeting</p>
