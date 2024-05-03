@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import React from "react";
 import { image } from "@/app/constants/images";
 import Image from "next/image";
+import useForgotConfirm from "./useForgotConfirm";
 
 export default function Page() {
-  const [email, setEmail] = useState("");
+  const { handleForgotPassword, password, setPassword } = useForgotConfirm();
 
   return (
     <div className="flex mt-28 justify-center">
@@ -20,15 +20,17 @@ export default function Page() {
         </div>
         <div className="max-w-[440px] h-[320px] border-[1px] border-[#DADADA] rounded-[6px] p-[24px]">
           <div>
-            <p className="font-bold text-[14px] leading-6">Enter your email</p>
+            <p className="font-bold text-[14px] leading-6">
+              Enter New Password
+            </p>
           </div>
           <div className="mt-2">
             <input
-              type="text"
+              type="password"
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
             />
           </div>
 
@@ -46,27 +48,12 @@ export default function Page() {
             </p>
           </div>
           <div className="flex items-center justify-center mt-4">
-            <Link
-              href={{
-                pathname: "/forgotConfirm",
-                query: {
-                  email: email,
-                },
-              }}
+            <button
+              onClick={handleForgotPassword}
               className="h-[44px] bg-[#0069FF] border-[#0069FF] text-center flex items-center justify-center rounded-[32px] w-[132px] border-[1px] text-white text-[12px] font-bold "
             >
               Forgot Password
-            </Link>
-          </div>
-          <div className="mt-2 mr-3">
-            <p className="text-[#1A1A1A] text-[12px] font-normal leading-5">
-              Don't have an account ?{" "}
-              <Link href={"/login"}>
-                <span className="text-[#0069FF] cursor-pointer font-semibold">
-                  Login
-                </span>
-              </Link>
-            </p>
+            </button>
           </div>
         </div>
       </div>
