@@ -4,19 +4,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { showToast } from "@/app/constants/toastify";
 
-const useForgotConfirm = () => {
-  const searchParams = useSearchParams();
+const useForgotConfirm = ({ params }: any) => {
+  const decodedValue = decodeURIComponent(params?.forgot || "");
+
   const router = useRouter();
-  const [formData, setFormData] = useState<any | "">();
+  const [selectedDateTime, setSelectedDateTime] = useState<any>({
+    decodedValue: decodedValue,
+  });
 
-  useEffect(() => {
-    if (searchParams) {
-      const email = searchParams.get("email");
-      setFormData(email);
-    }
-  }, [searchParams]);
-
-  const userEmail = formData;
+  const userEmail = selectedDateTime.decodedValue;
 
   const [password, setPassword] = useState("");
 
@@ -26,7 +22,6 @@ const useForgotConfirm = () => {
         userEmail,
         password,
       });
-      console.log("User password updated:", response.data);
       showToast("Forgot Password Successfull", "success");
 
       router.push("/login");

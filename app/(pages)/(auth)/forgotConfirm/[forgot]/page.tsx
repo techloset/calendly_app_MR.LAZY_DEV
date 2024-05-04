@@ -2,10 +2,12 @@
 import React from "react";
 import { image } from "@/app/constants/images";
 import Image from "next/image";
-import useForgotConfirm from "./useForgotConfirm";
+import useForgotConfirm from "./component/useForgotConfirm";
 
-export default function Page() {
-  const { handleForgotPassword, password, setPassword } = useForgotConfirm();
+export default function Page({ params }: any) {
+  const { handleForgotPassword, password, setPassword } = useForgotConfirm({
+    params,
+  });
 
   return (
     <div className="flex mt-28 justify-center">
