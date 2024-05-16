@@ -1,6 +1,6 @@
+import { i } from "@/app/constants/images";
 import Image from "next/image";
 import React from "react";
-import i from "../../../public/profile/i.png";
 
 interface HeadingName {
   headingName: string;

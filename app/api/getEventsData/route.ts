@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
-import { IncomingMessage } from "http";
 import { getServerSession } from "next-auth";
 import { MySession, UploadDataApi } from "@/app/constants/types";
 
-export async function GET(req: IncomingMessage) {
+export async function GET(req: Request) {
   try {
     const session = (await getServerSession(req as any)) as MySession;
     if (!session) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     const userEmail = session.user?.email;
 
-    console.log("session", userEmail);
-
     if (!userEmail) {
-      return new NextResponse("User email not found", { status: 400 });
+      return new Response("User email not found", { status: 400 });
     }
 
     const userData = await prismadb.scheduleEvent.findMany({
@@ -28,20 +25,20 @@ export async function GET(req: IncomingMessage) {
     });
 
     if (!userData) {
-      return new NextResponse("User data not found", { status: 404 });
+      return new Response("User data not found", { status: 404 });
     }
 
-    return new NextResponse(JSON.stringify(userData), {
+    return new Response(JSON.stringify(userData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", { status: 500 });
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
 
@@ -66,7 +63,7 @@ export async function POST(req: NextRequest) {
       !ownerEmail ||
       !ownerName
     ) {
-      return new NextResponse("Missing data", { status: 400 });
+      return new Response("Missing data", { status: 400 });
     }
 
     const newData: UploadDataApi = {
@@ -84,12 +81,12 @@ export async function POST(req: NextRequest) {
       data: newData,
     });
 
-    return new NextResponse(JSON.stringify(createdData), {
+    return new Response(JSON.stringify(createdData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", { status: 500 });
   }
 }

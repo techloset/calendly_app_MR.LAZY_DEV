@@ -1,4 +1,3 @@
-import { getServerSession } from "next-auth";
 import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
 

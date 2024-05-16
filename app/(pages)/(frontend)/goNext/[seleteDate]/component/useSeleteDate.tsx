@@ -11,11 +11,17 @@ import {
 } from "@/app/constants/types";
 import axios from "axios";
 import { setOwnerAvailability } from "@/app/store/slice/ownerData";
+import { fetchAvailabilityData } from "@/app/store/slice/availabilityData";
 
 const useSeleteDate = ({ params }: any) => {
   const decodedValue = decodeURIComponent(params?.seleteDate || "");
   const [newOwnerData, setNewOwnerData] = useState<any>();
   const dispatch = useAppDispatch();
+
+  
+  useEffect(() => {
+    dispatch(fetchAvailabilityData());
+  }, [dispatch]);
 
   const availabilityDataLoading: AvailabilityData | null = useAppSelector(
     (state) => state.ownerAvailability.ownerAvailability

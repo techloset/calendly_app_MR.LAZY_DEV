@@ -271,3 +271,7 @@ export interface AuthInputFieldd {
   placeholder?: string;
   name?: string;
 }
+
+export interface PropsProfile {
+  handleFileChange: (files: FileList | null) => void;
+}

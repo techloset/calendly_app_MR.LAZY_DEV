@@ -1,13 +1,15 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import tick from "../../../../../public/vectors/check.png";
-import tab from "../../../../../public/vectors/newTab.png";
-import person from "../../../../../public/vectors/person.png";
-import calendar from "../../../../../public/vectors/diary.png";
-import world from "../../../../../public/vectors/globe.png";
-import sticker from "../../../../../public/vectors/sticker.png";
 import useCalendarInvitation from "./useCalendarInvitation";
+import {
+  calendar,
+  person,
+  sticker,
+  tab,
+  tick,
+  world,
+} from "@/app/constants/images";
 
 export default function CalendarInvitation() {
   const { formData, session } = useCalendarInvitation();

@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const { email } = await req.json();
 
     if (!email) {
-      return new NextResponse("Email not provided", { status: 400 });
+      return new Response("Email not provided", { status: 400 });
     }
 
     const userData = await prismadb.user.findFirst({
@@ -19,15 +19,15 @@ export async function POST(req: Request) {
     });
 
     if (!userData) {
-      return new NextResponse("User data not found", { status: 404 });
+      return new Response("User data not found", { status: 404 });
     }
 
-    return new NextResponse(JSON.stringify(userData), {
+    return new Response(JSON.stringify(userData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", { status: 500 });
   }
 }

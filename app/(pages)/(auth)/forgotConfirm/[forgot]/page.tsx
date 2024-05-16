@@ -30,7 +30,7 @@ export default function Page({ params }: any) {
             <input
               type="password"
               className="w-[374px] h-[46px] border-[1px] border[#B2B2B2] rounded-[8px] px-4"
-              placeholder="Email"
+              placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />

@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import prismadb from "../../libs/prismadb";
 import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth";
@@ -80,7 +79,7 @@ export async function PUT(req: Request) {
     const session = (await getServerSession(req as any)) as MySession;
 
     if (!session || !session.user?.email) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     const userEmail: string = session.user.email;
@@ -126,20 +125,20 @@ export async function PUT(req: Request) {
 import { IncomingMessage } from "http";
 import { MySession, UserDataSignUp } from "@/app/constants/types";
 
-export async function GET(req: IncomingMessage) {
+export async function GET(req: Request) {
   try {
     const session = (await getServerSession(req as any)) as MySession;
 
     console.log("session", session);
 
     if (!session) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     const userEmail = session.user?.email;
 
     if (!userEmail) {
-      return new NextResponse("User email not found", { status: 400 });
+      return new Response("User email not found", { status: 400 });
     }
 
     const userData = await prismadb.user.findFirst({
@@ -151,16 +150,16 @@ export async function GET(req: IncomingMessage) {
     });
 
     if (!userData) {
-      return new NextResponse("User data not found", { status: 404 });
+      return new Response("User data not found", { status: 404 });
     }
 
-    return new NextResponse(JSON.stringify(userData), {
+    return new Response(JSON.stringify(userData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", { status: 500 });
   }
 }
 
@@ -169,13 +168,13 @@ export async function DELETE(req: IncomingMessage) {
     const session = (await getServerSession(req as any)) as MySession;
 
     if (!session) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     const userEmail = session.user?.email;
 
     if (!userEmail) {
-      return new NextResponse("User email not found", { status: 400 });
+      return new Response("User email not found", { status: 400 });
     }
 
     const deleteResult = await prismadb.user.delete({
@@ -185,14 +184,14 @@ export async function DELETE(req: IncomingMessage) {
     });
 
     if (!deleteResult) {
-      return new NextResponse("User data not found", { status: 404 });
+      return new Response("User data not found", { status: 404 });
     }
 
-    return new NextResponse("User data deleted successfully", {
+    return new Response("User data deleted successfully", {
       status: 200,
     });
   } catch (err) {
     console.error("Error:", err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new Response("Internal Server Error", { status: 500 });
   }
 }

@@ -1,8 +1,6 @@
+import { down, exportt, filterNew } from "@/app/constants/images";
 import Image from "next/image";
 import React from "react";
-import down from "../../../public/icons/down.png";
-import exportt from "../../../public/icons/export.png";
-import filterNew from "../../../public/icons/filterNew.png";
 
 export default function ExportFilter() {
   return (

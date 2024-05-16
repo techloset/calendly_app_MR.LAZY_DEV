@@ -57,7 +57,6 @@ const useScheduleEvent = () => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/getEventsData", formData);
-      console.log("Form data uploaded successfully:", response.data);
       showToast("ScheduleEvent Request Send Successfull", "success");
 
       handleSendEmailToOwner();
@@ -94,8 +93,6 @@ const useScheduleEvent = () => {
       emailjs.init(userId);
 
       await emailjs.send(serviceId, templateId, templateParams);
-
-      console.log("Email sent to owner successfully!");
     } catch (error) {
       console.error("Error sending to owner email:", error);
     }
@@ -127,8 +124,6 @@ const useScheduleEvent = () => {
       emailjs.init(userId);
 
       await emailjs.send(serviceId, templateId, templateParams);
-
-      console.log("Email sent to user successfully!");
     } catch (error) {
       console.error("Error sending to user email:", error);
     }
